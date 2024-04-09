@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "18414324434",
+    "firebase_url": "https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fasum-2a3e9",
+    "storage_bucket": "fasum-2a3e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18414324434:android:354a9f5032ac563c0e3b0b",
+        "android_client_info": {
+          "package_name": "com.example.fasum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpt2cmzEkqDhfJU8rcJn2rLOxgM-dtrf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18414324434:android:30c29181c5256f4c0e3b0b",
+        "android_client_info": {
+          "package_name": "com.example.projek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpt2cmzEkqDhfJU8rcJn2rLOxgM-dtrf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
