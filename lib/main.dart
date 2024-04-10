@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
+import 'package:projek/screens/awalan/lupa_katasandi.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'firebase_options.dart';
 
@@ -24,7 +25,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(),
       // home: const TrupayScreen(),
       // debugShowCheckedModeBanner: false,
-      home: LandingScreen(),
+      home: LupaScreen(),
       initialRoute: '/',
       routes: {
         '/daftar': (context) => const DaftarScreen(),
