@@ -3,15 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
+import 'package:projek/screens/awalan/reset_password.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
-  
 }
 
 class MainApp extends StatelessWidget {
@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(),
       // home: const TrupayScreen(),
       // debugShowCheckedModeBanner: false,
-      home: LandingScreen(),
+      home: ResetPass(),
       initialRoute: '/',
       routes: {
         '/daftar': (context) => const DaftarScreen(),
