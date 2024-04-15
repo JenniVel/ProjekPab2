@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   cached_network_image: ^3.3.0
-  flutter_rating_bar: 4.0.1
+  flutter_rating_bar: ^4.0.1
   animate_do: ^3.0.2
   shape_of_view_null_safe: ^2.0.0
   water_drop_nav_bar: ^2.2.0+5
@@ -26,7 +26,6 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
-  fluttertoast: ^8.0.8
   shared_preferences: ^2.2.2
   google_fonts: ^6.2.1
   animated_splash_screen: ^1.3.0
