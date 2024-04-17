@@ -4,15 +4,15 @@ import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
 import 'package:projek/screens/awalan/lupa_katasandi.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
+import 'package:projek/screens/awalan/reset_password.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
-  
 }
 
 class MainApp extends StatelessWidget {
