@@ -13,8 +13,8 @@ class ResetPass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: Reset(), routes: {
-      'homepage': (context) => MasukScreen(),
-      'login': (context) => MasukScreen(),
+      'homepage': (context) => const MasukScreen(),
+      'login': (context) => const MasukScreen(),
     });
   }
 }
@@ -44,19 +44,48 @@ class ResetPage extends State<Reset> {
     return Scaffold(
       body: Container(
         child: Scaffold(
-          backgroundColor: Colors.lightBlue[900],
+          backgroundColor: const Color(0xFFF1F8FF),
           body: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
+                  Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Color(0xFF49A2F4),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                  child: Text(
+                    'Ubah Kata Sandi',
+                    style: TextStyle(
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                      color: Color(0xFF1284EE),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+              ],
+            ),
                   Container(
                     padding: const EdgeInsets.only(top: 150.0, bottom: 30),
                     child: (Text(
                       ' Reset Password ',
                       style: GoogleFonts.workSans(
                         fontSize: 30,
-                        color: Colors.white,
+                        color: Color(0xFF1284EE),
                       ),
                     )),
                   ),
@@ -66,7 +95,7 @@ class ResetPage extends State<Reset> {
                       'Please enter your email below to receive your password reset instructions',
                       style: GoogleFonts.workSans(
                         fontSize: 15,
-                        color: Colors.white,
+                        color: Colors.grey,
                       ),
                       textAlign: TextAlign.center,
                     )),
@@ -77,24 +106,24 @@ class ResetPage extends State<Reset> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.grey),
                       decoration: InputDecoration(
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.mail_outline_rounded,
-                            color: Colors.white70,
+                            color: Colors.grey,
                           ),
                           filled: true,
                           fillColor: Colors.black12,
                           labelStyle: GoogleFonts.workSans(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.grey,
                           ),
-                          hintStyle: TextStyle(color: Colors.white54),
-                          enabledBorder: OutlineInputBorder(
+                          hintStyle: const TextStyle(color: Colors.white54),
+                          enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 0.5),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 1.5),
                           ),
@@ -108,14 +137,14 @@ class ResetPage extends State<Reset> {
                     maintainState: true,
                     visible: visible,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       child: Container(
                         width: 290,
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         child: LinearProgressIndicator(
                           minHeight: 2,
-                          backgroundColor: Colors.blueGrey[800],
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                          backgroundColor: Colors.white,
+                          valueColor: const AlwaysStoppedAnimation(Colors.white),
                         ),
                       ),
                     ),
@@ -147,11 +176,13 @@ class ResetPage extends State<Reset> {
                         elevation: 8,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(
-                            color: Colors.white70,
+                          side: const BorderSide(
+                            color: Colors.blue,
                             width: 2,
                           ),
                         ),
+                        backgroundColor: Colors.blue.shade400,
+                        foregroundColor: Colors.white,
                       ),
                     ),
                   ),
@@ -170,7 +201,7 @@ class ResetPage extends State<Reset> {
       displaySnackBar(context, 'Email has been sent to the given id');
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => MasukScreen()));
+            builder: (BuildContext context) => const MasukScreen()));
       });
     } catch (e) {
       String errorMessage = 'An error occurred';
@@ -198,7 +229,7 @@ class ResetPage extends State<Reset> {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: Colors.black45,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
