@@ -58,14 +58,9 @@ class _DaftarScreenState extends State<DaftarScreen> {
     User? user = await FirebaseAuthService().signUpWithEmailAndPassword(context, email, password);
     if (user != null) {
       showMessage(context, "Akun Pengguna berhasil di buat");
-      Navigator.pushNamed(context, '/masuk');
-    } else {
-      showMessage(context, "Terjadinya Error");
-    }
-
-  //Menyimpan nama pengguna
-  String? uid = user?.uid;
-  _database.child('users/$uid').set({
+      //Menyimpan nama pengguna
+    String? uid = user.uid;
+    _database.child('users/$uid').set({
       'namaPengguna': namaPengguna,
     }).then((_) {
       // Berhasil menyimpan data tambahan
@@ -73,6 +68,12 @@ class _DaftarScreenState extends State<DaftarScreen> {
       print('Gagal menyimpan nama pengguna: ${error.toString()}');
       // Gagal menyimpan data tambahan, tangani kesalahan
     });
+      Navigator.pushNamed(context, '/masuk');
+    } else {
+      showMessage(context, "Terjadinya Error");
+    }
+
+  
   }
 
   // TODO: 2. Membuat fungsi dispose
