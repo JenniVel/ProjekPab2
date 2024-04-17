@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -75,11 +72,23 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCQ3VmTFf7fPHuIii634jKYCoVpJO-wvqg',
-    appId: '1:18414324434:ios:a307e5deb2012ff40e3b0b',
+    appId: '1:18414324434:ios:a3f10a67b2b5d5630e3b0b',
     messagingSenderId: '18414324434',
     projectId: 'fasum-2a3e9',
     databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'fasum-2a3e9.appspot.com',
-    iosBundleId: 'com.example.projek.RunnerTests',
+    iosBundleId: 'com.example.projek',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBurjRK2yh02wWvbbKcYU3FMlXYkJdkdwY',
+    appId: '1:18414324434:web:70884e56d06013ff0e3b0b',
+    messagingSenderId: '18414324434',
+    projectId: 'fasum-2a3e9',
+    authDomain: 'fasum-2a3e9.firebaseapp.com',
+    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'fasum-2a3e9.appspot.com',
+    measurementId: 'G-6XZPM1GGHN',
+  );
+
 }
