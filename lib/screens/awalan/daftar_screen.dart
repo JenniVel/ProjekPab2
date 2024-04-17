@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/provider/auth_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:projek/screens/awalan/masuk_screen.dart';
 
 class DaftarScreen extends StatefulWidget {
   const DaftarScreen({super.key});
@@ -34,6 +33,8 @@ class _DaftarScreenState extends State<DaftarScreen> {
 
     String email = _emailController.text.trim();
     String password = _kataSandiController.text.trim();
+     String namaPengguna = _namapenggunaController.text.trim();
+
     if (password.length < 8 ||
         !password.contains(RegExp(r'[A-Z]')) ||
         !password.contains(RegExp(r'[a-z]')) ||
@@ -53,38 +54,18 @@ class _DaftarScreenState extends State<DaftarScreen> {
       return;
     }
 
-    try {
-    User? user = await _auth.signUpWithEmailAndPassword(email, password);
+  
+    User? user = await FirebaseAuthService().signUpWithEmailAndPassword(context, email, password);
     if (user != null) {
-      // Account created successfully
       showMessage(context, "Akun Pengguna berhasil di buat");
       Navigator.pushNamed(context, '/masuk');
     } else {
       showMessage(context, "Terjadinya Error");
     }
-  } on FirebaseAuthException catch (e) {
-    setState(() {
-      _errorText = e.message!; // Display Firebase error message
-    });
-  } catch (e) {
-    // Handle other unexpected errors
-    print("Unexpected error during signup: $e");
-  } finally {
-    setState(() {
-      isSigningUp = false; // Reset the flag when signup is complete (success or error)
-    });
-  }
 
-  }
-
-  void saveAdditionalUserInfo(User user) {
-    String namaPengguna = _namapenggunaController.text.trim();
-
-    // Mendapatkan UID (identifier unik) dari pengguna
-    String? uid = user.uid;
-
-    // Simpan data tambahan ke dalam database
-    _database.child('users/$uid').set({
+  //Menyimpan nama pengguna
+  String? uid = user?.uid;
+  _database.child('users/$uid').set({
       'namaPengguna': namaPengguna,
     }).then((_) {
       // Berhasil menyimpan data tambahan
@@ -112,13 +93,8 @@ class _DaftarScreenState extends State<DaftarScreen> {
           children: [
             Align(
               alignment: const AlignmentDirectional(0.00, 0.00),
-              child: ClipRRect(
-                child: Image.asset(
-                  'images/ic_latar.png',
-                  width: 500,
-                  height: 850,
-                  fit: BoxFit.cover,
-                ),
+              child: Container(
+                color: Colors.blue,
               ),
             ),
             Padding(
