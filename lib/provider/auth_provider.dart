@@ -4,8 +4,7 @@ import 'package:projek/global/showmessage.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  late BuildContext context;
-  Future<User?> signUpWithEmailAndPassword(
+  Future<User?> signUpWithEmailAndPassword(BuildContext context,
       String email, String password) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
@@ -21,8 +20,7 @@ class FirebaseAuthService {
     return null;
   }
 
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(BuildContext context,String email, String password) async {
     try {
       UserCredential credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -31,7 +29,7 @@ class FirebaseAuthService {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         showMessage(context, 'Password atau email salah');
       } else {
-        showMessage(context, 'An error occurred: ${e.code}');
+        showMessage(context, 'Terjadi kesalahan: ${e.code}');
       }
     }
     return null;

@@ -87,12 +87,12 @@ class _MasukScreenState extends State<MasukScreen> {
       Align(
         alignment: const AlignmentDirectional(0.00, 0.00),
         child: ClipRRect(
-          child: Image.asset(
-            'images/ic_latar.png',
-            width: 500,
-            height: 850,
-            fit: BoxFit.cover,
-          ),
+          child: Align(
+              alignment: const AlignmentDirectional(0.00, 0.00),
+              child: Container(
+                color: Colors.blue,
+              ),
+            ),
         ),
       ),
 
