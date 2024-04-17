@@ -58,9 +58,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
     if (user != null) {
       // Account created successfully
       showMessage(context, "Akun Pengguna berhasil di buat");
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-         return const DaftarScreen();
-         }));
+      Navigator.pushNamed(context, '/masuk');
     } else {
       showMessage(context, "Terjadinya Error");
     }
@@ -77,10 +75,6 @@ class _DaftarScreenState extends State<DaftarScreen> {
     });
   }
 
-  // Add the loading indicator code here (assuming you're using a CircularProgressIndicator)
-  while (isSigningUp) {
-    await Future.delayed(const Duration(milliseconds: 500)); // Simulate some delay
-  }
   }
 
   void saveAdditionalUserInfo(User user) {
