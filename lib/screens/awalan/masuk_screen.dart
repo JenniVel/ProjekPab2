@@ -355,6 +355,6 @@ class _MasukScreenState extends State<MasukScreen> {
           ),
         ),
       )
-    ]));
-  }
+    ]));
+  }
 }

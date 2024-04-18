@@ -23,8 +23,6 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Logo Screen',
       theme: ThemeData(),
-      // home: const TrupayScreen(),
-      // debugShowCheckedModeBanner: false,
       home: MasukScreen(),
       initialRoute: '/',
       routes: {

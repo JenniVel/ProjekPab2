@@ -41,54 +41,56 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBurjRK2yh02wWvbbKcYU3FMlXYkJdkdwY',
-    appId: '1:18414324434:web:c4033c363b5b95130e3b0b',
-    messagingSenderId: '18414324434',
-    projectId: 'fasum-2a3e9',
-    authDomain: 'fasum-2a3e9.firebaseapp.com',
-    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'fasum-2a3e9.appspot.com',
-    measurementId: 'G-MMDPYG4FE3',
+    apiKey: 'AIzaSyBXOd-7ZdHk8MhU8af8yZaPJ8Zdih_fVwA',
+    appId: '1:3524906210:web:75946d904a065b633b62bb',
+    messagingSenderId: '3524906210',
+    projectId: 'traveline-905a2',
+    authDomain: 'traveline-905a2.firebaseapp.com',
+    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'traveline-905a2.appspot.com',
+    measurementId: 'G-Z1GDQXEXER',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDpt2cmzEkqDhfJU8rcJn2rLOxgM-dtrf0',
-    appId: '1:18414324434:android:30c29181c5256f4c0e3b0b',
-    messagingSenderId: '18414324434',
-    projectId: 'fasum-2a3e9',
-    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'fasum-2a3e9.appspot.com',
+    apiKey: 'AIzaSyBqEls1UzwNREwSO3QYq1s1TuPxFKKG3_k',
+    appId: '1:3524906210:android:5ffe65dd06a758e43b62bb',
+    messagingSenderId: '3524906210',
+    projectId: 'traveline-905a2',
+    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'traveline-905a2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCQ3VmTFf7fPHuIii634jKYCoVpJO-wvqg',
-    appId: '1:18414324434:ios:a3f10a67b2b5d5630e3b0b',
-    messagingSenderId: '18414324434',
-    projectId: 'fasum-2a3e9',
-    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'fasum-2a3e9.appspot.com',
+    apiKey: 'AIzaSyCqYN63phN1iLz3bTX0lwk9K5sBpglVDJs',
+    appId: '1:3524906210:ios:fbc7eca92fe14c133b62bb',
+    messagingSenderId: '3524906210',
+    projectId: 'traveline-905a2',
+    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'traveline-905a2.appspot.com',
+    iosClientId: '3524906210-hc9ruv4h4tg08mqrdkqcthu5281a1u39.apps.googleusercontent.com',
     iosBundleId: 'com.example.projek',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCQ3VmTFf7fPHuIii634jKYCoVpJO-wvqg',
-    appId: '1:18414324434:ios:a3f10a67b2b5d5630e3b0b',
-    messagingSenderId: '18414324434',
-    projectId: 'fasum-2a3e9',
-    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'fasum-2a3e9.appspot.com',
+    apiKey: 'AIzaSyCqYN63phN1iLz3bTX0lwk9K5sBpglVDJs',
+    appId: '1:3524906210:ios:fbc7eca92fe14c133b62bb',
+    messagingSenderId: '3524906210',
+    projectId: 'traveline-905a2',
+    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'traveline-905a2.appspot.com',
+    iosClientId: '3524906210-hc9ruv4h4tg08mqrdkqcthu5281a1u39.apps.googleusercontent.com',
     iosBundleId: 'com.example.projek',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBurjRK2yh02wWvbbKcYU3FMlXYkJdkdwY',
-    appId: '1:18414324434:web:70884e56d06013ff0e3b0b',
-    messagingSenderId: '18414324434',
-    projectId: 'fasum-2a3e9',
-    authDomain: 'fasum-2a3e9.firebaseapp.com',
-    databaseURL: 'https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'fasum-2a3e9.appspot.com',
-    measurementId: 'G-6XZPM1GGHN',
+    apiKey: 'AIzaSyBXOd-7ZdHk8MhU8af8yZaPJ8Zdih_fVwA',
+    appId: '1:3524906210:web:d64c4b69a0e15ced3b62bb',
+    messagingSenderId: '3524906210',
+    projectId: 'traveline-905a2',
+    authDomain: 'traveline-905a2.firebaseapp.com',
+    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'traveline-905a2.appspot.com',
+    measurementId: 'G-QNC16KDT77',
   );
 
 }
