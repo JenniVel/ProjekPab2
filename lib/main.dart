@@ -23,9 +23,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Logo Screen',
       theme: ThemeData(),
-      // home: const TrupayScreen(),
-      // debugShowCheckedModeBanner: false,
-      home: DaftarScreen(),
+      home: MasukScreen(),
       initialRoute: '/',
       routes: {
         '/daftar': (context) => const DaftarScreen(),

@@ -5,7 +5,7 @@ void showMessage(BuildContext context, String message) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text("Error"),
+        title: Text("Infomasi"),
         content: Text(message),
         actions: [
           TextButton(

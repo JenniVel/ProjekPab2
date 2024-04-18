@@ -1,46 +1,37 @@
 {
   "project_info": {
-    "project_number": "18414324434",
-    "firebase_url": "https://fasum-2a3e9-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "fasum-2a3e9",
-    "storage_bucket": "fasum-2a3e9.appspot.com"
+    "project_number": "3524906210",
+    "firebase_url": "https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "traveline-905a2",
+    "storage_bucket": "traveline-905a2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:18414324434:android:354a9f5032ac563c0e3b0b",
-        "android_client_info": {
-          "package_name": "com.example.fasum"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDpt2cmzEkqDhfJU8rcJn2rLOxgM-dtrf0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:18414324434:android:30c29181c5256f4c0e3b0b",
+        "mobilesdk_app_id": "1:3524906210:android:5ffe65dd06a758e43b62bb",
         "android_client_info": {
           "package_name": "com.example.projek"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "3524906210-947ijkbfjeqpt71oj8sg1vcu9hspkuk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDpt2cmzEkqDhfJU8rcJn2rLOxgM-dtrf0"
+          "current_key": "AIzaSyBqEls1UzwNREwSO3QYq1s1TuPxFKKG3_k"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3524906210-947ijkbfjeqpt71oj8sg1vcu9hspkuk9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -72,8 +72,6 @@ class _DaftarScreenState extends State<DaftarScreen> {
     } else {
       showMessage(context, "Terjadinya Error");
     }
-
-  
   }
 
   // TODO: 2. Membuat fungsi dispose
@@ -119,7 +117,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: FixedExtentScrollPhysics(),
                   child: Container(
                     width: 337,
                     height: 720,
