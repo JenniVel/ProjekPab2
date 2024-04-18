@@ -118,210 +118,213 @@ class _MasukScreenState extends State<MasukScreen> {
         alignment: const AlignmentDirectional(0.00, 0.00),
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
-          child: Container(
-            width: 337,
-            height: 720,
-            decoration: BoxDecoration(
-              color: const Color(0xFFBADBFA),
-              borderRadius: BorderRadius.circular(41),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Align(
-                  alignment: AlignmentDirectional(-1.00, 0.00),
-                  child: Form(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(8, 120, 8, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Nama Pengguna',
-                            style: TextStyle(
-                              fontFamily: 'fonts/Inter-Black.ttf',
-                              color: Color(0xFF1284EE),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _namaPenggunaController,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              hintText: "Nama Pengguna",
-                              labelStyle: const TextStyle(
-                                fontFamily: 'fonts/Inter-Bold.ttf',
-                                color: Color(0xFF4583DF),
+          child: SingleChildScrollView(
+            physics: FixedExtentScrollPhysics(),
+            child: Container(
+              width: 337,
+              height: 720,
+              decoration: BoxDecoration(
+                color: const Color(0xFFBADBFA),
+                borderRadius: BorderRadius.circular(41),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(-1.00, 0.00),
+                    child: Form(
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(8, 150, 8, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Nama Pengguna',
+                              style: TextStyle(
+                                fontFamily: 'fonts/Inter-Black.ttf',
+                                color: Color(0xFF1284EE),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              controller: _namaPenggunaController,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                hintText: "Nama Pengguna",
+                                labelStyle: const TextStyle(
+                                  fontFamily: 'fonts/Inter-Bold.ttf',
                                   color: Color(0xFF4583DF),
-                                  width: 10,
                                 ),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Kata Sandi',
-                            style: TextStyle(
-                              fontFamily: 'fonts/Inter-Black.ttf',
-                              color: Color(0xFF1284EE),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _kataSandiController,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              hintText: "Kata Sandi",
-                              errorText:
-                                  _errorText.isNotEmpty ? _errorText : null,
-                              labelStyle: const TextStyle(
-                                fontFamily: 'fonts/Inter-Bold.ttf',
-                                color: Color(0xFF4583DF),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF4583DF),
-                                  width: 10,
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                                icon: Icon(_obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            obscureText: _obscurePassword,
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: _isSignedIn,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isSignedIn = !_isSignedIn;
-                                  });
-                                },
-                              ),
-                              const Text(
-                                'Ingat saya',
-                                style: TextStyle(
-                                  fontFamily: 'fonts/Inter-Black.ttf',
-                                  color: Color(0xFF1284EE),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0, 0, 0, 0),
-                            child: ElevatedButton(
-                              onPressed: _signIn,
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(360, 60),
-                                  textStyle: const TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'fonts/Inter-Bold.ttf',
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF4583DF),
+                                    width: 10,
                                   ),
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.blue.shade400,
-                                  shape: const StadiumBorder()),
-                              child: const Text("MASUK"),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
                             ),
-                          ),
-                          
-              const SizedBox(height: 30),
-
-              // or continue with
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
+                            const SizedBox(height: 10),
+                            const Text(
+                              'Kata Sandi',
+                              style: TextStyle(
+                                fontFamily: 'fonts/Inter-Black.ttf',
+                                color: Color(0xFF1284EE),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              controller: _kataSandiController,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                hintText: "Kata Sandi",
+                                errorText:
+                                    _errorText.isNotEmpty ? _errorText : null,
+                                labelStyle: const TextStyle(
+                                  fontFamily: 'fonts/Inter-Bold.ttf',
+                                  color: Color(0xFF4583DF),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF4583DF),
+                                    width: 10,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                  icon: Icon(_obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                              obscureText: _obscurePassword,
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isSignedIn,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isSignedIn = !_isSignedIn;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Ingat saya',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
+                                    color: Color(0xFF1284EE),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 0, 0, 0),
+                              child: ElevatedButton(
+                                onPressed: _signIn,
+                                style: ElevatedButton.styleFrom(
+                                    fixedSize: const Size(360, 60),
+                                    textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                    ),
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.blue.shade400,
+                                    shape: const StadiumBorder()),
+                                child: const Text("MASUK"),
+                              ),
+                            ),
+                            
+                const SizedBox(height: 20),
+            
+                // or continue with
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        'Or continue with',
-                        style: TextStyle(color: Colors.grey[700]),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text(
+                          'Or continue with',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+            
+                const SizedBox(height: 20),
+            
+                // google + apple sign in buttons
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    // google button
+                    Tombol(imagePath: 'lib/images/google.png'),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // google + apple sign in buttons
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
-                  // google button
-                  Tombol(imagePath: 'lib/images/google.png'),
-                ],
-              ),
-
-              const SizedBox(height: 50),
-
-                          Center(
-                            child: RichText(
-                                text: TextSpan(
-                                    text: 'Tidak Punya Akun? ',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
+            
+                const SizedBox(height: 20),
+            
+                            Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                      text: 'Tidak Punya Akun? ',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                      children: [
+                                    TextSpan(
+                                      text: 'Daftar',
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 16,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.pushNamed(context, '/daftar');
+                                        },
                                     ),
-                                    children: [
-                                  TextSpan(
-                                    text: 'Daftar',
-                                    style: const TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
-                                      fontSize: 16,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Navigator.pushNamed(context, '/daftar');
-                                      },
-                                  ),
-                                ])),
-                          ),
-                        ],
+                                  ])),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -355,6 +358,6 @@ class _MasukScreenState extends State<MasukScreen> {
           ),
         ),
       )
-    ]));
-  }
+    ]));
+  }
 }

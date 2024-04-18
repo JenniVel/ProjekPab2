@@ -19,7 +19,7 @@ class Tombol extends StatelessWidget {
         ),
         child: Image.asset(
           imagePath,
-          height: 30,
+          height: 20,
         ),
       ),
     );
