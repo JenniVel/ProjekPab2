@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/komponen/google.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -131,7 +132,7 @@ class _MasukScreenState extends State<MasukScreen> {
                   alignment: AlignmentDirectional(-1.00, 0.00),
                   child: Form(
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(8, 230, 8, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(8, 120, 8, 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -233,12 +234,10 @@ class _MasukScreenState extends State<MasukScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
-                                0, 130, 0, 10),
+                                0, 0, 0, 0),
                             child: ElevatedButton(
                               onPressed: _signIn,
                               style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      100, 0, 100, 0),
                                   fixedSize: const Size(360, 60),
                                   textStyle: const TextStyle(
                                     fontSize: 20,
@@ -250,6 +249,50 @@ class _MasukScreenState extends State<MasukScreen> {
                               child: const Text("MASUK"),
                             ),
                           ),
+                          
+              const SizedBox(height: 30),
+
+              // or continue with
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Or continue with',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // google + apple sign in buttons
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  // google button
+                  Tombol(imagePath: 'lib/images/google.png'),
+                ],
+              ),
+
+              const SizedBox(height: 50),
+
                           Center(
                             child: RichText(
                                 text: TextSpan(

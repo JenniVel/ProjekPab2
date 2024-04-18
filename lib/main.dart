@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(),
       // home: const TrupayScreen(),
       // debugShowCheckedModeBanner: false,
-      home: DaftarScreen(),
+      home: MasukScreen(),
       initialRoute: '/',
       routes: {
         '/daftar': (context) => const DaftarScreen(),
