@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/komponen/google.dart';
+import 'package:projek/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -287,9 +288,12 @@ class _MasukScreenState extends State<MasukScreen> {
                 // google + apple sign in buttons
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
+                  children: [
                     // google button
-                    Tombol(imagePath: 'lib/images/google.png'),
+                    Tombol(
+                      onTap: () => AuthService().signInWithGoogle(),
+                      imagePath: 'lib/images/google.png',
+                    ),
                   ],
                 ),
             

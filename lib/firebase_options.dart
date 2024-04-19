@@ -27,7 +27,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -67,30 +70,20 @@ class DefaultFirebaseOptions {
     projectId: 'traveline-905a2',
     databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'traveline-905a2.appspot.com',
+    androidClientId: '3524906210-ffvd7qmmbgj3lmmqp831uohcbctcl3m3.apps.googleusercontent.com',
     iosClientId: '3524906210-hc9ruv4h4tg08mqrdkqcthu5281a1u39.apps.googleusercontent.com',
     iosBundleId: 'com.example.projek',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCqYN63phN1iLz3bTX0lwk9K5sBpglVDJs',
-    appId: '1:3524906210:ios:fbc7eca92fe14c133b62bb',
+    appId: '1:3524906210:ios:386b8070c845124a3b62bb',
     messagingSenderId: '3524906210',
     projectId: 'traveline-905a2',
     databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'traveline-905a2.appspot.com',
-    iosClientId: '3524906210-hc9ruv4h4tg08mqrdkqcthu5281a1u39.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projek',
+    androidClientId: '3524906210-ffvd7qmmbgj3lmmqp831uohcbctcl3m3.apps.googleusercontent.com',
+    iosClientId: '3524906210-du35d5edeisj53kcb1tsgdqblo0iod34.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projek.RunnerTests',
   );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBXOd-7ZdHk8MhU8af8yZaPJ8Zdih_fVwA',
-    appId: '1:3524906210:web:d64c4b69a0e15ced3b62bb',
-    messagingSenderId: '3524906210',
-    projectId: 'traveline-905a2',
-    authDomain: 'traveline-905a2.firebaseapp.com',
-    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'traveline-905a2.appspot.com',
-    measurementId: 'G-QNC16KDT77',
-  );
-
 }
