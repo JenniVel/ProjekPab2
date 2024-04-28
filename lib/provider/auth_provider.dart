@@ -37,9 +37,13 @@ class FirebaseAuthService {
     return null;
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+   static Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if(googleUser == null){
+      throw const NoGoogleAccountChosenException();
+    }
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
@@ -54,4 +58,8 @@ class FirebaseAuthService {
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+}
+class NoGoogleAccountChosenException implements Exception {
+  const NoGoogleAccountChosenException();
 }
