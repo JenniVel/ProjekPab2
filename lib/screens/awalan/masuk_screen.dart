@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
-import 'package:projek/services/auth_service.dart';
+import 'package:projek/provider/auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -20,6 +21,18 @@ class _MasukScreenState extends State<MasukScreen> {
   bool isRemembered = false;
   bool _isSignedIn = false;
   bool _obscurePassword = true;
+
+   Future<void> authenticateWithGoogle({required BuildContext context}) async {
+    try {
+      await FirebaseAuthService.signInWithGoogle();
+    } on NoGoogleAccountChosenException {
+      return;
+    } catch (e) {
+      if (!context.mounted) return;
+      showMessage(context, "Terjadinya error");
+    }
+  }
+
 
   Future<Map<String, String>> _retrieveAndDecryptDataFromPrefs(
       SharedPreferences sharedPreferences) async {
@@ -285,14 +298,14 @@ class _MasukScreenState extends State<MasukScreen> {
             
                 const SizedBox(height: 20),
             
-                // google + apple sign in buttons
-                const Row(
+                // google 
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // google button
                     Tombol(
-                      onTap: () => AuthService().signInWithGoogle(),
                       imagePath: 'lib/images/google.png',
+                      onTap: () => authenticateWithGoogle(context: context),
                     ),
                   ],
                 ),

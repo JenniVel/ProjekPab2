@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
-import 'package:projek/screens/awalan/landing_screen.dart';
-import 'package:projek/screens/awalan/lupa_katasandi.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
-import 'package:projek/screens/awalan/reset_password.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,7 +20,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Logo Screen',
       theme: ThemeData(),
-      home: MasukScreen(),
+      home: const MasukScreen(),
       initialRoute: '/',
       routes: {
         '/daftar': (context) => const DaftarScreen(),

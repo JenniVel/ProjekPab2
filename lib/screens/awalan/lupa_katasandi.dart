@@ -13,7 +13,7 @@ class LupaScreen extends StatefulWidget {
 
 class _LupaScreenState extends State<LupaScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
+  // String _email = '';
 
   @override
   Widget build(BuildContext context) {

@@ -12,7 +12,7 @@ class DaftarScreen extends StatefulWidget {
 }
 
 class _DaftarScreenState extends State<DaftarScreen> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  // final FirebaseAuthService _auth = FirebaseAuthService();
   final DatabaseReference _database = FirebaseDatabase.instance.reference();
   final TextEditingController _namapenggunaController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
