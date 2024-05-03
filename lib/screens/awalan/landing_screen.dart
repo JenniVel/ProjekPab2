@@ -33,7 +33,7 @@ class _LandingScreenState extends State<LandingScreen> {
         width: double.infinity,
         height: double.infinity,
         child: Image.asset(
-          '/images/logo.gif',
+          'lib/images/logo.gif',
           height: 357,
           width: 332,
         ),
