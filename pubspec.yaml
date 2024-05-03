@@ -27,7 +27,7 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
   shared_preferences: ^2.2.2
-  google_fonts: ^6.2.1
+  google_fonts: ^6.2.0
   animated_splash_screen: ^1.3.0
   google_sign_in: ^6.2.1
   cloud_firestore: ^4.16.1
@@ -41,3 +41,4 @@ flutter:
   uses-material-design: true
   assets:
     - lib/images/
+    - lib/images/logo .gif

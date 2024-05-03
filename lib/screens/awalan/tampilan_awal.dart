@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
@@ -11,19 +10,18 @@ class TampilanAwal extends StatefulWidget {
 }
 
 class _TampilanAwalState extends State<TampilanAwal> {
-  
-    void _pindah1() async {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-         return const DaftarScreen();
-         }));
-    }
+  void _pindah1() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const DaftarScreen();
+    }));
+  }
 
-    void _pindah2() async {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-         return const MasukScreen();
-         }));
-    }
-  
+  void _pindah2() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const MasukScreen();
+    }));
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -38,10 +36,10 @@ class _TampilanAwalState extends State<TampilanAwal> {
             alignment: const AlignmentDirectional(0.00, 0.00),
             child: ClipRRect(
               child: Image.asset(
-                'images/ic_latar.png',
-                width: 500,
-                height: 850,
-                fit: BoxFit.cover,
+                'lib/images/hello.png',
+                width: 271,
+                height: 240,
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -55,8 +53,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
                 color: const Color(0xFFBADBFA),
                 borderRadius: BorderRadius.circular(41),
               ),
-
-              child:  Padding(
+              child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -73,7 +70,6 @@ class _TampilanAwalState extends State<TampilanAwal> {
                         ),
                       ),
                     ),
-
                     const Text(
                       'Jelajahi yang Sejati',
                       style: TextStyle(
@@ -81,43 +77,43 @@ class _TampilanAwalState extends State<TampilanAwal> {
                         color: Color(0xFF196EEE),
                       ),
                     ),
-
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                       child: ElevatedButton(
                         onPressed: _pindah2,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
-                          fixedSize: const Size(340, 60),
-                          textStyle: const TextStyle(
-                            fontSize: 19,
-                            fontFamily: 'fonts/Inter-Bold.ttf',
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                100, 0, 100, 0),
+                            fixedSize: const Size(340, 60),
+                            textStyle: const TextStyle(
+                              fontSize: 19,
+                              fontFamily: 'fonts/Inter-Bold.ttf',
                             ),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.blue.shade400,
-                          shape: const StadiumBorder()
-                        ),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.blue.shade400,
+                            shape: const StadiumBorder()),
                         child: const Text("MASUK"),
-                        ),
+                      ),
                     ),
-
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                       child: ElevatedButton(
                         onPressed: _pindah1,
                         style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(340, 60),
-                          padding: const EdgeInsetsDirectional.fromSTEB(97, 0, 97, 0),
-                          textStyle: const TextStyle(
-                            fontSize: 19,
-                            fontFamily: 'fonts/Inter-Bold.ttf',
+                            fixedSize: const Size(340, 60),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                97, 0, 97, 0),
+                            textStyle: const TextStyle(
+                              fontSize: 19,
+                              fontFamily: 'fonts/Inter-Bold.ttf',
                             ),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.blue.shade400,
-                          shape: const StadiumBorder()
-                        ),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.blue.shade400,
+                            shape: const StadiumBorder()),
                         child: const Text("DAFTAR"),
-                        ),
+                      ),
                     ),
                   ],
                 ),

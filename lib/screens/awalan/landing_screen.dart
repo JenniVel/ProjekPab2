@@ -10,22 +10,20 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     mulai();
   }
 
-  mulai()async{
+  mulai() async {
     var durasi = Duration(seconds: 5);
-    return Timer(durasi, () { 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
+    return Timer(durasi, () {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
         return TampilanAwal();
       }));
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class _LandingScreenState extends State<LandingScreen> {
         width: double.infinity,
         height: double.infinity,
         child: Image.asset(
-          'images/ic_logo.png',
+          '/images/logo.gif',
           height: 357,
           width: 332,
         ),
