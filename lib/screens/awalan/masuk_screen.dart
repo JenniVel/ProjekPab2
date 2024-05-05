@@ -24,7 +24,7 @@ class _MasukScreenState extends State<MasukScreen> {
 
    Future<void> authenticateWithGoogle({required BuildContext context}) async {
     try {
-      await FirebaseAuthService.signInWithGoogle();
+      await FirebaseAuthService.signInWithGoogle(context);
     } on NoGoogleAccountChosenException {
       return;
     } catch (e) {
@@ -93,6 +93,11 @@ class _MasukScreenState extends State<MasukScreen> {
     } catch (e) {
       print('Terjadinya error: $e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
