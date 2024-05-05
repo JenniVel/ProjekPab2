@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
@@ -53,46 +54,51 @@ class _MasukScreenState extends State<MasukScreen> {
   }
 
   void _signIn() async {
-    try {
-      final Future<SharedPreferences> prefsFuture =
-          SharedPreferences.getInstance();
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _namaPenggunaController.text, 
+      password: _kataSandiController.text
+    );
 
-      String nama = _namaPenggunaController.text.trim();
-      String password = _kataSandiController.text.trim();
-      print('Sign in dilakukan');
+    // try {
+    //   final Future<SharedPreferences> prefsFuture =
+    //       SharedPreferences.getInstance();
 
-      if (nama.isNotEmpty && password.isNotEmpty) {
-        final SharedPreferences prefs = await prefsFuture;
-        final data = await _retrieveAndDecryptDataFromPrefs(prefs);
-        if (data.isNotEmpty) {
-          final decryptedUsername = data['username'];
-          final decryptedPassword = data['password'];
-          if (nama == decryptedUsername && password == decryptedPassword) {
-            _errorText = '';
-            _isSignedIn = true;
-            prefs.setBool('isSignedIn', true);
-            // Pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            });
-            // Sign in berhasil, navigasikan ke layar utama
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacementNamed(context, '/home');
-            });
-            print('Sign in berhasil');
-          } else {
-            print('Nama Pengguna atau Kata Sandi Salah');
-          }
-        } else {
-          print('Tidak ditemukan data pengguna');
-        }
-      } else {
-        print('Nama Pengguna dan Kata Sandi tidak boleh kosong');
-        // Tambahkan pesan untuk kasus ketika username atau password kosong
-      }
-    } catch (e) {
-      print('Terjadinya error: $e');
-    }
+    //   String nama = _namaPenggunaController.text.trim();
+    //   String password = _kataSandiController.text.trim();
+    //   print('Sign in dilakukan');
+
+    //   if (nama.isNotEmpty && password.isNotEmpty) {
+    //     final SharedPreferences prefs = await prefsFuture;
+    //     final data = await _retrieveAndDecryptDataFromPrefs(prefs);
+    //     if (data.isNotEmpty) {
+    //       final decryptedUsername = data['username'];
+    //       final decryptedPassword = data['password'];
+    //       if (nama == decryptedUsername && password == decryptedPassword) {
+    //         _errorText = '';
+    //         _isSignedIn = true;
+    //         prefs.setBool('isSignedIn', true);
+    //         // Pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
+    //         WidgetsBinding.instance.addPostFrameCallback((_) {
+    //           Navigator.of(context).popUntil((route) => route.isFirst);
+    //         });
+    //         // Sign in berhasil, navigasikan ke layar utama
+    //         WidgetsBinding.instance.addPostFrameCallback((_) {
+    //           Navigator.pushReplacementNamed(context, '/home');
+    //         });
+    //         print('Sign in berhasil');
+    //       } else {
+    //         print('Nama Pengguna atau Kata Sandi Salah');
+    //       }
+    //     } else {
+    //       print('Tidak ditemukan data pengguna');
+    //     }
+    //   } else {
+    //     print('Nama Pengguna dan Kata Sandi tidak boleh kosong');
+    //     // Tambahkan pesan untuk kasus ketika username atau password kosong
+    //   }
+    // } catch (e) {
+    //   print('Terjadinya error: $e');
+    // }
   }
 
   @override

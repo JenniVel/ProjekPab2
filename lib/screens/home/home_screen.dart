@@ -4,8 +4,10 @@ import 'package:projek/screens/awalan/tampilan_awal.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
+  // final user = FirebaseAuth.instance.currentUser!;
 
   const HomeScreen({Key? key, required this.user}) : super(key: key);
+  // HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
