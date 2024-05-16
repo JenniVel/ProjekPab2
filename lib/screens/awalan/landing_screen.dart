@@ -29,13 +29,21 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 73, 161, 244),
         width: double.infinity,
         height: double.infinity,
-        child: Image.asset(
-          'lib/images/logo.gif',
-          height: 357,
-          width: 332,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffB4DBFE), Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Image.asset(
+            'lib/images/logo.gif',
+            height: 357,
+            width: 332,
+          ),
         ),
       ),
     );

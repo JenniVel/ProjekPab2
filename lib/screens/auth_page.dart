@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/home/home_screen.dart';
 
-
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
@@ -13,13 +12,11 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // user is logged in
-          if (snapshot.hasData) {
-            return HomeScreen();
-          }
-
-          // user is NOT logged in
-          else {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data != null) {
+            return HomeScreen(user: snapshot.data!);
+          } else {
             return MasukScreen();
           }
         },

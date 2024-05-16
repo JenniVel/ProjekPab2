@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projek/screens/awalan/tampilan_awal.dart';
+import 'package:projek/screens/awalan/tampilan_awal.dart'; // Adjust the import path as necessary
 
 class HomeScreen extends StatefulWidget {
   final User user;
-  // final user = FirebaseAuth.instance.currentUser!;
 
   const HomeScreen({Key? key, required this.user}) : super(key: key);
-  // HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,18 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome, ${widget.user.displayName}!', // Menampilkan nama pengguna
+              'Welcome, ${widget.user.displayName ?? 'User'}!', // Display user's name or 'User' if name is null
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Logout dari Google
                 await FirebaseAuth.instance.signOut();
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        TampilanAwal(), //NewScreen(user: userCredential.user),
+                    builder: (context) => TampilanAwal(),
                   ),
                 );
               },
