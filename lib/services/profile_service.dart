@@ -7,8 +7,8 @@ import 'package:path/path.dart' as path;
 
 class ProfileService {
   static final FirebaseFirestore _database = FirebaseFirestore.instance;
-  static final CollectionReference _notesCollection =
-      _database.collection('notes');
+  static final CollectionReference _profilesCollection =
+      _database.collection('profiles');
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
   static Future<String?> uploadImage(File imageFile) async {
@@ -30,29 +30,29 @@ class ProfileService {
       'created_at': FieldValue.serverTimestamp(),
       'updated_at': FieldValue.serverTimestamp(),
     };
-    await _notesCollection.add(newNote);
+    await _profilesCollection.add(newNote);
   }
 
   static Future<void> updateProfile(Profiles profiles) async {
-    Map<String, dynamic> updatedNote = {
+    Map<String, dynamic> updatedProfile = {
       'image_url': profiles.image_url,
       'created_at': profiles.createdAt,
       'updated_at': FieldValue.serverTimestamp(),
     };
 
-    await _notesCollection.doc(profiles.id).update(updatedNote);
+    await _profilesCollection.doc(profiles.id).update(updatedProfile);
   }
 
   static Future<void> deleteNote(Profiles profiles) async {
-    await _notesCollection.doc(profiles.id).delete();
+    await _profilesCollection.doc(profiles.id).delete();
   }
 
-  static Future<QuerySnapshot> retrieveNotes() {
-    return _notesCollection.get();
+  static Future<QuerySnapshot> retrieveProfiles() {
+    return _profilesCollection.get();
   }
 
   static Stream<List<Profiles>> getProfile() {
-    return _notesCollection.snapshots().map((snapshot) {
+    return _profilesCollection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Profiles(
