@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:projek/komponen/navbar.dart';
 import 'package:projek/screens/awalan/tampilan_awal.dart'; // Adjust the import path as necessary
 
 class HomeScreen extends StatefulWidget {
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Text('Logout'),
             ),
+            NavBar(),
           ],
         ),
       ),
