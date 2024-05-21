@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projek/screens/awalan/profile_screen.dart';
 import 'package:projek/services/profile_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -11,7 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
 
 class PengaturanProfile extends StatefulWidget {
-  const PengaturanProfile({super.key});
+  final Profile? profile;
+  const PengaturanProfile({super.key, this.profile});
 
   @override
   State<PengaturanProfile> createState() => _ProfileState();
@@ -72,37 +74,37 @@ class _ProfileState extends State<PengaturanProfile> {
         _imageFile = File(pickedFile.path);
       });
 
-      // Upload the image to Firebase Storage
-      String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
-      if (uploadedImageUrl != null) {
-        // Save the uploaded image URL to Firestore
-        await FirebaseFirestore.instance
-            .collection('profiles')
-            .doc(username)
-            .update({
-          'image_url': uploadedImageUrl,
-        });
+      // // Upload the image to Firebase Storage
+      // String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
+      // if (uploadedImageUrl != null) {
+      //   // Save the uploaded image URL to Firestore
+      //   await FirebaseFirestore.instance
+      //       .collection('profiles')
+      //       .doc(username)
+      //       .update({
+      //     'image_url': uploadedImageUrl,
+      //   });
 
-        setState(() {
-          imageUrl = uploadedImageUrl;
-        });
-      }
+      //   setState(() {
+      //     imageUrl = uploadedImageUrl;
+      //   });
+      // }
     }
   }
 
-  Future<String?> _uploadImageToFirebase(File imageFile) async {
-    try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images')
-          .child('$username.jpg');
-      await storageRef.putFile(imageFile);
-      return await storageRef.getDownloadURL();
-    } catch (e) {
-      print('Error uploading image: $e');
-      return null;
-    }
-  }
+  // Future<String?> _uploadImageToFirebase(File imageFile) async {
+  //   try {
+  //     final storageRef = FirebaseStorage.instance
+  //         .ref()
+  //         .child('profile_images')
+  //         .child('$username.jpg');
+  //     await storageRef.putFile(imageFile);
+  //     return await storageRef.getDownloadURL();
+  //   } catch (e) {
+  //     print('Error uploading image: $e');
+  //     return null;
+  //   }
+  // }
 
   Future<void> _saveChanges() async {
     if (_formKey.currentState!.validate()) {
@@ -165,6 +167,19 @@ class _ProfileState extends State<PengaturanProfile> {
                                   ? NetworkImage(imageUrl!)
                                   : AssetImage('lib/images/hello.png')
                                       as ImageProvider,
+                          child: _imageFile != null
+                              ? Image.file(
+                                  _imageFile!,
+                                  fit: BoxFit.cover,
+                                )
+                              : (widget.profile?.image_url != null &&
+                                      Uri.parse(widget.profile!.image_url!)
+                                          .isAbsolute
+                                  ? Image.network(
+                                      widget.profile!.image_url!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container()),
                         ),
                         Positioned(
                           bottom: 0,
