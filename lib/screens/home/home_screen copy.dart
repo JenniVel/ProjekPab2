@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
-import 'package:projek/screens/nav_pages/tiket_screen.dart';
+import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/wisata_widget.dart';
 import '../models/category_model.dart';
 import '../models/people_also_like_mode.dart';

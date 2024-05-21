@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projek/screens/awalan/profile_screen.dart';
 import 'package:projek/screens/home/home_screen%20copy.dart';
 import 'package:projek/screens/models/people_also_like_mode.dart';
-import 'package:projek/screens/nav_pages/tiket_screen.dart';
+import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 import 'favorite.dart';
