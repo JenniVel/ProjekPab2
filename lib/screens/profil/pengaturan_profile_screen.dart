@@ -5,7 +5,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projek/screens/awalan/profile_screen.dart';
-import 'package:projek/services/profile_service.dart';
+import 'package:projek/screens/awalan/reset_password.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -135,6 +136,14 @@ class _ProfileState extends State<PengaturanProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Perubahan berhasil disimpan!')));
     }
+  }
+
+  void _resetPassword() {
+    // Implementasikan logika reset password Anda di sini
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResetPass()),
+    );
   }
 
   @override
@@ -360,6 +369,23 @@ class _ProfileState extends State<PengaturanProfile> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                child: ElevatedButton(
+                  onPressed: _resetPassword, // Updated to remove ()
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(360, 60),
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'fonts/Inter-Bold.ttf',
+                      ),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue.shade400,
+                      shape: const StadiumBorder()),
+                  child: const Text("Ganti Kata Sandi"),
                 ),
               ),
               const SizedBox(height: 20),
