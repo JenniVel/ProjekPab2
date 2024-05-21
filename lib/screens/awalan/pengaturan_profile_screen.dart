@@ -8,8 +8,8 @@ import 'package:projek/screens/awalan/profile_screen.dart';
 import 'package:projek/services/profile_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class PengaturanProfile extends StatefulWidget {
   final Profile? profile;
@@ -24,6 +24,7 @@ class _ProfileState extends State<PengaturanProfile> {
   String? imageUrl;
   File? _imageFile;
   final _formKey = GlobalKey<FormState>();
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -54,7 +55,6 @@ class _ProfileState extends State<PengaturanProfile> {
       username = decryptedUsername;
     });
 
-    // Retrieve profile image URL from Firestore
     final docSnapshot = await FirebaseFirestore.instance
         .collection('profiles')
         .doc(username)
@@ -74,43 +74,40 @@ class _ProfileState extends State<PengaturanProfile> {
         _imageFile = File(pickedFile.path);
       });
 
-      // // Upload the image to Firebase Storage
-      // String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
-      // if (uploadedImageUrl != null) {
-      //   // Save the uploaded image URL to Firestore
-      //   await FirebaseFirestore.instance
-      //       .collection('profiles')
-      //       .doc(username)
-      //       .update({
-      //     'image_url': uploadedImageUrl,
-      //   });
+      String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
+      if (uploadedImageUrl != null) {
+        await FirebaseFirestore.instance
+            .collection('profiles')
+            .doc(username)
+            .update({
+          'image_url': uploadedImageUrl,
+        });
 
-      //   setState(() {
-      //     imageUrl = uploadedImageUrl;
-      //   });
-      // }
+        setState(() {
+          imageUrl = uploadedImageUrl;
+        });
+      }
     }
   }
 
-  // Future<String?> _uploadImageToFirebase(File imageFile) async {
-  //   try {
-  //     final storageRef = FirebaseStorage.instance
-  //         .ref()
-  //         .child('profile_images')
-  //         .child('$username.jpg');
-  //     await storageRef.putFile(imageFile);
-  //     return await storageRef.getDownloadURL();
-  //   } catch (e) {
-  //     print('Error uploading image: $e');
-  //     return null;
-  //   }
-  // }
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    try {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('$username.jpg');
+      await storageRef.putFile(imageFile);
+      return await storageRef.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
 
   Future<void> _saveChanges() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Update the profile details in Firestore
       await FirebaseFirestore.instance
           .collection('profiles')
           .doc(username)
@@ -120,7 +117,6 @@ class _ProfileState extends State<PengaturanProfile> {
         'image_url': imageUrl,
       });
 
-      // Update the local storage with new values
       final SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       final keyString = sharedPreferences.getString('key') ?? '';
@@ -136,7 +132,6 @@ class _ProfileState extends State<PengaturanProfile> {
       sharedPreferences.setString('fullname', encryptedFullname);
       sharedPreferences.setString('email', encryptedEmail);
 
-      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Perubahan berhasil disimpan!')));
     }
@@ -167,19 +162,6 @@ class _ProfileState extends State<PengaturanProfile> {
                                   ? NetworkImage(imageUrl!)
                                   : AssetImage('lib/images/hello.png')
                                       as ImageProvider,
-                          child: _imageFile != null
-                              ? Image.file(
-                                  _imageFile!,
-                                  fit: BoxFit.cover,
-                                )
-                              : (widget.profile?.image_url != null &&
-                                      Uri.parse(widget.profile!.image_url!)
-                                          .isAbsolute
-                                  ? Image.network(
-                                      widget.profile!.image_url!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Container()),
                         ),
                         Positioned(
                           bottom: 0,
@@ -204,38 +186,65 @@ class _ProfileState extends State<PengaturanProfile> {
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 300),
-                child: Text(
-                  'Nama Lengkap',
-                  style: TextStyle(
-                    fontFamily: 'fonts/Inter-Black.ttf',
-                    color: Colors.blue.shade800,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Nama Lengkap',
+                      style: TextStyle(
+                        fontFamily: 'fonts/Inter-Black.ttf',
+                        color: Colors.blue.shade800,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          isEditing = !isEditing;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 400),
-                child: TextFormField(
-                  initialValue: nama,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
-                    filled: true,
-                    fillColor: const Color(0xFFF5F6F9),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  onSaved: (value) {
-                    nama = value!;
-                  },
-                ),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: nama,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama lengkap tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          nama = value!;
+                        },
+                      )
+                    : Text(
+                        nama,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
               ),
               const SizedBox(height: 10),
               FadeInUp(
@@ -253,25 +262,39 @@ class _ProfileState extends State<PengaturanProfile> {
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 550),
-                child: TextFormField(
-                  initialValue: username,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.admin_panel_settings),
-                    filled: true,
-                    fillColor: const Color(0xFFF5F6F9),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  onSaved: (value) {
-                    username = value!;
-                  },
-                ),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: username,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.admin_panel_settings),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama pengguna tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          username = value!;
+                        },
+                      )
+                    : Text(
+                        username,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
               ),
               const SizedBox(height: 10),
               FadeInUp(
@@ -289,25 +312,42 @@ class _ProfileState extends State<PengaturanProfile> {
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 650),
-                child: TextFormField(
-                  initialValue: email,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.mail),
-                    filled: true,
-                    fillColor: const Color(0xFFF5F6F9),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  onSaved: (value) {
-                    email = value!;
-                  },
-                ),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: email,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.mail),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email tidak boleh kosong';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+.[^@]+').hasMatch(value)) {
+                            return 'Masukkan email yang valid';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          email = value!;
+                        },
+                      )
+                    : Text(
+                        email,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
               ),
               const SizedBox(height: 20),
               FadeInUp(
