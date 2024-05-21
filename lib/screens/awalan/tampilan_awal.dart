@@ -46,7 +46,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
               alignment: const AlignmentDirectional(0.00, 0.00),
               child: ClipRRect(
                 child: Image.asset(
-                  'lib/images/hello.png',
+                  'images/google/hello.png',
                   width: 271,
                   height: 240,
                   fit: BoxFit.contain,

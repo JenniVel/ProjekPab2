@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
 import 'package:projek/provider/auth_provider.dart';
+import 'package:projek/screens/home/home_screen%20copy.dart';
 import 'package:projek/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -79,7 +80,7 @@ class _MasukScreenState extends State<MasukScreen> {
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+        MaterialPageRoute(builder: (context) => HomePage(user: user)),
       );
     } else {
       setState(() {
@@ -95,56 +96,6 @@ class _MasukScreenState extends State<MasukScreen> {
       _errorText = 'Terjadinya error: $e';
     });
   }
-
-
-
-    // await FirebaseAuth.instance.signInWithEmailAndPassword(
-    //   email: _namaPenggunaController.text, 
-    //   password: _kataSandiController.text
-    // );
-
-
-
-    // try {
-    //   final Future<SharedPreferences> prefsFuture =
-    //       SharedPreferences.getInstance();
-
-    //   String nama = _namaPenggunaController.text.trim();
-    //   String password = _kataSandiController.text.trim();
-    //   print('Sign in dilakukan');
-
-    //   if (nama.isNotEmpty && password.isNotEmpty) {
-    //     final SharedPreferences prefs = await prefsFuture;
-    //     final data = await _retrieveAndDecryptDataFromPrefs(prefs);
-    //     if (data.isNotEmpty) {
-    //       final decryptedUsername = data['username'];
-    //       final decryptedPassword = data['password'];
-    //       if (nama == decryptedUsername && password == decryptedPassword) {
-    //         _errorText = '';
-    //         _isSignedIn = true;
-    //         prefs.setBool('isSignedIn', true);
-    //         // Pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
-    //         WidgetsBinding.instance.addPostFrameCallback((_) {
-    //           Navigator.of(context).popUntil((route) => route.isFirst);
-    //         });
-    //         // Sign in berhasil, navigasikan ke layar utama
-    //         WidgetsBinding.instance.addPostFrameCallback((_) {
-    //           Navigator.pushReplacementNamed(context, '/home');
-    //         });
-    //         print('Sign in berhasil');
-    //       } else {
-    //         print('Nama Pengguna atau Kata Sandi Salah');
-    //       }
-    //     } else {
-    //       print('Tidak ditemukan data pengguna');
-    //     }
-    //   } else {
-    //     print('Nama Pengguna dan Kata Sandi tidak boleh kosong');
-    //     // Tambahkan pesan untuk kasus ketika username atau password kosong
-    //   }
-    // } catch (e) {
-    //   print('Terjadinya error: $e');
-    // }
   }
 
   @override
@@ -361,7 +312,7 @@ class _MasukScreenState extends State<MasukScreen> {
                   children: [
                     // google button
                     Tombol(
-                      imagePath: 'lib/images/google.png',
+                      imagePath: 'images/google/google.png',
                       onTap: () => authenticateWithGoogle(context: context),
                     ),
                   ],
