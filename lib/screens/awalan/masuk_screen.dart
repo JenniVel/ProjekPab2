@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
 import 'package:projek/provider/auth_provider.dart';
+import 'package:projek/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -54,10 +55,55 @@ class _MasukScreenState extends State<MasukScreen> {
   }
 
   void _signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _namaPenggunaController.text, 
-      password: _kataSandiController.text
+  if (_namaPenggunaController.text.isEmpty || _kataSandiController.text.isEmpty) {
+    setState(() {
+      _errorText = 'Nama Pengguna dan Kata Sandi tidak boleh kosong';
+    });
+    return;
+  }
+
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _namaPenggunaController.text,
+      password: _kataSandiController.text,
     );
+
+    User? user = userCredential.user;
+
+    if (user != null) {
+      setState(() {
+        _errorText = '';
+        _isSignedIn = true;
+      });
+
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+      );
+    } else {
+      setState(() {
+        _errorText = 'Login gagal: User tidak ditemukan';
+      });
+    }
+  } on FirebaseAuthException catch (e) {
+    setState(() {
+      _errorText = 'Login gagal: ${e.message}';
+    });
+  } catch (e) {
+    setState(() {
+      _errorText = 'Terjadinya error: $e';
+    });
+  }
+
+
+
+    // await FirebaseAuth.instance.signInWithEmailAndPassword(
+    //   email: _namaPenggunaController.text, 
+    //   password: _kataSandiController.text
+    // );
+
+
 
     // try {
     //   final Future<SharedPreferences> prefsFuture =
