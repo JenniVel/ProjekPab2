@@ -40,7 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
         child: Center(
           child: Image.asset(
-            'lib/images/logo.gif',
+            'images/google/logo.gif',
             height: 357,
             width: 332,
           ),
