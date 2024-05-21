@@ -13,6 +13,8 @@ import 'pengaturan_profile_screen.dart'; // Import PengaturanProfileScreen
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
+  get image_url => null;
+
   @override
   State<Profile> createState() => _ProfileState();
 }
