@@ -8,7 +8,7 @@ import 'package:projek/services/profile_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-import 'pengaturan_profile_screen.dart'; // Import PengaturanProfileScreen
+import '../profil/pengaturan_profile_screen.dart'; // Import PengaturanProfileScreen
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
