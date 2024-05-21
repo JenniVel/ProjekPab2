@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
+import 'package:projek/screens/awalan/profile_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
