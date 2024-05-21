@@ -16,7 +16,7 @@ class MasukScreen extends StatefulWidget {
 }
 
 class _MasukScreenState extends State<MasukScreen> {
-  final TextEditingController _namaPenggunaController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _kataSandiController = TextEditingController();
 
   String _errorText = '';
@@ -55,7 +55,7 @@ class _MasukScreenState extends State<MasukScreen> {
   }
 
   void _signIn() async {
-  if (_namaPenggunaController.text.isEmpty || _kataSandiController.text.isEmpty) {
+  if (_emailController.text.isEmpty || _kataSandiController.text.isEmpty) {
     setState(() {
       _errorText = 'Nama Pengguna dan Kata Sandi tidak boleh kosong';
     });
@@ -64,7 +64,7 @@ class _MasukScreenState extends State<MasukScreen> {
 
   try {
     UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _namaPenggunaController.text,
+      email: _emailController.text,
       password: _kataSandiController.text,
     );
 
@@ -210,7 +210,7 @@ class _MasukScreenState extends State<MasukScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Nama Pengguna',
+                              'Email',
                               style: TextStyle(
                                 fontFamily: 'fonts/Inter-Black.ttf',
                                 color: Color(0xFF1284EE),
@@ -220,10 +220,10 @@ class _MasukScreenState extends State<MasukScreen> {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
-                              controller: _namaPenggunaController,
+                              controller: _emailController,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                hintText: "Nama Pengguna",
+                                hintText: "Email",
                                 labelStyle: const TextStyle(
                                   fontFamily: 'fonts/Inter-Bold.ttf',
                                   color: Color(0xFF4583DF),
