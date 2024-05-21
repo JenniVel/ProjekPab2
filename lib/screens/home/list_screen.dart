@@ -3,21 +3,21 @@ import 'package:projek/screens/home/edit_screen.dart';
 import 'package:projek/services/upload_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NoteListScreen extends StatefulWidget {
-  const NoteListScreen({super.key});
+class DestinationListScreen extends StatefulWidget {
+  const DestinationListScreen({super.key});
 
   @override
-  State<NoteListScreen> createState() => _NoteListScreenState();
+  State<DestinationListScreen> createState() => _DestinationListScreenState();
 }
 
-class _NoteListScreenState extends State<NoteListScreen> {
+class _DestinationListScreenState extends State<DestinationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: const Text('Destinations'),
       ),
-      body: const NoteList(),
+      body: const DestinationList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -26,15 +26,15 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 builder: (context) => const DestinationEditScreen(),
               ));
         },
-        tooltip: 'Add Note',
+        tooltip: 'Add Destination',
         child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class NoteList extends StatelessWidget {
-  const NoteList({super.key});
+class DestinationList extends StatelessWidget {
+  const DestinationList({super.key});
 
   Future<void> _launchMaps(double latitude, double longitude) async {
     Uri googleUrl = Uri.parse(

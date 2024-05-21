@@ -142,10 +142,10 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                     );
 
                     if (widget.wisata == null) {
-                      UploadService.addDestination(wisata)
+                      UploadService.addDestination(Destination)
                           .whenComplete(() => Navigator.of(context).pop());
                     } else {
-                      UploadService.updateDestination(wisata)
+                      UploadService.updateDestination(Destination)
                           .whenComplete(() => Navigator.of(context).pop());
                     }
                   },
