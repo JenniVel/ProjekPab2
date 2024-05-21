@@ -36,16 +36,16 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
 class DestinationList extends StatelessWidget {
   const DestinationList({super.key});
 
-  Future<void> _launchMaps(double latitude, double longitude) async {
-    Uri googleUrl = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
-    try {
-      await launchUrl(googleUrl);
-    } catch (e) {
-      print('Could not open the map: $e');
-      // Optionally, show a message to the user
-    }
-  }
+  // Future<void> _launchMaps(double latitude, double longitude) async {
+  //   Uri googleUrl = Uri.parse(
+  //       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+  //   try {
+  //     await launchUrl(googleUrl);
+  //   } catch (e) {
+  //     print('Could not open the map: $e');
+  //     // Optionally, show a message to the user
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
