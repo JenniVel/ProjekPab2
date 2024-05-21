@@ -74,6 +74,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
     }
   }
 
+
   // TODO: 2. Membuat fungsi dispose
   @override
   void dispose() {

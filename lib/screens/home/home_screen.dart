@@ -11,22 +11,39 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+Future<void> updateDisplayName(String displayName) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await user.updateProfile(displayName: displayName);
+    await user.reload();
+    user = FirebaseAuth.instance.currentUser;
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
+  late User _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = widget.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome, ${widget.user.displayName ?? 'User'}!', // Display user's name or 'User' if name is null
-              style: TextStyle(fontSize: 20),
+              'Welcome, ${_user.displayName ?? 'User'}!', // Display user's name or 'User' if name is null
+              style: const TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
@@ -36,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-              child: Text('Logout'),
+              child: const Text('Logout'),
             ),
           ],
         ),
