@@ -18,7 +18,7 @@ class _UploadDialogState extends State<UploadDialog> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   File? _imageFile;
-  Position? _currentPosition;
+  // Position? _currentPosition;
   // String? _currentAddress;
 
   @override
