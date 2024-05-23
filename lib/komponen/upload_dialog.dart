@@ -17,6 +17,7 @@ class UploadDialog extends StatefulWidget {
 class _UploadDialogState extends State<UploadDialog> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _hargaController = TextEditingController();
   File? _imageFile;
   // Position? _currentPosition;
   // String? _currentAddress;
@@ -27,6 +28,7 @@ class _UploadDialogState extends State<UploadDialog> {
     if (widget.wisata != null) {
       _nameController.text = widget.wisata!.name;
       _descriptionController.text = widget.wisata!.description;
+      _hargaController.text = widget.wisata!.harga;
     }
   }
 
@@ -57,7 +59,7 @@ class _UploadDialogState extends State<UploadDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Title: ',
+            'Nama Destinasi: ',
             textAlign: TextAlign.start,
           ),
           TextField(
@@ -66,11 +68,20 @@ class _UploadDialogState extends State<UploadDialog> {
           const Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
-              'Description: ',
+              'Deskripsi: ',
             ),
           ),
           TextField(
             controller: _descriptionController,
+          ),
+           const Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'Harga: ',
+            ),
+          ),
+          TextField(
+            controller: _hargaController,
           ),
           const Padding(
             padding: EdgeInsets.only(top: 20),
@@ -118,6 +129,7 @@ class _UploadDialogState extends State<UploadDialog> {
               id: widget.wisata?.id,
               name: _nameController.text,
               description: _descriptionController.text,
+              harga: _hargaController.text,
               imageUrl: imageUrl,
               createdAt: widget.wisata?.createdAt,
             );

@@ -18,6 +18,7 @@ class DestinationEditScreen extends StatefulWidget {
 class _DestinationEditScreenState extends State<DestinationEditScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _hargaController = TextEditingController();
   File? _imageFile;
   Position? _currentPosition;
 
@@ -27,6 +28,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
     if (widget.wisata != null) {
       _nameController.text = widget.wisata!.name;
       _descriptionController.text = widget.wisata!.description;
+      _hargaController.text = widget.wisata!.harga;
     }
   }
 
@@ -56,7 +58,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Title: ',
+                'Nama Destinasi: ',
                 textAlign: TextAlign.start,
               ),
               TextField(
@@ -65,11 +67,20 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Text(
-                  'Description: ',
+                  'Deskripsi: ',
                 ),
               ),
               TextField(
                 controller: _descriptionController,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Harga: ',
+                ),
+              ),
+              TextField(
+                controller: _hargaController,
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 20),
@@ -117,6 +128,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                           id: widget.wisata?.id,
                           name: _nameController.text,
                           description: _descriptionController.text,
+                          harga: _hargaController.text,
                           imageUrl: imageUrl,
                           // latitude: _currentPosition?.latitude,
                           // longitude: _currentPosition?.longitude,

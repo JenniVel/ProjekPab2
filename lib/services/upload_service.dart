@@ -37,6 +37,7 @@ class UploadService {
     Map<String, dynamic> newDestination = {
       'name': wisata.name,
       'description': wisata.description,
+      'harga': wisata.harga,
       'image_url': wisata.imageUrl,
       'created_at': FieldValue.serverTimestamp(),
       'updated_at': FieldValue.serverTimestamp(),
@@ -48,6 +49,7 @@ class UploadService {
     Map<String, dynamic> updatedDestination = {
       'name': wisata.name,
       'description': wisata.description,
+      'harga': wisata.harga,
       'image_url': wisata.imageUrl,
       'created_at': wisata.createdAt,
       'updated_at': FieldValue.serverTimestamp(),
@@ -72,6 +74,7 @@ class UploadService {
           id: doc.id,
           name: data['name'],
           description: data['description'],
+          harga: data['harga'],
           imageUrl: data['image_url'],
           createdAt: data['created_at'] != null
               ? data['created_at'] as Timestamp
