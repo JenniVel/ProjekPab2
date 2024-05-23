@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:projek/screens/awalan/reset_password.dart';
+import 'package:projek/tema/theme_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -13,9 +14,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class PengaturanProfile extends StatefulWidget {
-  const PengaturanProfile({super.key});
+  const PengaturanProfile({Key? key});
 
-  get image_url => null;
   @override
   State<PengaturanProfile> createState() => _ProfileState();
 }
@@ -135,11 +135,17 @@ class _ProfileState extends State<PengaturanProfile> {
 
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Perubahan berhasil disimpan!')));
+
+      setState(() {
+        isEditing = false;
+      });
+
+      // Navigasi kembali ke halaman profil setelah menyimpan perubahan
+      Navigator.pop(context);
     }
   }
 
   void _resetPassword() {
-    // Implementasikan logika reset password Anda di sini
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ResetPass()),
@@ -169,24 +175,25 @@ class _ProfileState extends State<PengaturanProfile> {
                               ? FileImage(_imageFile!)
                               : imageUrl != null
                                   ? NetworkImage(imageUrl!)
-                                  : AssetImage('lib/images/hello.png')
+                                  : const AssetImage('lib/images/hello.png')
                                       as ImageProvider,
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: _pickImage,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blue,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
+                        if (isEditing)
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: InkWell(
+                              onTap: _pickImage,
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.blue,
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
@@ -208,7 +215,7 @@ class _ProfileState extends State<PengaturanProfile> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         setState(() {
                           isEditing = !isEditing;
@@ -225,7 +232,7 @@ class _ProfileState extends State<PengaturanProfile> {
                     ? TextFormField(
                         initialValue: nama,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: const Icon(Icons.person),
                           filled: true,
                           fillColor: const Color(0xFFF5F6F9),
                           enabledBorder: OutlineInputBorder(
@@ -275,7 +282,7 @@ class _ProfileState extends State<PengaturanProfile> {
                     ? TextFormField(
                         initialValue: username,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.admin_panel_settings),
+                          prefixIcon: const Icon(Icons.admin_panel_settings),
                           filled: true,
                           fillColor: const Color(0xFFF5F6F9),
                           enabledBorder: OutlineInputBorder(
@@ -321,42 +328,13 @@ class _ProfileState extends State<PengaturanProfile> {
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 650),
-                child: isEditing
-                    ? TextFormField(
-                        initialValue: email,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.mail),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F6F9),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Email tidak boleh kosong';
-                          }
-                          if (!RegExp(r'^[^@]+@[^@]+.[^@]+').hasMatch(value)) {
-                            return 'Masukkan email yang valid';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          email = value!;
-                        },
-                      )
-                    : Text(
-                        email,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.blue.shade800,
-                        ),
-                      ),
+                child: Text(
+                  email,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue.shade800,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               FadeInUp(
@@ -372,11 +350,12 @@ class _ProfileState extends State<PengaturanProfile> {
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: _resetPassword, // Updated to remove ()
-                  style: ElevatedButton.styleFrom(
+              if (!isEditing) // Show the reset password button only when not in edit mode
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: _resetPassword,
+                    style: ElevatedButton.styleFrom(
                       fixedSize: const Size(360, 60),
                       textStyle: const TextStyle(
                         fontSize: 20,
@@ -384,16 +363,18 @@ class _ProfileState extends State<PengaturanProfile> {
                       ),
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blue.shade400,
-                      shape: const StadiumBorder()),
-                  child: const Text("Ganti Kata Sandi"),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text("Ganti Kata Sandi"),
+                  ),
                 ),
-              ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: _saveChanges,
-                  style: ElevatedButton.styleFrom(
+              if (isEditing) // Show the save button only in edit mode
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: _saveChanges,
+                    style: ElevatedButton.styleFrom(
                       fixedSize: const Size(360, 60),
                       textStyle: const TextStyle(
                         fontSize: 20,
@@ -401,13 +382,24 @@ class _ProfileState extends State<PengaturanProfile> {
                       ),
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blue.shade400,
-                      shape: const StadiumBorder()),
-                  child: const Text("Simpan Perubahan"),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text("Simpan Perubahan"),
+                  ),
                 ),
-              ),
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TemaPage()),
+          );
+        },
+        child: const Icon(Icons.color_lens),
+        backgroundColor: Colors.blue,
       ),
     );
   }
