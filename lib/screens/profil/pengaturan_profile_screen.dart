@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projek/screens/awalan/profile_screen.dart';
 import 'package:projek/screens/awalan/reset_password.dart';
+// import 'package:projek/screens/awalan/tema.dart'; // pastikan Anda memiliki halaman tema
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -135,16 +136,36 @@ class _ProfileState extends State<PengaturanProfile> {
 
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Perubahan berhasil disimpan!')));
+
+      setState(() {
+        isEditing = false;
+      });
     }
   }
 
   void _resetPassword() {
-    // Implementasikan logika reset password Anda di sini
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ResetPass()),
     );
   }
+
+  void _logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => PengaturanProfile()),
+    );
+  }
+
+  // void _navigateToTema() {
+  //   Navigator.push(
+  //       // context,
+  //       // MaterialPageRoute(builder: (context) => TemaPage()),
+  //       );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -169,23 +190,25 @@ class _ProfileState extends State<PengaturanProfile> {
                               ? FileImage(_imageFile!)
                               : imageUrl != null
                                   ? NetworkImage(imageUrl!)
-                                  : AssetImage('lib/images/hello.png')
+                                  : AssetImage('images/google/hello.png')
                                       as ImageProvider,
                         ),
                         Positioned(
                           bottom: 0,
                           right: 0,
-                          child: InkWell(
-                            onTap: _pickImage,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blue,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                          child: isEditing
+                              ? InkWell(
+                                  onTap: _pickImage,
+                                  child: const CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.blue,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
                         ),
                       ],
                     ),
@@ -318,6 +341,16 @@ class _ProfileState extends State<PengaturanProfile> {
                   ),
                 ),
               ),
+              FadeInUp(
+                delay: const Duration(milliseconds: 650),
+                child: Text(
+                  email,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue.shade800,
+                  ),
+                ),
+              ),
               const SizedBox(height: 10),
               FadeInUp(
                 delay: const Duration(milliseconds: 650),
@@ -341,7 +374,7 @@ class _ProfileState extends State<PengaturanProfile> {
                           if (value == null || value.isEmpty) {
                             return 'Email tidak boleh kosong';
                           }
-                          if (!RegExp(r'^[^@]+@[^@]+.[^@]+').hasMatch(value)) {
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                             return 'Masukkan email yang valid';
                           }
                           return null;
@@ -372,39 +405,82 @@ class _ProfileState extends State<PengaturanProfile> {
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: _resetPassword, // Updated to remove ()
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(360, 60),
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'fonts/Inter-Bold.ttf',
-                      ),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue.shade400,
-                      shape: const StadiumBorder()),
-                  child: const Text("Ganti Kata Sandi"),
+              if (!isEditing)
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: _resetPassword,
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(360, 60),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'fonts/Inter-Bold.ttf',
+                        ),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue.shade400,
+                        shape: const StadiumBorder()),
+                    child: const Text("Ganti Kata Sandi"),
+                  ),
                 ),
-              ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: _saveChanges,
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(360, 60),
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'fonts/Inter-Bold.ttf',
-                      ),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue.shade400,
-                      shape: const StadiumBorder()),
-                  child: const Text("Simpan Perubahan"),
+              if (isEditing)
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await _saveChanges();
+                      setState(() {
+                        isEditing = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(360, 60),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'fonts/Inter-Bold.ttf',
+                        ),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue.shade400,
+                        shape: const StadiumBorder()),
+                    child: const Text("Simpan Perubahan"),
+                  ),
                 ),
-              ),
+              const SizedBox(height: 20),
+              if (!isEditing)
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  // child: ElevatedButton(
+                  // onPressed: _navigateToTema,
+                  // style: ElevatedButton.styleFrom(
+                  //     fixedSize: const Size(360, 60),
+                  //     textStyle: const TextStyle(
+                  //       fontSize: 20,
+                  //       fontFamily: 'fonts/Inter-Bold.ttf',
+                  //     ),
+                  //       foregroundColor: Colors.white,
+                  //       backgroundColor: Colors.blue.shade400,
+                  //       shape: const StadiumBorder()),
+                  //   child: const Text("Tema"),
+                  // ),
+                ),
+              const SizedBox(height: 20),
+              if (!isEditing)
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: _logout,
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(360, 60),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'fonts/Inter-Bold.ttf',
+                        ),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red.shade400,
+                        shape: const StadiumBorder()),
+                    child: const Text("Keluar"),
+                  ),
+                ),
             ],
           ),
         ),
