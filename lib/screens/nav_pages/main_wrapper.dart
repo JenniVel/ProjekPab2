@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projek/screens/awalan/profile_screen.dart';
+
 import 'package:projek/screens/home/home_screen%20copy.dart';
 import 'package:projek/screens/models/people_also_like_mode.dart';
+import 'package:projek/screens/nav_pages/profile.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
@@ -26,7 +27,7 @@ class _MainWrapperState extends State<MainWrapper> {
       HomePage(user: widget.user),
       FavoritePage(favoriteWisata: favorites),
       SearchScreen(),
-      Profile(),
+      PengaturanProfile(),
     ];
   }
 
@@ -45,7 +46,8 @@ class _MainWrapperState extends State<MainWrapper> {
   void onTap(int index) {
     setState(() {
       currentIndex = index;
-      final List<PeopleAlsoLikeModel> favoritedWisata = PeopleAlsoLikeModel.getFavoriteWisata();
+      final List<PeopleAlsoLikeModel> favoritedWisata =
+          PeopleAlsoLikeModel.getFavoriteWisata();
       favorites = favoritedWisata;
     });
     pageController.animateToPage(index,

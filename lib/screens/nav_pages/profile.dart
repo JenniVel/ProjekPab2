@@ -1,19 +1,31 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:projek/screens/awalan/reset_password.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class PengaturanProfile extends StatefulWidget {
+  const PengaturanProfile({super.key});
 
+  get image_url => null;
   @override
-  State<Profile> createState() => _ProfileState();
+  State<PengaturanProfile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<PengaturanProfile> {
   String nama = "", username = "", email = "";
+  String? imageUrl;
+  File? _imageFile;
+  final _formKey = GlobalKey<FormState>();
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -21,7 +33,7 @@ class _ProfileState extends State<Profile> {
     getValidationData();
   }
 
-  Future getValidationData() async {
+  Future<void> getValidationData() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     final encryptedFullname = sharedPreferences.getString('fullname') ?? '';
@@ -43,9 +55,95 @@ class _ProfileState extends State<Profile> {
       email = decryptedEmail;
       username = decryptedUsername;
     });
-    print(nama);
-    print(email);
-    print(username);
+
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('profiles')
+        .doc(username)
+        .get();
+    if (docSnapshot.exists) {
+      setState(() {
+        imageUrl = docSnapshot['image_url'];
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+
+      String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
+      if (uploadedImageUrl != null) {
+        await FirebaseFirestore.instance
+            .collection('profiles')
+            .doc(username)
+            .update({
+          'image_url': uploadedImageUrl,
+        });
+
+        setState(() {
+          imageUrl = uploadedImageUrl;
+        });
+      }
+    }
+  }
+
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    try {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('$username.jpg');
+      await storageRef.putFile(imageFile);
+      return await storageRef.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  Future<void> _saveChanges() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      await FirebaseFirestore.instance
+          .collection('profiles')
+          .doc(username)
+          .update({
+        'fullname': nama,
+        'email': email,
+        'image_url': imageUrl,
+      });
+
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      final keyString = sharedPreferences.getString('key') ?? '';
+      final ivString = sharedPreferences.getString('iv') ?? '';
+
+      final encrypt.Key key = encrypt.Key.fromBase64(keyString);
+      final iv = encrypt.IV.fromBase64(ivString);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+      final encryptedFullname = encrypter.encrypt(nama, iv: iv).base64;
+      final encryptedEmail = encrypter.encrypt(email, iv: iv).base64;
+
+      sharedPreferences.setString('fullname', encryptedFullname);
+      sharedPreferences.setString('email', encryptedEmail);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Perubahan berhasil disimpan!')));
+    }
+  }
+
+  void _resetPassword() {
+    // Implementasikan logika reset password Anda di sini
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResetPass()),
+    );
   }
 
   @override
@@ -54,149 +152,263 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.blue.shade50,
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
                 child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 70,
-                  backgroundImage: AssetImage('images/ic_profil.jpg'),
-                ),
-              ],
-            )),
-            const SizedBox(height: 10),
-            FadeInUp(
-              delay: const Duration(milliseconds: 300),
-              child: Text(
-                'Informasi Akun',
-                style: TextStyle(
-                  fontFamily: 'fonts/Inter-Black.ttf',
-                  color: Colors.blue.shade800,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            FadeInUp(
-              delay: const Duration(milliseconds: 400),
-              child: itemProfile(nama, Icons.person, () {}),
-            ),
-            FadeInUp(
-              delay: const Duration(milliseconds: 500),
-              child: itemProfile(username, Icons.admin_panel_settings, () {}),
-            ),
-            FadeInUp(
-              delay: const Duration(milliseconds: 600),
-              child: itemProfile(email, Icons.mail, () {}),
-            ),
-            FadeInUp(
-              delay: const Duration(milliseconds: 700),
-              child: itemProfile('08xxxxxxxxxx', Icons.phone, () {}),
-            ),
-            const SizedBox(height: 10),
-            FadeInUp(
-              delay: const Duration(milliseconds: 800),
-              child: Text(
-                'Detail Informasi',
-                style: TextStyle(
-                  fontFamily: 'fonts/Inter-Black.ttf',
-                  color: Colors.blue.shade800,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: _imageFile != null
+                              ? FileImage(_imageFile!)
+                              : imageUrl != null
+                                  ? NetworkImage(imageUrl!)
+                                  : AssetImage('lib/images/hello.png')
+                                      as ImageProvider,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: InkWell(
+                            onTap: _pickImage,
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.blue,
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            FadeInUp(
-              delay: const Duration(milliseconds: 900),
-              child: itemProfile('keluar', Icons.logout, _showDialog),
-            ),
-            FadeInUp(
-              delay: const Duration(milliseconds: 1000),
-              child: itemProfile('TruPay', Icons.wallet, () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
-              }),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  itemProfile(String title, IconData iconData, VoidCallback? press) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.blue.shade800,
-          padding: const EdgeInsets.all(15),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: const Color(0xFFF5F6F9),
-        ),
-        onPressed: press,
-        child: Row(
-          children: [
-            Icon(
-              iconData,
-              color: Colors.blue.shade800,
-            ),
-            const SizedBox(width: 20),
-            Expanded(
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 300),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Nama Lengkap',
+                      style: TextStyle(
+                        fontFamily: 'fonts/Inter-Black.ttf',
+                        color: Colors.blue.shade800,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          isEditing = !isEditing;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 400),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: nama,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama lengkap tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          nama = value!;
+                        },
+                      )
+                    : Text(
+                        nama,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 500),
                 child: Text(
-              title,
-              style: const TextStyle(
-                fontFamily: 'fonts/Inter-Black.ttf',
-                color: Color(0xFF1284EE),
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                  'Nama Pengguna',
+                  style: TextStyle(
+                    fontFamily: 'fonts/Inter-Black.ttf',
+                    color: Colors.blue.shade800,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
               ),
-            )),
-          ],
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 550),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: username,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.admin_panel_settings),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama pengguna tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          username = value!;
+                        },
+                      )
+                    : Text(
+                        username,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 600),
+                child: Text(
+                  'Gmail',
+                  style: TextStyle(
+                    fontFamily: 'fonts/Inter-Black.ttf',
+                    color: Colors.blue.shade800,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FadeInUp(
+                delay: const Duration(milliseconds: 650),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: email,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.mail),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F6F9),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email tidak boleh kosong';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+.[^@]+').hasMatch(value)) {
+                            return 'Masukkan email yang valid';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          email = value!;
+                        },
+                      )
+                    : Text(
+                        email,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 20),
+              FadeInUp(
+                delay: const Duration(milliseconds: 800),
+                child: Text(
+                  'Ganti Kata Sandi',
+                  style: TextStyle(
+                    fontFamily: 'fonts/Inter-Black.ttf',
+                    color: Colors.blue.shade800,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                child: ElevatedButton(
+                  onPressed: _resetPassword, // Updated to remove ()
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(360, 60),
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'fonts/Inter-Bold.ttf',
+                      ),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue.shade400,
+                      shape: const StadiumBorder()),
+                  child: const Text("Ganti Kata Sandi"),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                child: ElevatedButton(
+                  onPressed: _saveChanges,
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(360, 60),
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'fonts/Inter-Bold.ttf',
+                      ),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue.shade400,
+                      shape: const StadiumBorder()),
+                  child: const Text("Simpan Perubahan"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  void _showDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Log Out'),
-            content: const Text('Apakah anda yakin ingin log out ?'),
-            actions: [
-              MaterialButton(
-                onPressed: () async {
-                  final SharedPreferences sharedPreferences =
-                      await SharedPreferences.getInstance();
-                  sharedPreferences.remove('nama');
-                  sharedPreferences.remove('username');
-                  sharedPreferences.remove('email');
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  });
-                  // Sign in berhasil, navigasikan ke layar utama
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushReplacementNamed(context, '/');
-                  });
-                },
-                child: const Text(
-                  'Iya',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Tidak'),
-              )
-            ],
-          );
-        });
   }
 }
