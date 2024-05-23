@@ -152,6 +152,37 @@ class _ProfileState extends State<PengaturanProfile> {
     );
   }
 
+  Future<void> showLogoutDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Keluar'),
+          content: const Text('Anda yakin ingin keluar?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+              child: const Text('Tidak'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                await sharedPreferences.clear(); // Hapus data akun
+                Navigator.of(context).pop(); // Tutup dialog
+                Navigator.of(context).pushReplacementNamed(
+                    '/login'); // Navigasi ke halaman login
+              },
+              child: const Text('Ya'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -387,6 +418,24 @@ class _ProfileState extends State<PengaturanProfile> {
                     child: const Text("Simpan Perubahan"),
                   ),
                 ),
+              const SizedBox(height: 20),
+              FadeInUp(
+                delay: const Duration(milliseconds: 850),
+                child: ElevatedButton(
+                  onPressed: showLogoutDialog,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(360, 60),
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'fonts/Inter-Bold.ttf',
+                    ),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red.shade400,
+                    shape: const StadiumBorder(),
+                  ),
+                  child: const Text("Keluar"),
+                ),
+              ),
             ],
           ),
         ),
