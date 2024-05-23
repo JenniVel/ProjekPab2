@@ -175,7 +175,7 @@ class _ProfileState extends State<PengaturanProfile> {
                               ? FileImage(_imageFile!)
                               : imageUrl != null
                                   ? NetworkImage(imageUrl!)
-                                  : const AssetImage('lib/images/hello.png')
+                                  : const AssetImage('images/google/hello.png')
                                       as ImageProvider,
                         ),
                         if (isEditing)
