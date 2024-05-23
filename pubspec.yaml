@@ -33,6 +33,9 @@ dependencies:
   cloud_firestore: ^4.16.1
   image_picker: ^1.1.1
   firebase_storage: ^11.7.5
+  curved_navigation_bar: ^1.0.3
+  url_launcher: ^6.2.6
+  geolocator: ^12.0.0
 
 dev_dependencies:
   flutter_test:
@@ -42,5 +45,20 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/images/
-    - lib/images/logo.gif
+    - images/
+    - images/google/logo.gif
+    - images/google/
+    - images/user/
+
+  fonts:
+   - family: Inter
+     fonts:
+       - asset: fonts/Inter-Regular.ttf
+       - asset: fonts/Inter-Black.ttf
+       - asset: fonts/Inter-ExtraBold.ttf
+       - asset: fonts/Inter-ExtraLight.ttf
+       - asset: fonts/Inter-Light.ttf
+       - asset: fonts/Inter-Medium.ttf
+       - asset: fonts/Inter-SemiBold.ttf
+       - asset: fonts/Inter-Thin.ttf
+

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
 import 'package:projek/provider/auth_provider.dart';
+import 'package:projek/screens/home/home_screen%20copy.dart';
+import 'package:projek/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -15,7 +17,7 @@ class MasukScreen extends StatefulWidget {
 }
 
 class _MasukScreenState extends State<MasukScreen> {
-  final TextEditingController _namaPenggunaController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _kataSandiController = TextEditingController();
 
   String _errorText = '';
@@ -54,51 +56,46 @@ class _MasukScreenState extends State<MasukScreen> {
   }
 
   void _signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _namaPenggunaController.text, 
-      password: _kataSandiController.text
+  if (_emailController.text.isEmpty || _kataSandiController.text.isEmpty) {
+    setState(() {
+      _errorText = 'Nama Pengguna dan Kata Sandi tidak boleh kosong';
+    });
+    return;
+  }
+
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _kataSandiController.text,
     );
 
-    // try {
-    //   final Future<SharedPreferences> prefsFuture =
-    //       SharedPreferences.getInstance();
+    User? user = userCredential.user;
 
-    //   String nama = _namaPenggunaController.text.trim();
-    //   String password = _kataSandiController.text.trim();
-    //   print('Sign in dilakukan');
+    if (user != null) {
+      setState(() {
+        _errorText = '';
+        _isSignedIn = true;
+      });
 
-    //   if (nama.isNotEmpty && password.isNotEmpty) {
-    //     final SharedPreferences prefs = await prefsFuture;
-    //     final data = await _retrieveAndDecryptDataFromPrefs(prefs);
-    //     if (data.isNotEmpty) {
-    //       final decryptedUsername = data['username'];
-    //       final decryptedPassword = data['password'];
-    //       if (nama == decryptedUsername && password == decryptedPassword) {
-    //         _errorText = '';
-    //         _isSignedIn = true;
-    //         prefs.setBool('isSignedIn', true);
-    //         // Pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
-    //         WidgetsBinding.instance.addPostFrameCallback((_) {
-    //           Navigator.of(context).popUntil((route) => route.isFirst);
-    //         });
-    //         // Sign in berhasil, navigasikan ke layar utama
-    //         WidgetsBinding.instance.addPostFrameCallback((_) {
-    //           Navigator.pushReplacementNamed(context, '/home');
-    //         });
-    //         print('Sign in berhasil');
-    //       } else {
-    //         print('Nama Pengguna atau Kata Sandi Salah');
-    //       }
-    //     } else {
-    //       print('Tidak ditemukan data pengguna');
-    //     }
-    //   } else {
-    //     print('Nama Pengguna dan Kata Sandi tidak boleh kosong');
-    //     // Tambahkan pesan untuk kasus ketika username atau password kosong
-    //   }
-    // } catch (e) {
-    //   print('Terjadinya error: $e');
-    // }
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage(user: user)),
+      );
+    } else {
+      setState(() {
+        _errorText = 'Login gagal: User tidak ditemukan';
+      });
+    }
+  } on FirebaseAuthException catch (e) {
+    setState(() {
+      _errorText = 'Login gagal: ${e.message}';
+    });
+  } catch (e) {
+    setState(() {
+      _errorText = 'Terjadinya error: $e';
+    });
+  }
   }
 
   @override
@@ -164,7 +161,7 @@ class _MasukScreenState extends State<MasukScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Nama Pengguna',
+                              'Email',
                               style: TextStyle(
                                 fontFamily: 'fonts/Inter-Black.ttf',
                                 color: Color(0xFF1284EE),
@@ -174,10 +171,10 @@ class _MasukScreenState extends State<MasukScreen> {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
-                              controller: _namaPenggunaController,
+                              controller: _emailController,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                hintText: "Nama Pengguna",
+                                hintText: "Email",
                                 labelStyle: const TextStyle(
                                   fontFamily: 'fonts/Inter-Bold.ttf',
                                   color: Color(0xFF4583DF),
@@ -315,7 +312,7 @@ class _MasukScreenState extends State<MasukScreen> {
                   children: [
                     // google button
                     Tombol(
-                      imagePath: 'lib/images/google.png',
+                      imagePath: 'images/google/google.png',
                       onTap: () => authenticateWithGoogle(context: context),
                     ),
                   ],
