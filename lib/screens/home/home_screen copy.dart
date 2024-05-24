@@ -53,7 +53,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.blue.shade50,
+        // backgroundColor: Colors.blue.shade50,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: _buildAppBar(size),
         body: SizedBox(
           width: size.width,
@@ -71,6 +72,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       text: "TruExplore",
                       size: 30,
                       color: Colors.blue,
+                     
                       fontWeight: FontWeight.w500,
                     ),
                   ),

@@ -4,12 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/home/list_screen.dart';
 import 'package:projek/tema/theme_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:projek/tema/light_theme.dart';
+import 'package:projek/tema/dark_theme.dart';
+import 'package:projek/tema/theme_notifier.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
-import 'package:projek/screens/nav_pages/profile.dart';
-import 'package:projek/tema/theme_notifier.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:projek/screens/nav_pages/profile_page.dart';
 import 'firebase_options.dart';
 import 'package:flutter/foundation.dart';
 
@@ -31,15 +33,22 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ThemeNotifier(),
-      child: MaterialApp(
-        title: 'Logo Screen',
-        theme: ThemeData(),
-        home: const DestinationListScreen(),
-        initialRoute: '/',
-        routes: {
-          '/daftar': (context) => const DaftarScreen(),
-          '/masuk': (context) => const MasukScreen(),
-          '/tema': (context) => const TemaPage(),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, theme, child) {
+          return MaterialApp(
+            title: 'Logo Screen',
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: theme.currentTheme,
+            home: const LandingScreen(),
+            initialRoute: '/',
+            routes: {
+              '/daftar': (context) => const DaftarScreen(),
+              '/masuk': (context) => const MasukScreen(),
+              '/tema': (context) => const TemaPage(),
+            },
+          );
         },
       ),
     );
