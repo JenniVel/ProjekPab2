@@ -1,10 +1,10 @@
 name: projek
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.1.2 <4.0.0'
+  sdk: ">=3.1.2 <4.0.0"
 
 dependencies:
   encrypt: ^5.0.3
@@ -51,14 +51,13 @@ flutter:
     - images/user/
 
   fonts:
-   - family: Inter
-     fonts:
-       - asset: fonts/Inter-Regular.ttf
-       - asset: fonts/Inter-Black.ttf
-       - asset: fonts/Inter-ExtraBold.ttf
-       - asset: fonts/Inter-ExtraLight.ttf
-       - asset: fonts/Inter-Light.ttf
-       - asset: fonts/Inter-Medium.ttf
-       - asset: fonts/Inter-SemiBold.ttf
-       - asset: fonts/Inter-Thin.ttf
-
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter-Regular.ttf
+        - asset: fonts/Inter-Black.ttf
+        - asset: fonts/Inter-ExtraBold.ttf
+        - asset: fonts/Inter-ExtraLight.ttf
+        - asset: fonts/Inter-Light.ttf
+        - asset: fonts/Inter-Medium.ttf
+        - asset: fonts/Inter-SemiBold.ttf
+        - asset: fonts/Inter-Thin.ttf
