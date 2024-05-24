@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
@@ -25,7 +27,7 @@ class _MasukScreenState extends State<MasukScreen> {
   bool _isSignedIn = false;
   bool _obscurePassword = true;
 
-   Future<void> authenticateWithGoogle({required BuildContext context}) async {
+  Future<void> authenticateWithGoogle({required BuildContext context}) async {
     try {
       await FirebaseAuthService.signInWithGoogle(context);
     } on NoGoogleAccountChosenException {
@@ -35,7 +37,6 @@ class _MasukScreenState extends State<MasukScreen> {
       showMessage(context, "Terjadinya error");
     }
   }
-
 
   Future<Map<String, String>> _retrieveAndDecryptDataFromPrefs(
       SharedPreferences sharedPreferences) async {
@@ -56,46 +57,56 @@ class _MasukScreenState extends State<MasukScreen> {
   }
 
   void _signIn() async {
-  if (_emailController.text.isEmpty || _kataSandiController.text.isEmpty) {
-    setState(() {
-      _errorText = 'Nama Pengguna dan Kata Sandi tidak boleh kosong';
-    });
-    return;
-  }
-
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _kataSandiController.text,
-    );
-
-    User? user = userCredential.user;
-
-    if (user != null) {
+    if (_emailController.text.isEmpty || _kataSandiController.text.isEmpty) {
       setState(() {
-        _errorText = '';
-        _isSignedIn = true;
+        _errorText = 'Nama Pengguna dan Kata Sandi tidak boleh kosong';
+      });
+      return;
+    }
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _kataSandiController.text,
+      );
+
+// stlh buat user, buat doc di -tes (ins)
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        'username': _emailController.text.split('@')[0], //initial username
+        'namalengkap': 'Nama saya..'
       });
 
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage(user: user)),
-      );
-    } else {
+      User? user = userCredential.user;
+
+      if (user != null) {
+        setState(() {
+          _errorText = '';
+          _isSignedIn = true;
+        });
+
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage(user: user)),
+        );
+      } else {
+        setState(() {
+          _errorText = 'Login gagal: User tidak ditemukan';
+        });
+      }
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorText = 'Login gagal: User tidak ditemukan';
+        _errorText = 'Login gagal: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _errorText = 'Terjadinya error: $e';
       });
     }
-  } on FirebaseAuthException catch (e) {
-    setState(() {
-      _errorText = 'Login gagal: ${e.message}';
-    });
-  } catch (e) {
-    setState(() {
-      _errorText = 'Terjadinya error: $e';
-    });
-  }
   }
 
   @override
@@ -111,11 +122,11 @@ class _MasukScreenState extends State<MasukScreen> {
         alignment: const AlignmentDirectional(0.00, 0.00),
         child: ClipRRect(
           child: Align(
-              alignment: const AlignmentDirectional(0.00, 0.00),
-              child: Container(
-                color: Colors.blue,
-              ),
+            alignment: const AlignmentDirectional(0.00, 0.00),
+            child: Container(
+              color: Colors.blue,
             ),
+          ),
         ),
       ),
 
@@ -273,53 +284,56 @@ class _MasukScreenState extends State<MasukScreen> {
                                 child: const Text("MASUK"),
                               ),
                             ),
-                            
-                const SizedBox(height: 20),
-            
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            
-                const SizedBox(height: 20),
-            
-                // google 
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    Tombol(
-                      imagePath: 'images/google/google.png',
-                      onTap: () => authenticateWithGoogle(context: context),
-                    ),
-                  ],
-                ),
-            
-                const SizedBox(height: 20),
-            
+
+                            const SizedBox(height: 20),
+
+                            // or continue with
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Divider(
+                                      thickness: 0.5,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Text(
+                                      'Or continue with',
+                                      style: TextStyle(color: Colors.grey[700]),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      thickness: 0.5,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // google
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // google button
+                                Tombol(
+                                  imagePath: 'images/google/google.png',
+                                  onTap: () =>
+                                      authenticateWithGoogle(context: context),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
                             Center(
                               child: RichText(
                                   text: TextSpan(
@@ -338,7 +352,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
-                                          Navigator.pushNamed(context, '/daftar');
+                                          Navigator.pushNamed(
+                                              context, '/daftar');
                                         },
                                     ),
                                   ])),

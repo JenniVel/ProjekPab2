@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/awalan/landing_screen.dart';
-import 'package:projek/screens/nav_pages/profile.dart';
+import 'package:projek/screens/nav_pages/profile_page.dart';
 import 'package:projek/tema/theme_notifier.dart';
 
 import 'firebase_options.dart';
@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Logo Screen',
         theme: ThemeData(),
-        home: const PengaturanProfile(),
+        home: const LandingScreen(),
         initialRoute: '/',
         routes: {
           '/daftar': (context) => const DaftarScreen(),
