@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
-import 'package:projek/provider/auth_provider.dart';
+import 'package:projek/services/auth_provider.dart';
 import 'package:projek/screens/home/home_screen%20copy.dart';
 import 'package:projek/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

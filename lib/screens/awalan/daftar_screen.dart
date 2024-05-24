@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projek/global/showmessage.dart';
-import 'package:projek/provider/auth_provider.dart';
+import 'package:projek/services/auth_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class DaftarScreen extends StatefulWidget {
