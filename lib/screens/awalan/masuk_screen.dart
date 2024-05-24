@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
 import 'package:projek/services/auth_provider.dart';
-import 'package:projek/screens/home/home_screen%20copy.dart';
-import 'package:projek/screens/home/home_screen.dart';
+import 'package:projek/screens/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 

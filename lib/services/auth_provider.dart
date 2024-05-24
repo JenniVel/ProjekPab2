@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:projek/screens/awalan/daftar_screen.dart';
-import 'package:projek/screens/home/home_screen%20copy.dart';
-import 'package:projek/screens/home/home_screen.dart';
+import 'package:projek/screens/home/home_page.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

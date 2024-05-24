@@ -41,7 +41,7 @@ class MainApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: theme.currentTheme,
-            home: const LandingScreen(),
+            home: const DestinationListScreen(),
             initialRoute: '/',
             routes: {
               '/daftar': (context) => const DaftarScreen(),

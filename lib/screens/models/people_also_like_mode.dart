@@ -76,7 +76,7 @@ class PeopleAlsoLikeModel {
     description:
     'Danau Moraine, yang terletak di Taman Nasional Banff, Alberta, Kanada, adalah salah satu destinasi wisata alam paling menakjubkan di dunia. Danau ini dikenal karena keindahan alamnya yang luar biasa, airnya yang jernih, dan latar belakangnya yang megah, dengan Puncak Sepuluh Terkenal di Rocky Mountains sebagai latar belakangnya.',
     day: 3,
-    price: 321000,
+    price: 21000,
     image: 'images/ic_alam.jpg',
     isFavorite: false, 
     isSelected: true,
@@ -89,7 +89,7 @@ class PeopleAlsoLikeModel {
         'Gunung Matterhorn, yang terletak di Alpen Swiss-Italia, adalah salah satu ikon alam paling terkenal di dunia. Dikenal karena puncaknya yang menyerupai piramida dan keindahan alam sekitarnya, Matterhorn menjadi daya tarik utama bagi para petualang, pendaki gunung, dan pecinta alam.',
     image: 'images/ic_alam2.jpg',
     day: 3,
-    price: 321000,
+    price: 50000,
     isFavorite: false,
     isSelected: true
   ),
@@ -101,7 +101,7 @@ class PeopleAlsoLikeModel {
         'Raja Ampat adalah destinasi wisata yang sangat terkenal di Indonesia dan diakui secara internasional sebagai salah satu surga bagi penyelam dan pecinta alam. Terletak di ujung barat laut Papua, Raja Ampat merupakan kelompok kepulauan yang terdiri dari lebih dari 1.500 pulau kecil yang tersebar di sekitar Laut Cenderawasih. Destinasi ini menawarkan keindahan alam bawah laut yang luar biasa, terumbu karang yang subur, dan keanekaragaman hayati laut yang kaya.',
     image: 'images/ic_alam3.jpg',
     day: 3,
-        price: 321000,
+        price: 100000,
     isFavorite: false,
     isSelected: true
   ),
@@ -113,7 +113,7 @@ class PeopleAlsoLikeModel {
         'Tembok Besar Tiongkok, sebuah keajaiban arsitektur yang luar biasa, menawarkan pengalaman bersejarah dan pemandangan alam yang menakjubkan. Dalam konteks tempat wisata, Tembok Besar Tiongkok memikat wisatawan dengan keindahan alam sekitarnya dan keberadaannya yang kaya akan sejarah.',
     image: 'images/ic_alam4.jpg',
     day: 3,
-        price: 321000,
+        price: 300000,
     isFavorite: false,
     isSelected: true
   ),
@@ -126,19 +126,16 @@ class PeopleAlsoLikeModel {
         'Gunung Bromo adalah salah satu destinasi wisata alam yang paling menakjubkan di Indonesia. Terletak di Taman Nasional Bromo Tengger Semeru, gunung ini menawarkan pemandangan luar biasa yang mencakup gunung berapi aktif, lautan pasir, dan pemandangan pegunungan yang megah.',
     image: 'images/ic_alam5.jpg',
     day: 3,
-        price: 321000,
-    
+        price: 50000,
     isFavorite: false,
     isSelected: true
   ),
   PeopleAlsoLikeModel(
     id: 0,
   title: 'Menara Eiffel',
-    location: 'Paris',
-    
+    location: 'Paris', 
     description:
         'Menara Eiffel, dengan arsitektur ikoniknya yang dirancang oleh insinyur Gustave Eiffel, menjadi daya tarik utama di Paris, Prancis. Dengan ketinggian mencapai sekitar 324 meter, menara ini memancarkan kemegahan dan keanggunan, menawarkan pengunjung pemandangan yang luar biasa dari tiga tingkat observasi yang berbeda. Menara Eiffel juga terkenal sebagai tempat romantis yang sering dipilih oleh pasangan untuk momen kencan atau pernikahan mereka. Di samping fasilitas seperti restoran, toko suvenir, dan ruang pameran, pengunjung dapat memilih naik tangga atau menggunakan lift untuk mencapai tingkat observasi dan merasakan keunikan desain rangka logam yang transparan dan indah.',
-   
     image: 'images/ic_alam6.jpg',
    day: 3,
         price: 321000,
@@ -167,7 +164,7 @@ class PeopleAlsoLikeModel {
     
     image: 'images/ic_alam9.jpeg',
     day: 3,
-        price: 321000,
+        price: 30000,
     isFavorite: false,
     isSelected: true
   ),
@@ -181,7 +178,7 @@ class PeopleAlsoLikeModel {
    
     image: 'images/ic_alam10.jpg',
     day: 3,
-        price: 321000,
+        price: 150000,
     isFavorite: false,
     isSelected: true
   ),
@@ -195,7 +192,7 @@ class PeopleAlsoLikeModel {
    
     image: 'images/ic_alam11.jpg',
     day: 3,
-        price: 321000,
+        price: 30000,
     isFavorite: false,
     isSelected: true
   ),
@@ -207,7 +204,7 @@ class PeopleAlsoLikeModel {
         'Gunung Everest, yang terletak di Pegunungan Himalaya, merupakan daya tarik wisata alam yang penuh tantangan dan keindahan alam yang menakjubkan. Dengan ketinggian mencapai 8.848 meter di atas permukaan laut, Everest menjadi puncak tertinggi di dunia, menarik para pendaki gunung dari seluruh dunia untuk menaklukkan puncaknya. Selain pesona alam yang memukau, pengunjung juga dapat merasakan budaya dan kehidupan lokal Sherpa yang unik di sekitar daerah ini. Perjalanan menuju Everest Base Camp memberikan pengalaman mendalam, melalui pemandangan pegunungan yang megah, lembah hijau yang subur, dan perkampungan tradisional. Everest tidak hanya menantang fisik, tetapi juga menyajikan pengalaman spiritual dan petualangan yang luar biasa bagi mereka yang mencari ketangguhan dan keindahan alam yang tak tertandingi.',
     image: 'images/ic_alam12.jpg',
     day: 3,
-        price: 321000,
+        price: 150000,
     isFavorite: false,
     isSelected: true
   ),
@@ -219,7 +216,7 @@ class PeopleAlsoLikeModel {
         'Gunung Fuji, yang terletak di Honshu, Jepang, menjadi daya tarik utama sebagai ikon alam dan budaya negara tersebut. Dengan ketinggian 3.776 meter, Fuji merupakan gunung tertinggi di Jepang dan sering dianggap sebagai simbol keindahan dan ketenangan. Puncaknya yang berbentuk kerucut sempurna selalu ditutupi oleh salju di musim dingin, menciptakan pemandangan yang menakjubkan. Ribuan wisatawan setiap tahunnya mendaki Fuji selama musim panas saat jalur pendakian dibuka. Selain pengalaman mendaki, kawasan sekitar Gunung Fuji menawarkan taman dan danau yang indah, seperti Danau Kawaguchi, memberikan suasana yang damai dan memikat bagi para pengunjung. Fuji juga memiliki nilai budaya yang tinggi, dengan kuil-kuil dan festival-festival lokal yang menambah daya tarik bagi wisatawan yang mencari pengalaman yang mendalam di Jepang.',
     image: 'images/ic_alam13.jpg',
 day: 3,
-        price: 321000,
+        price: 120000,
     isFavorite: false,
     isSelected: true
   ),
@@ -231,7 +228,7 @@ day: 3,
         'Danau Kelimutu, terletak di Pulau Flores, Indonesia, menawarkan pesona alam yang unik dan memikat. Keistimewaan utama danau ini terletak pada tiga kawahnya yang menampung air berwarna-warni, yang dapat berubah-ubah seiring waktu. Warna-warna yang paling umum dikenal adalah putih, merah, dan biru. Terletak di ketinggian sekitar 1.600 meter di atas permukaan laut, danau ini dikelilingi oleh pemandangan pegunungan yang hijau dan hutan tropis yang memukau. Perjalanan menuju Danau Kelimutu sering melibatkan pendakian dan perjalanan melalui pedesaan yang indah, memberikan pengalaman yang tak terlupakan bagi para pengunjung. Selain keindahan alamnya, situs ini juga memiliki nilai budaya yang tinggi karena dianggap sebagai tempat sakral oleh masyarakat lokal. Danau Kelimutu menjadi destinasi yang menarik bagi mereka yang mencari keajaiban alam yang unik dan perpaduan antara keindahan alam dan warisan budaya.',
     image: 'images/ic_alam14.jpg',
     day: 3,
-        price: 321000,
+        price: 40000,
     isFavorite: false,
     isSelected: true
   ),

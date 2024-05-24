@@ -5,6 +5,7 @@ import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/wisata_widget.dart';
+import 'package:projek/services/upload_service.dart';
 import '../models/category_model.dart';
 import '../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   FadeInUp(
                     delay: const Duration(milliseconds: 300),
                     child: const AppText(
-                      text: "TruExplore",
+                      text: "TraveLine",
                       size: 30,
                       color: Colors.blue,
                      
@@ -225,21 +226,71 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 1000),
-                    child: Container(
-                      margin: EdgeInsets.only(top: size.height * 0.01),
-                      width: size.width,
-                      height: size.height * 0.68,
-                      child: ListView.builder(
-                          itemCount: 5,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            return WisataWidget(
-                              index: index,
-                              combinedPeopleAlsoLikeModelList: _peopleAlsoLikeModelList,
-                            ); /////
-                          }),
-                    ),
+                    child: StreamBuilder(
+      stream: UploadService.getDestinationList(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            return ListView.builder(
+  padding: const EdgeInsets.only(bottom: 80),
+  itemCount: snapshot.data!.length,
+  scrollDirection: Axis.vertical,
+  physics: const BouncingScrollPhysics(),
+  itemBuilder: (context, index) {
+  final document = snapshot.data![index];
+
+  return Card(
+    child: InkWell(
+      onTap: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => DetailsPage(
+        //       personData: current, // Assuming this is valid data
+        //       isCameFromPersonSection: true,
+        //       id: combinedPeopleAlsoLikeModelList[index].id, // Assuming this is a valid ID
+        //     ),
+        //   ),
+        // );
+      },
+      child: Column(
+        children: [
+          document.imageUrl != null &&
+              Uri.parse(document.imageUrl!).isAbsolute
+            ? ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                child: Image.network(
+                  document.imageUrl!,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  height: 150,
+                ),
+              )
+            : Container(),
+          ListTile(
+            // ... rest of your ListTile code
+          ),
+        ],
+      ),
+    ),
+  );
+},
+);
+
+        }
+      },
+    ),
                   )
                 ],
               ),
