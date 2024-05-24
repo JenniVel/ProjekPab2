@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  cached_network_image: ^3.3.0
+  cached_network_image: ^3.3.1
   flutter_rating_bar: ^4.0.1
   animate_do: ^3.0.2
   shape_of_view_null_safe: ^2.0.0
@@ -36,6 +36,8 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   url_launcher: ^6.2.6
   geolocator: ^12.0.0
+  google_maps_flutter: ^2.2.8
+  flutter_config: ^2.0.2
 
 dev_dependencies:
   flutter_test:

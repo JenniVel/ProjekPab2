@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,6 +48,26 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
     }
   }
 
+Future<void> _uploadImageToFirebase(XFile imageFile) async {
+  // Get a reference to Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref();
+
+  // Create a unique filename for the image
+  final fileName = DateTime.now().toString() + '.jpg';
+  final imageRef = storageRef.child('images/$fileName'); // Adjust path as needed
+
+  // Upload the image to Firebase Storage
+  try {
+    print('Image uploaded to Firebase Storage: $fileName');
+
+    // Get the download URL for the uploaded image
+    final imageUrl = await imageRef.getDownloadURL();
+
+    } catch (e) {
+    print('Error uploading image: $e');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,18 +109,41 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                 padding: EdgeInsets.only(top: 20),
                 child: Text('Image: '),
               ),
-              if (_imageFile != null)
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.file(_imageFile!, fit: BoxFit.cover),
-                )
-              else if (widget.wisata?.imageUrl != null && Uri.parse(widget.wisata!.imageUrl!).isAbsolute)
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.network(widget.wisata!.imageUrl!, fit: BoxFit.cover),
-                )
-              else
-                Container(),
+              _imageFile != null
+                  ? AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: kIsWeb
+                          ? CachedNetworkImage(
+                              imageUrl: _imageFile!.path,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            )
+                          : Image.file(File(_imageFile!.path),
+                              fit: BoxFit.cover,),
+                    )
+                  : (widget.wisata?.imageUrl != null &&
+                          Uri.parse(widget.wisata!.imageUrl!).isAbsolute
+                      ? AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.wisata!.imageUrl!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(Icons.error),
+                            ),
+                          ),
+                        )
+                      : Container()),
+
               TextButton(
                 onPressed: _pickImage,
                 child: const Text('Pick Image'),

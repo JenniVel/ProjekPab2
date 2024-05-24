@@ -237,8 +237,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             return WisataWidget(
                               index: index,
                               combinedPeopleAlsoLikeModelList: _peopleAlsoLikeModelList,
-
-
                             ); /////
                           }),
                     ),

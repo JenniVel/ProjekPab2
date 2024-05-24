@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:projek/screens/home/google_maps_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
 import '../models/tempat_wisata.dart';
@@ -56,12 +58,12 @@ class _DetailsPageState extends State<DetailsPage> {
     Size size = MediaQuery.of(context).size;
 
     final List<PeopleAlsoLikeModel> _peopleAlsoLikeModelList =
-        PeopleAlsoLikeModel.peopleAlsoLikeModeList+
-        PeopleAlsoLikeModel.peopleAlsoLikeModeList1+
-        PeopleAlsoLikeModel.inspiration+
-        PeopleAlsoLikeModel.perkotaan+
-        PeopleAlsoLikeModel.places+
-        PeopleAlsoLikeModel.popular;
+        PeopleAlsoLikeModel.peopleAlsoLikeModeList +
+            PeopleAlsoLikeModel.peopleAlsoLikeModeList1 +
+            PeopleAlsoLikeModel.inspiration +
+            PeopleAlsoLikeModel.perkotaan +
+            PeopleAlsoLikeModel.places +
+            PeopleAlsoLikeModel.popular;
 
     onFirstLoaded();
 
@@ -69,13 +71,17 @@ class _DetailsPageState extends State<DetailsPage> {
       return !isFavorite;
     }
 
-    void showAlert() {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Transaction Completed Successfully!',
-      );
+    Future<void> _launchMaps(double latitude, double longitude) async {
+    Uri googleUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    try {
+      await launchUrl(googleUrl);
+    } catch (e) {
+      print('Could not open the map: $e');
+      // Optionally, show a message to the user
     }
+  }
+
 
     return Scaffold(
         backgroundColor: Colors.blue.shade50,
@@ -153,11 +159,26 @@ class _DetailsPageState extends State<DetailsPage> {
                                         SizedBox(
                                           width: size.width * 0.01,
                                         ),
-                                        AppText(
-                                          text: current.location,
-                                          size: 12,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w400,
+                                        RichText(
+                                          text: TextSpan(
+                                            text: current.location,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                          //       Navigator.push(
+                                          // context,
+                                          // MaterialPageRoute(
+                                          //   builder: (context) => GoogleMapsScreen(
+                                          //     latitude: latitude, 
+                                          //     longitude: latitude,
+                                          //   ),
+                                          // ));
+                                               
+                                              }),
                                         ),
                                       ],
                                     ),
@@ -202,25 +223,6 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                         SizedBox(height: size.height * 0.03),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 400),
-                          child: const AppText(
-                            text: "Orang",
-                            size: 24,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: size.height * 0.002),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 500),
-                          child: const AppText(
-                            text: "Berapa jumlah orang didalam grupmu",
-                            size: 14,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
                         FadeInUp(
                           delay: const Duration(milliseconds: 600),
                           child: Container(
@@ -267,44 +269,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                     ),
                                   );
                                 }),
-                          ),
-                        ),
-                        SizedBox(height: size.height * 0.02),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 800),
-                          child: const AppText(
-                            text: "Pilih Tanggal",
-                            size: 21,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: size.height * 0.02),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 900),
-                          child: Container(
-                            child: TextFormField(
-                              controller: datetimeinput,
-                              decoration: InputDecoration(
-                                icon: Icon(
-                                  Icons.calendar_today_rounded,
-                                  color: Colors.black,
-                                ),
-                                labelText: "Masukkan Tanggal",
-                                labelStyle: TextStyle(color: Colors.black),
-                                filled: true,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              readOnly: true,
-                              onTap: () {
-                                _selectDate();
-                              },
-                            ),
                           ),
                         ),
                         SizedBox(height: size.height * 0.03),
@@ -383,23 +347,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
                       SizedBox(width: size.width * 0.03),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        minWidth: size.width * 0.6,
-                        height: size.height * 0.06,
-                        color: Color.fromARGB(255, 26, 123, 214),
-                        onPressed: () {
-                          showAlert();
-                        },
-                        child: const AppText(
-                          text: "Pesan Sekarang",
-                          size: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),
