@@ -191,9 +191,13 @@ class _ProfilPageState extends State<ProfilPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyText1?.color ?? Colors.black;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pengaturan"),
+        title: Text("Pengaturan", style: TextStyle(color: textColor)),
+        backgroundColor: theme.appBarTheme.backgroundColor,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: usersCollection.doc(currentUser.email).snapshots(),
@@ -231,34 +235,37 @@ class _ProfilPageState extends State<ProfilPage> {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
                     'Informasi Akun',
-                    style: TextStyle(color: Colors.green),
+                    style: TextStyle(color: theme.primaryColor),
                   ),
                 ),
                 MyTextBox(
                   text: userData['username'],
                   sectionName: 'Nama Pengguna',
                   onPressed: () => editField('username'),
+                  theme: theme,
                 ),
                 MyTextBox(
                   text: userData['namalengkap'],
                   sectionName: 'Nama Lengkap',
                   onPressed: () => editField('namalengkap'),
+                  theme: theme,
                 ),
                 ReadOnlyTextBox(
                   text: currentUser.email!,
                   sectionName: 'Email',
+                  color: theme.primaryColor, // Pass theme's primary color
                 ),
                 const SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
                     'Pengaturan',
-                    style: TextStyle(color: Colors.green),
+                    style: TextStyle(color: Color(0xFF176FF2)),
                   ),
                 ),
                 ListTile(
                   leading: Icon(Icons.color_lens),
-                  title: Text('Tema'),
+                  title: Text('Tema', style: TextStyle(color: textColor)),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -268,14 +275,15 @@ class _ProfilPageState extends State<ProfilPage> {
                 ),
                 ListTile(
                   leading: Icon(Icons.exit_to_app),
-                  title: Text('Keluar'),
+                  title: Text('Keluar', style: TextStyle(color: textColor)),
                   onTap: _confirmSignOut,
                 ),
               ],
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Error: ${snapshot.error}'),
+              child: Text('Error: ${snapshot.error}',
+                  style: TextStyle(color: textColor)),
             );
           }
           return const Center(
@@ -290,15 +298,20 @@ class _ProfilPageState extends State<ProfilPage> {
 class ReadOnlyTextBox extends StatelessWidget {
   final String text;
   final String sectionName;
+  final Color color; // Add color parameter
 
   const ReadOnlyTextBox({
-    super.key,
+    Key? key,
     required this.text,
     required this.sectionName,
-  });
+    required this.color, // Update constructor to include color parameter
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final textColor =
+        Theme.of(context).textTheme.bodyText1?.color ?? Colors.black;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.cyan,
@@ -311,10 +324,10 @@ class ReadOnlyTextBox extends StatelessWidget {
         children: [
           Text(
             sectionName,
-            style: TextStyle(color: Colors.yellowAccent),
+            style: TextStyle(color: color), // Use color parameter here
           ),
           const SizedBox(height: 5),
-          Text(text),
+          Text(text, style: TextStyle(color: textColor)),
         ],
       ),
     );
