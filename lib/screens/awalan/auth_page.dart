@@ -15,7 +15,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData && snapshot.data != null) {
-            return HomeScreen(user: snapshot.data!);
+            return HomePage(user: snapshot.data!);
           } else {
             return MasukScreen();
           }

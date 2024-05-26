@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:projek/screens/home/home_screen%20copy.dart';
-import 'package:projek/screens/models/people_also_like_mode.dart';
+import 'package:projek/screens/home/home_screen.dart';
+import 'package:projek/models/people_also_like_mode.dart';
 import 'package:projek/screens/nav_pages/profile_page.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
