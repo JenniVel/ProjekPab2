@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/edit_screen.dart';
 import 'package:projek/services/upload_service.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,6 +38,7 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
 class DestinationList extends StatelessWidget {
   const DestinationList({super.key});
 
+  // Uncomment and complete this method if you need to launch Google Maps
   // Future<void> _launchMaps(double latitude, double longitude) async {
   //   Uri googleUrl = Uri.parse(
   //       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
@@ -49,11 +52,11 @@ class DestinationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<List<Wisata>>(
       stream: UploadService.getDestinationList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -61,88 +64,105 @@ class DestinationList extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           default:
-            return ListView.builder(
-  padding: const EdgeInsets.only(bottom: 80),
-  itemCount: snapshot.data!.length,
-  scrollDirection: Axis.vertical,
-  physics: const BouncingScrollPhysics(),
-  itemBuilder: (context, index) {
-    final document = snapshot.data![index];
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text('No destinations available'),
+              );
+            }
 
-    return Card(
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DestinationEditScreen(
-                wisata: document,
-              ),
-            ),
-          );
-        },
-        child: Column(
-          children: [
-            document.imageUrl != null &&
-                    Uri.parse(document.imageUrl!).isAbsolute
-                ? ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                    child: Image.network(
-                      document.imageUrl!,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 150,
-                    ),
-                  )
-                : Container(),
-            ListTile(
-              title: Text(document.name),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Konfirmasi Hapus'),
-                            content: Text(
-                                'Yakin ingin menghapus data \'${document.name}\' ?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Cancel'),
-                                onPressed: () => Navigator.of(context).pop(),
+            return FadeInUp(
+              delay: const Duration(milliseconds: 1000),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final document = snapshot.data![index];
+
+                  return FadeInUp(
+                    delay: Duration(
+                        milliseconds: index * 100), // Stagger animations
+                    child: Card(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DestinationEditScreen(
+                                wisata: document,
                               ),
-                              TextButton(
-                                child: const Text('Hapus'),
-                                onPressed: () => UploadService.deleteDestination(document)
-                                    .whenComplete(() => Navigator.of(context).pop()),
-                              ),
-                            ],
+                            ),
                           );
                         },
-                      );
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(Icons.delete),
+                        child: Column(
+                          children: [
+                            document.imageUrl != null &&
+                                    Uri.parse(document.imageUrl!).isAbsolute
+                                ? ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
+                                    ),
+                                    child: Image.network(
+                                      document.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.center,
+                                      width: double.infinity,
+                                      height: 150,
+                                    ),
+                                  )
+                                : Container(),
+                            ListTile(
+                              title: Text(document.name),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text('Konfirmasi Hapus'),
+                                            content: Text(
+                                                'Yakin ingin menghapus data \'${document.name}\' ?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: const Text('Cancel'),
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                              ),
+                                              TextButton(
+                                                child: const Text('Hapus'),
+                                                onPressed: () => UploadService
+                                                        .deleteDestination(
+                                                            document)
+                                                    .whenComplete(() =>
+                                                        Navigator.of(context)
+                                                            .pop()),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Icon(Icons.delete),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  },
-);
-
+            );
         }
       },
     );

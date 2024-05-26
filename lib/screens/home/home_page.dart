@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
-import 'package:projek/screens/widgets/wisata_widget.dart';
-import 'package:projek/services/upload_service.dart';
-import '../models/category_model.dart';
-import '../models/people_also_like_mode.dart';
+import 'package:projek/screens/widgets/wisata_list.dart';
+import '../../models/category_model.dart';
+import '../../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
 import '../widgets/painter.dart';
-import '../widgets/reuseabale_middle_app_text.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user});
@@ -46,11 +43,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     var size = MediaQuery.of(context).size;
 
     List<PeopleAlsoLikeModel> _peopleAlsoLikeModelList =
-        PeopleAlsoLikeModel.peopleAlsoLikeModeList+PeopleAlsoLikeModel.peopleAlsoLikeModeList1+
-        PeopleAlsoLikeModel.inspiration+
-        PeopleAlsoLikeModel.perkotaan+
-        PeopleAlsoLikeModel.places+
-        PeopleAlsoLikeModel.popular;
+        PeopleAlsoLikeModel.peopleAlsoLikeModeList +
+            PeopleAlsoLikeModel.peopleAlsoLikeModeList1 +
+            PeopleAlsoLikeModel.inspiration +
+            PeopleAlsoLikeModel.perkotaan +
+            PeopleAlsoLikeModel.places +
+            PeopleAlsoLikeModel.popular;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -73,7 +71,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       text: "TraveLine",
                       size: 30,
                       color: Colors.blue,
-                     
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -86,7 +83,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                   SizedBox(height: size.height * 0.02),
+                  SizedBox(height: size.height * 0.02),
                   FadeInUp(
                     delay: const Duration(milliseconds: 600),
                     child: Padding(
@@ -187,111 +184,61 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: tabController,
                           children: [
-                            TabViewChild(combinedPeopleAlsoLikeModelList: PeopleAlsoLikeModel.places),
-                            TabViewChild(combinedPeopleAlsoLikeModelList: PeopleAlsoLikeModel.inspiration),
-                            TabViewChild(combinedPeopleAlsoLikeModelList: PeopleAlsoLikeModel.popular),
-                            TabViewChild(combinedPeopleAlsoLikeModelList: PeopleAlsoLikeModel.perkotaan),
+                            TabViewChild(
+                                combinedPeopleAlsoLikeModelList:
+                                    PeopleAlsoLikeModel.places),
+                            TabViewChild(
+                                combinedPeopleAlsoLikeModelList:
+                                    PeopleAlsoLikeModel.inspiration),
+                            TabViewChild(
+                                combinedPeopleAlsoLikeModelList:
+                                    PeopleAlsoLikeModel.popular),
+                            TabViewChild(
+                                combinedPeopleAlsoLikeModelList:
+                                    PeopleAlsoLikeModel.perkotaan),
                           ]),
                     ),
                   ),
-                 FadeInUp(
-  delay: const Duration(milliseconds: 900),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      const AppText(
-        text: "Rekomendasi",
-        size: 20,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
-      InkWell(
-        onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => SeeAllPage(), // Ganti SeeAllPage dengan halaman yang sesuai
-          //   ),
-          // );
-        },
-        child: const AppText(
-          text: "Lihat Semua",
-          size: 16,
-          color: Colors.blue, // Sesuaikan dengan warna yang diinginkan
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    ],
-  ),
-),
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 900),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const AppText(
+                          text: "Rekomendasi",
+                          size: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => SeeAllPage(), // Ganti SeeAllPage dengan halaman yang sesuai
+                            //   ),
+                            // );
+                          },
+                          child: const AppText(
+                            text: "Lihat Semua",
+                            size: 16,
+                            color: Colors
+                                .blue, // Sesuaikan dengan warna yang diinginkan
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 1000),
-                    child: StreamBuilder(
-      stream: UploadService.getDestinationList(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          default:
-            return ListView.builder(
-  padding: const EdgeInsets.only(bottom: 80),
-  itemCount: snapshot.data!.length,
-  scrollDirection: Axis.vertical,
-  physics: const BouncingScrollPhysics(),
-  itemBuilder: (context, index) {
-  final document = snapshot.data![index];
-
-  return Card(
-    child: InkWell(
-      onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => DetailsPage(
-        //       personData: current, // Assuming this is valid data
-        //       isCameFromPersonSection: true,
-        //       id: combinedPeopleAlsoLikeModelList[index].id, // Assuming this is a valid ID
-        //     ),
-        //   ),
-        // );
-      },
-      child: Column(
-        children: [
-          document.imageUrl != null &&
-              Uri.parse(document.imageUrl!).isAbsolute
-            ? ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-                child: Image.network(
-                  document.imageUrl!,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 150,
-                ),
-              )
-            : Container(),
-          ListTile(
-            // ... rest of your ListTile code
-          ),
-        ],
-      ),
-    ),
-  );
-},
-);
-
-        }
-      },
-    ),
-                  )
+                    child: SizedBox(
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: WisataList(),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -320,23 +267,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           elevation: 0,
           actions: [
             Padding(
-  padding: const EdgeInsets.only(right: 5),
-  child: GestureDetector(
-    onTap: () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainWrapper(user: widget.user),
-        ),
-      );
-    },
-    child: const CircleAvatar(
-      radius: 30,
-      backgroundImage: AssetImage("images/panah1.png"),
-    ),
-  ),
-)
-
+              padding: const EdgeInsets.only(right: 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainWrapper(user: widget.user),
+                    ),
+                  );
+                },
+                child: const CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("images/panah1.png"),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -344,15 +290,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 }
 
-
 class TabViewChild extends StatelessWidget {
   const TabViewChild({
-    Key? key, 
+    Key? key,
     required this.combinedPeopleAlsoLikeModelList,
   }) : super(key: key);
 
   final List<PeopleAlsoLikeModel> combinedPeopleAlsoLikeModelList;
-
 
   @override
   Widget build(BuildContext context) {
@@ -369,12 +313,11 @@ class TabViewChild extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => DetailsPage(
-                personData: current, 
-                isCameFromPersonSection: true, 
-                id: combinedPeopleAlsoLikeModelList[index].id
-                ),
-              ),
+                  personData: current,
+                  isCameFromPersonSection: true,
+                  id: combinedPeopleAlsoLikeModelList[index].id),
             ),
+          ),
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
