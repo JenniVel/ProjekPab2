@@ -3,9 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/screens/home/google_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../models/people_also_like_mode.dart';
+import '../../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
-import '../models/tempat_wisata.dart';
+import '../../models/tempat_wisata.dart';
 import 'package:quickalert/quickalert.dart';
 
 class DetailsPage extends StatefulWidget {

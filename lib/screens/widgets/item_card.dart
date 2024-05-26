@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projek/screens/models/tempat_wisata.dart';
+import 'package:projek/models/tempat_wisata.dart';
 
 
 class ItemCard extends StatelessWidget {
