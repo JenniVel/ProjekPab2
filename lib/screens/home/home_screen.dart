@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
-import 'package:projek/screens/widgets/wisata_widget.dart';
+import 'package:projek/screens/widgets/wisata_list.dart';
 import '../../models/category_model.dart';
 import '../../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
 import '../widgets/painter.dart';
-import '../widgets/reuseabale_middle_app_text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user});
@@ -69,7 +68,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   FadeInUp(
                     delay: const Duration(milliseconds: 300),
                     child: const AppText(
-                      text: "TruExplore",
+                      text: "TraveLine",
                       size: 30,
                       color: Colors.blue,
                       fontWeight: FontWeight.w500,
@@ -216,7 +215,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
-                            //     builder: (context) => SeeAllPage(), // Ganti SeeAllPage dengan halaman yang sesuai
+                            //     builder: (context) => SeeAllPage(), 
                             //   ),
                             // );
                           },
@@ -233,23 +232,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 1000),
-                    child: Container(
-                      margin: EdgeInsets.only(top: size.height * 0.01),
-                      width: size.width,
-                      height: size.height * 0.68,
-                      child: ListView.builder(
-                          itemCount: 5,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            return WisataWidget(
-                              index: index,
-                              combinedPeopleAlsoLikeModelList:
-                                  _peopleAlsoLikeModelList,
-                            ); /////
-                          }),
+                    child: SizedBox(
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: WisataList(),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
