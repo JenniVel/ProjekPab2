@@ -63,7 +63,8 @@ class WisataList extends StatelessWidget {
                               child: ListTile(
                                 title: Text(document.name,
                                     style: const TextStyle(fontSize: 18)),
-                                
+                                subtitle: Text("Rp."+document.harga,
+                                    style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.5))),
                               ),
                             ),
                           ],

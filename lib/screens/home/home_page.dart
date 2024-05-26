@@ -1,10 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/wisata_list.dart';
+import 'package:projek/services/upload_service.dart';
 import '../../models/category_model.dart';
 import '../../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
@@ -302,98 +304,123 @@ class TabViewChild extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return ListView.builder(
-      itemCount: combinedPeopleAlsoLikeModelList.length,
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        PeopleAlsoLikeModel current = combinedPeopleAlsoLikeModelList[index];
-        return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailsPage(
-                  personData: current,
-                  isCameFromPersonSection: true,
-                  id: combinedPeopleAlsoLikeModelList[index].id),
-            ),
-          ),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Hero(
-                tag: current.image,
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  width: size.width * 0.6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: AssetImage(current.image),
-                      fit: BoxFit.cover,
+    return StreamBuilder<List<Wisata>>(
+      stream: UploadService.getDestinationList(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text('No destinations available'),
+              );
+            }
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: 3,
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                PeopleAlsoLikeModel current =
+                    combinedPeopleAlsoLikeModelList[index];
+                    final document = snapshot.data![index];
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailsPage(
+                          personData: current,
+                          isCameFromPersonSection: true,
+                          id: combinedPeopleAlsoLikeModelList[index].id),
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                top: size.height * 0.2,
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  width: size.width * 0.53,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromARGB(153, 0, 0, 0),
-                        Color.fromARGB(118, 29, 29, 29),
-                        Color.fromARGB(54, 0, 0, 0),
-                        Color.fromARGB(0, 0, 0, 0),
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    children: [
+                      Hero(
+                        tag: current.image,
+                        child: document.imageUrl != null &&
+                                    Uri.parse(document.imageUrl!).isAbsolute
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0), 
+                                    child: Image.network(
+                                      document.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.center,
+                                      width: 100.0, // Adjust width as needed
+                                      height: 150.0,
+                                    ),
+                                  )
+                        : Container(),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        top: size.height * 0.2,
+                        child: Container(
+                          margin: const EdgeInsets.all(10.0),
+                          width: size.width * 0.53,
+                          height: size.height * 0.2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromARGB(153, 0, 0, 0),
+                                Color.fromARGB(118, 29, 29, 29),
+                                Color.fromARGB(54, 0, 0, 0),
+                                Color.fromARGB(0, 0, 0, 0),
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: size.width * 0.07,
+                        bottom: size.height * 0.045,
+                        child: AppText(
+                          text: document.name,
+                          size: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Positioned(
+                        left: size.width * 0.07,
+                        bottom: size.height * 0.025,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.01,
+                            ),
+                            AppText(
+                              text: current.location,  //Harus lokasi kita
+                              size: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Positioned(
-                left: size.width * 0.07,
-                bottom: size.height * 0.045,
-                child: AppText(
-                  text: current.title,
-                  size: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Positioned(
-                left: size.width * 0.07,
-                bottom: size.height * 0.025,
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.01,
-                    ),
-                    AppText(
-                      text: current.location,
-                      size: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
+                );
+              },
+            );
+        }
       },
     );
   }
