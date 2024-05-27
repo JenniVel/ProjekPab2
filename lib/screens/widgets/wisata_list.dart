@@ -51,7 +51,7 @@ class WisataList extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       alignment: Alignment.center,
                                       width: 100.0, // Adjust width as needed
-                                      height: 150.0,
+                                      height: 100.0,
                                     ),
                                   )
                                 : Container(), // Handle cases where image URL is not available

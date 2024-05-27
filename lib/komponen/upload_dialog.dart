@@ -18,6 +18,7 @@ class _UploadDialogState extends State<UploadDialog> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
+  final TextEditingController _kategoriController = TextEditingController();
   File? _imageFile;
   // Position? _currentPosition;
   // String? _currentAddress;
@@ -29,6 +30,7 @@ class _UploadDialogState extends State<UploadDialog> {
       _nameController.text = widget.wisata!.name;
       _descriptionController.text = widget.wisata!.description;
       _hargaController.text = widget.wisata!.harga;
+      _kategoriController.text = widget.wisata!.kategori;
     }
   }
 
@@ -85,6 +87,15 @@ class _UploadDialogState extends State<UploadDialog> {
           ),
           const Padding(
             padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'Kategori: ',
+            ),
+          ),
+          TextField(
+            controller: _kategoriController,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 20),
             child: Text('Image: '),
           ),
           Expanded(
@@ -130,6 +141,7 @@ class _UploadDialogState extends State<UploadDialog> {
               name: _nameController.text,
               description: _descriptionController.text,
               harga: _hargaController.text,
+              kategori: _kategoriController.text,
               imageUrl: imageUrl,
               createdAt: widget.wisata?.createdAt,
             );

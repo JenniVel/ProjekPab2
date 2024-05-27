@@ -1,10 +1,14 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
+import 'package:projek/screens/widgets/tab_view_child.dart';
 import 'package:projek/screens/widgets/wisata_list.dart';
+import 'package:projek/services/upload_service.dart';
 import '../../models/category_model.dart';
 import '../../models/people_also_like_mode.dart';
 import '../widgets/reuseable_text.dart';
@@ -23,12 +27,38 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final TabController tabController;
   int _selectedIndex = 0;
   List<PeopleAlsoLikeModel> favorites = [];
-  final EdgeInsetsGeometry padding =
-      const EdgeInsets.symmetric(horizontal: 10.0);
+  final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 10.0);
+
+   final Stream<List<Wisata>>? wisataStream = // Replace with your actual Stream/Future
+      FirebaseFirestore.instance
+          .collection('Destinations') // Replace 'wisata' with your collection name
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList();
+      });
+
+  List<Wisata> allWisata = []; // List to store all Wisata objects
+  List<Wisata> filteredWisata = []; // List to store filtered Wisata objects
+  String selectedCategory = 'All'; // Default category
+
+  void filterByCategory(String category) {
+    setState(() {
+      if (category == 'All') {
+        filteredWisata = allWisata;
+      } else {
+        filteredWisata = allWisata.where((wisata) => wisata.kategori == category).toList();
+      }
+    });
+  }
 
   @override
   void initState() {
     tabController = TabController(length: 4, vsync: this);
+     wisataStream!.listen((data) {
+      allWisata = data;
+      filteredWisata = allWisata;
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -129,6 +159,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
+                  SizedBox(height: size.height * 0.02),
                   FadeInUp(
                     delay: const Duration(milliseconds: 700),
                     child: Container(
@@ -152,25 +183,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             color: Color.fromARGB(255, 63, 141, 219),
                             radius: 4,
                           ),
-                          tabs: categoryComponents.map((current) {
-                            return Tab(
-                              icon: Column(
-                                children: [
-                                  Image.asset(
-                                    current.image,
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    current.name,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                          tabs: [
+              Tab(child: Text('pantai')),
+              Tab(child: Text('gunung')),
+              Tab(child: Text('danau')),
+              Tab(child: Text('perkotaan')), // Add more tabs for other categories
+            ],
+            onTap: (index) {
+              String category;
+              switch (index) {
+                case 0:
+                  category = 'pantai';
+                  break;
+                case 1:
+                  category = 'gunung';
+                  break;
+                case 2:
+                  category = 'danau';
+                  break;
+                case 3:
+                  category = 'perkotaan';
+                  break;
+                default:
+                  category = 'pantai';
+              }
+              filterByCategory(category);
+            },
+          ),
                       ),
                     ),
                   ),
@@ -184,18 +223,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: tabController,
                           children: [
-                            TabViewChild(
-                                combinedPeopleAlsoLikeModelList:
-                                    PeopleAlsoLikeModel.places),
-                            TabViewChild(
-                                combinedPeopleAlsoLikeModelList:
-                                    PeopleAlsoLikeModel.inspiration),
-                            TabViewChild(
-                                combinedPeopleAlsoLikeModelList:
-                                    PeopleAlsoLikeModel.popular),
-                            TabViewChild(
-                                combinedPeopleAlsoLikeModelList:
-                                    PeopleAlsoLikeModel.perkotaan),
+                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'pantai').toList()),
+                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'gunung').toList()),
+                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'danau').toList()),
+                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'perkotaan').toList()),
                           ]),
                     ),
                   ),
@@ -232,27 +263,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 1000),
-                    child: SizedBox(
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: WisataList(),
+                    child: const SizedBox(
+                      child:  WisataList(),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
           ),
         ),
-
-        //   bottomNavigationBar: CustomNavigationBar(
-        //   onItemSelected: (index) {
-        //     setState(() {
-        //       _selectedIndex = index;
-        //     });
-        //   },
-        //   selectedIndex: _selectedIndex,
-        // ),
       ),
     );
   }
@@ -264,6 +283,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.only(top: 12),
         child: AppBar(
           backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           elevation: 0,
           actions: [
             Padding(
@@ -286,115 +306,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
-    );
-  }
-}
-
-class TabViewChild extends StatelessWidget {
-  const TabViewChild({
-    Key? key,
-    required this.combinedPeopleAlsoLikeModelList,
-  }) : super(key: key);
-
-  final List<PeopleAlsoLikeModel> combinedPeopleAlsoLikeModelList;
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return ListView.builder(
-      itemCount: combinedPeopleAlsoLikeModelList.length,
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        PeopleAlsoLikeModel current = combinedPeopleAlsoLikeModelList[index];
-        return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailsPage(
-                  personData: current,
-                  isCameFromPersonSection: true,
-                  id: combinedPeopleAlsoLikeModelList[index].id),
-            ),
-          ),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Hero(
-                tag: current.image,
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  width: size.width * 0.6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: AssetImage(current.image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                top: size.height * 0.2,
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  width: size.width * 0.53,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromARGB(153, 0, 0, 0),
-                        Color.fromARGB(118, 29, 29, 29),
-                        Color.fromARGB(54, 0, 0, 0),
-                        Color.fromARGB(0, 0, 0, 0),
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: size.width * 0.07,
-                bottom: size.height * 0.045,
-                child: AppText(
-                  text: current.title,
-                  size: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Positioned(
-                left: size.width * 0.07,
-                bottom: size.height * 0.025,
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.01,
-                    ),
-                    AppText(
-                      text: current.location,
-                      size: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projek/screens/home/list_screen.dart';
+import 'package:projek/screens/home/ujicoba_kategori.dart';
 import 'package:projek/tema/theme_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:projek/tema/light_theme.dart';

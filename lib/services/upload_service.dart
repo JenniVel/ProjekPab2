@@ -38,6 +38,7 @@ class UploadService {
       'name': wisata.name,
       'description': wisata.description,
       'harga': wisata.harga,
+      'kategori': wisata.kategori,
       'image_url': wisata.imageUrl,
       'created_at': FieldValue.serverTimestamp(),
       'updated_at': FieldValue.serverTimestamp(),
@@ -50,6 +51,7 @@ class UploadService {
       'name': wisata.name,
       'description': wisata.description,
       'harga': wisata.harga,
+      'kategori': wisata.kategori,
       'image_url': wisata.imageUrl,
       'created_at': wisata.createdAt,
       'updated_at': FieldValue.serverTimestamp(),
@@ -75,6 +77,7 @@ class UploadService {
           name: data['name'],
           description: data['description'],
           harga: data['harga'],
+          kategori: data['kategori'],
           imageUrl: data['image_url'],
           createdAt: data['created_at'] != null
               ? data['created_at'] as Timestamp
