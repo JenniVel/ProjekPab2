@@ -66,7 +66,7 @@ class _MainWrapperState extends State<MainWrapper> {
         bottomNavigationBar: WaterDropNavBar(
           bottomPadding: 10.0,
           waterDropColor: Colors.blue.shade500,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).backgroundColor,
           onItemSelected: onTap,
           selectedIndex: currentIndex,
           barItems: [

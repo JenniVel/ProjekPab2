@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         // backgroundColor: Colors.blue.shade50,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppBar(size),
         body: SizedBox(
           width: size.width,
@@ -67,19 +67,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 children: [
                   FadeInUp(
                     delay: const Duration(milliseconds: 300),
-                    child: const AppText(
+                    child: AppText(
                       text: "TraveLine",
                       size: 30,
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 400),
-                    child: const AppText(
+                    child: AppText(
                       text: "Mau kemana hari ini?",
                       size: 25,
-                      color: Colors.black,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -94,25 +94,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           fontFamily: 'fonts/Inter-Black.ttf',
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 20),
                           filled: true,
-                          fillColor: Colors.blue.shade700,
+                          fillColor: Theme.of(context).canvasColor,
                           prefixIcon: IconButton(
                             onPressed: () {},
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.search,
-                              color: Colors.white,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'fonts/Inter-Black.ttf',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                           ),
                           hintText: "Mencari ...",
                           border: OutlineInputBorder(
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
-                            //     builder: (context) => SeeAllPage(), 
+                            //     builder: (context) => SeeAllPage(),
                             //   ),
                             // );
                           },
