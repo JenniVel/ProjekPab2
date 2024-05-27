@@ -24,7 +24,21 @@ class _ProfilPageState extends State<ProfilPage> {
   @override
   void initState() {
     super.initState();
+    _initializeUserData(); // Initialize user data if not present
     _loadProfileImage();
+  }
+
+  Future<void> _initializeUserData() async {
+    DocumentSnapshot userDoc =
+        await usersCollection.doc(currentUser.email).get();
+    if (!userDoc.exists) {
+      await usersCollection.doc(currentUser.email).set({
+        'username': currentUser.displayName ?? '',
+        'namalengkap': currentUser.displayName ?? '',
+        'email': currentUser.email,
+        'image_url': '',
+      });
+    }
   }
 
   Future<void> _loadProfileImage() async {
