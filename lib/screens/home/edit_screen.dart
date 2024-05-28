@@ -23,6 +23,8 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
   final TextEditingController _kategoriController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
   File? _imageFile;
   Position? _currentPosition;
 
@@ -34,6 +36,8 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
       _descriptionController.text = widget.wisata!.description;
       _hargaController.text = widget.wisata!.harga;
       _kategoriController.text = widget.wisata!.kategori;
+      _latitudeController.text = widget.wisata!.latitude.toString();
+      _longitudeController.text = widget.wisata!.longitude.toString();
     }
   }
 
@@ -50,25 +54,21 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
     }
   }
 
-Future<void> _uploadImageToFirebase(XFile imageFile) async {
-  // Get a reference to Firebase Storage
-  final storageRef = FirebaseStorage.instance.ref();
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final fileName = DateTime.now().toString() + '.jpg';
+    final imageRef = storageRef.child('images/$fileName');
 
-  // Create a unique filename for the image
-  final fileName = DateTime.now().toString() + '.jpg';
-  final imageRef = storageRef.child('images/$fileName'); // Adjust path as needed
-
-  // Upload the image to Firebase Storage
-  try {
-    print('Image uploaded to Firebase Storage: $fileName');
-
-    // Get the download URL for the uploaded image
-    final imageUrl = await imageRef.getDownloadURL();
-
+    try {
+      await imageRef.putFile(imageFile);
+      final imageUrl = await imageRef.getDownloadURL();
+      print('Image uploaded to Firebase Storage: $imageUrl');
+      return imageUrl;
     } catch (e) {
-    print('Error uploading image: $e');
+      print('Error uploading image: $e');
+      return null;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -118,25 +118,40 @@ Future<void> _uploadImageToFirebase(XFile imageFile) async {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Latitude: ',
+                ),
+              ),
+              TextField(
+                controller: _latitudeController,
+                keyboardType: TextInputType.number,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Longitude: ',
+                ),
+              ),
+              TextField(
+                controller: _longitudeController,
+                keyboardType: TextInputType.number,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
                 child: Text('Image: '),
               ),
               _imageFile != null
                   ? AspectRatio(
                       aspectRatio: 16 / 9,
                       child: kIsWeb
-                          ? CachedNetworkImage(
-                              imageUrl: _imageFile!.path,
+                          ? Image.network(
+                              _imageFile!.path,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Center(
-                                child: Icon(Icons.error),
-                              ),
                             )
-                          : Image.file(File(_imageFile!.path),
-                              fit: BoxFit.cover,),
+                          : Image.file(
+                              File(_imageFile!.path),
+                              fit: BoxFit.cover,
+                            ),
                     )
                   : (widget.wisata?.imageUrl != null &&
                           Uri.parse(widget.wisata!.imageUrl!).isAbsolute
@@ -154,12 +169,11 @@ Future<void> _uploadImageToFirebase(XFile imageFile) async {
                           ),
                         )
                       : Container()),
-
               TextButton(
                 onPressed: _pickImage,
                 child: const Text('Pick Image'),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Row(
                 children: [
                   Padding(
@@ -176,27 +190,27 @@ Future<void> _uploadImageToFirebase(XFile imageFile) async {
                       try {
                         String? imageUrl;
                         if (_imageFile != null) {
-                          imageUrl = await UploadService.uploadImage(_imageFile!);
+                          imageUrl = await _uploadImageToFirebase(_imageFile!);
                         } else {
                           imageUrl = widget.wisata?.imageUrl;
                         }
 
-                        final Destination = Wisata(
-                          id: widget.wisata?.id,
+                        final destination = Wisata(
+                          id: widget.wisata?.id ?? '',
                           name: _nameController.text,
                           description: _descriptionController.text,
                           harga: _hargaController.text,
                           kategori: _kategoriController.text,
-                          imageUrl: imageUrl,
-                          // latitude: _currentPosition?.latitude,
-                          // longitude: _currentPosition?.longitude,
+                          imageUrl: imageUrl ?? '',
+                          latitude: double.tryParse(_latitudeController.text) ?? 0.0,
+                          longitude: double.tryParse(_longitudeController.text) ?? 0.0,
                           createdAt: widget.wisata?.createdAt,
                         );
 
                         if (widget.wisata == null) {
-                          await UploadService.addDestination(Destination);
+                          await UploadService.addDestination(destination);
                         } else {
-                          await UploadService.updateDestination(Destination);
+                          await UploadService.updateDestination(destination);
                         }
                         Navigator.of(context).pop();
                       } catch (e) {

@@ -19,6 +19,8 @@ class _UploadDialogState extends State<UploadDialog> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
   final TextEditingController _kategoriController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+   final TextEditingController _longitudeController = TextEditingController();
   File? _imageFile;
   // Position? _currentPosition;
   // String? _currentAddress;
@@ -31,6 +33,8 @@ class _UploadDialogState extends State<UploadDialog> {
       _descriptionController.text = widget.wisata!.description;
       _hargaController.text = widget.wisata!.harga;
       _kategoriController.text = widget.wisata!.kategori;
+      _latitudeController.text = widget.wisata!.latitude.toString();
+      _longitudeController.text = widget.wisata!.longitude.toString();
     }
   }
 
@@ -96,6 +100,24 @@ class _UploadDialogState extends State<UploadDialog> {
           ),
           const Padding(
             padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'latitude: ',
+            ),
+          ),
+          TextField(
+            controller: _latitudeController,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'Longitude: ',
+            ),
+          ),
+          TextField(
+            controller: _longitudeController,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 20),
             child: Text('Image: '),
           ),
           Expanded(
@@ -143,7 +165,9 @@ class _UploadDialogState extends State<UploadDialog> {
               harga: _hargaController.text,
               kategori: _kategoriController.text,
               imageUrl: imageUrl,
-              createdAt: widget.wisata?.createdAt,
+              createdAt: widget.wisata?.createdAt, 
+              latitude: double.tryParse(_latitudeController.text) ?? 0.0,
+              longitude: double.tryParse(_longitudeController.text) ?? 0.0,
             );
 
             if (widget.wisata == null) {

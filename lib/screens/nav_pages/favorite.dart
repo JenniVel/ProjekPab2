@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projek/models/people_also_like_mode.dart';
+import 'package:projek/models/people_also_like_model.dart';
 import 'package:projek/screens/widgets/wisata_widget.dart';
 
 class FavoritePage extends StatefulWidget {

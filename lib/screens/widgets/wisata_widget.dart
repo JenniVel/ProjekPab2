@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projek/screens/home/details_page.dart';
-import 'package:projek/models/people_also_like_mode.dart';
+import 'package:projek/models/people_also_like_model.dart';
 import 'package:projek/screens/widgets/reuseable_text.dart';
 
 class WisataWidget extends StatelessWidget {
