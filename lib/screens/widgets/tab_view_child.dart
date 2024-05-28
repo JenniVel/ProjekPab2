@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:projek/models/people_also_like_mode.dart';
+import 'package:projek/models/people_also_like_model.dart';
 
 import '../../models/wisata.dart';
 import '../../services/upload_service.dart';

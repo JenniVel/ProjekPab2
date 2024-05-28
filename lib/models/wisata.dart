@@ -6,16 +6,20 @@ class Wisata {
   final String description;
   final String harga;
   final String kategori;
+  final double latitude;
+  final double longitude;
   String? imageUrl;
   Timestamp? createdAt;
   Timestamp? updatedAt;
 
-  Wisata({
+  Wisata( {
     this.id,
     required this.name,
     required this.description,
     required this.harga,
     required this.kategori,
+    required this.latitude, 
+    required this.longitude,
     this.imageUrl,
     this.createdAt,
     this.updatedAt,
@@ -29,6 +33,8 @@ class Wisata {
       description: data['description'],
       harga: data['harga'],
       kategori: data['kategori'],
+      latitude: data['latitude'],
+      longitude: data['longitude'],
       imageUrl: data['image_url'],
       createdAt: data['created_at'] as Timestamp,
       updatedAt: data['updated_at'] as Timestamp, 
@@ -41,6 +47,8 @@ class Wisata {
       'description': description,
       'harga' : harga,
       'kategori' : kategori,
+      'latitude' : latitude,
+      'longitude': longitude,
       'image_url': imageUrl,
       'created_at': createdAt,
       'updated_at': updatedAt,

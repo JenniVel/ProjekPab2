@@ -1,53 +1,49 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class GoogleMapsScreen extends StatefulWidget {
-  final double latitude;
-  final double longitude;
-
-
-  const GoogleMapsScreen(
-      {super.key, required this.latitude, required this.longitude});
-
-
   @override
   State<GoogleMapsScreen> createState() => _GoogleMapsScreenState();
 }
 
-
 class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition _cameraPosition;
-  late Set<Marker> _markers;
-  late MarkerId _markerId;
-
-
+  late Set<Marker> _markers = {};
+  
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(
-      target: LatLng(widget.latitude, widget.longitude),
-      zoom: 15,
+    _cameraPosition = const CameraPosition(
+      target: LatLng(-6.200000, 106.816666), // Default to Jakarta
+      zoom: 5,
     );
-   
-    _markers = {};
-    _markerId = MarkerId(widget.latitude.toString() + widget.longitude.toString());
-
-
-    _markers.add(
-      Marker(
-        markerId: _markerId,
-        position: LatLng(widget.latitude, widget.longitude),
-        infoWindow: const InfoWindow(
-          title: 'Your target location',
-          snippet: 'a good place to visit',
-        ),
-      ),
-    );
+    _fetchDestinations();
   }
 
+  Future<void> _fetchDestinations() async {
+    await Firebase.initializeApp();
+    FirebaseFirestore.instance.collection('destinations').get().then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        final data = doc.data();
+        final markerId = MarkerId(doc.id);
+        final marker = Marker(
+          markerId: markerId,
+          position: LatLng(data['latitude'], data['longitude']),
+          infoWindow: InfoWindow(
+            title: data['title'],
+            snippet: data['description'],
+          ),
+        );
+        setState(() {
+          _markers.add(marker);
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +59,6 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
         markers: _markers,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
-          Future.delayed(const Duration(milliseconds: 500), () {
-            controller.showMarkerInfoWindow(_markerId);
-          });
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -76,10 +69,8 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
     );
   }
 
-
   Future<void> _goToLocation() async {
     final GoogleMapController controller = await _controller.future;
-    await controller
-        .animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    await controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }

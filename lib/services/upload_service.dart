@@ -84,7 +84,9 @@ class UploadService {
               : null,
           updatedAt: data['updated_at'] != null
               ? data['updated_at'] as Timestamp
-              : null,
+              : null, 
+          latitude: data['latitude'], 
+          longitude: data['longitude'],
         );
       }).toList();
     });
