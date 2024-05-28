@@ -4,10 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projek/screens/awalan/masuk_screen.dart';
+import 'package:projek/screens/home/home_screen.dart';
+import 'package:projek/screens/nav_pages/box.dart';
+import 'package:projek/screens/nav_pages/text_box.dart';
 import 'package:projek/tema/theme_screen.dart';
 
 class ProfilPage extends StatefulWidget {
-  const ProfilPage({super.key});
+  const ProfilPage({Key? key}) : super(key: key);
 
   @override
   State<ProfilPage> createState() => _ProfilPageState();
@@ -202,8 +206,18 @@ class _ProfilPageState extends State<ProfilPage> {
   }
 
   Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Use Future.delayed to ensure navigation happens after the widget tree update
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => MasukScreen()),
+          (Route<dynamic> route) => false,
+        );
+      });
+    } catch (e) {
+      print('Error signing out: $e');
+    }
   }
 
   @override
@@ -215,6 +229,15 @@ class _ProfilPageState extends State<ProfilPage> {
       appBar: AppBar(
         title: Text("Pengaturan", style: TextStyle(color: textColor)),
         backgroundColor: theme.backgroundColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: textColor),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (context) => HomePage(user: currentUser)),
+            );
+          },
+        ),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: usersCollection.doc(currentUser.email).snapshots(),
@@ -224,7 +247,7 @@ class _ProfilPageState extends State<ProfilPage> {
 
             return ListView(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
                 Center(
                   child: Stack(
                     alignment: Alignment.bottomRight,
@@ -247,9 +270,9 @@ class _ProfilPageState extends State<ProfilPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
                     'Informasi Akun',
                     style: TextStyle(
@@ -286,11 +309,11 @@ class _ProfilPageState extends State<ProfilPage> {
                   color: theme.primaryColor,
                   icon: Icons.email,
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
-                    'Pengaturan',
+                    'Pengaturan Lainnya',
                     style: TextStyle(
                       fontFamily: 'fonts/Inter-Black.ttf',
                       fontSize: 20,
@@ -327,125 +350,6 @@ class _ProfilPageState extends State<ProfilPage> {
             child: CircularProgressIndicator(),
           );
         },
-      ),
-    );
-  }
-}
-
-class ReadOnlyTextBox extends StatelessWidget {
-  final String text;
-  final String sectionName;
-  final Color color;
-  final IconData icon;
-
-  const ReadOnlyTextBox({
-    Key? key,
-    required this.text,
-    required this.sectionName,
-    required this.color,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final textColor = Theme.of(context).textTheme.bodyText1?.color;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.blue.shade800,
-          padding: const EdgeInsets.all(15),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: Theme.of(context).backgroundColor,
-        ),
-        onPressed: () {}, // Add functionality if needed
-        child: Row(
-          children: [
-            Icon(icon, color: Theme.of(context).iconTheme.color),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    sectionName,
-                    style: TextStyle(
-                      fontFamily: 'fonts/Inter-Black.ttf',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(text, style: TextStyle(color: textColor)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MyTextBox extends StatelessWidget {
-  final String text;
-  final String sectionName;
-  final void Function()? onPressed;
-  final ThemeData theme;
-  final IconData icon;
-
-  const MyTextBox({
-    Key? key,
-    required this.text,
-    required this.sectionName,
-    required this.onPressed,
-    required this.theme,
-    required this.icon,
-    Color? color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.all(15),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: Theme.of(context).backgroundColor,
-        ),
-        onPressed: onPressed,
-        child: Row(
-          children: [
-            Icon(icon, color: Theme.of(context).iconTheme.color),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    sectionName,
-                    style: TextStyle(
-                      fontFamily: 'fonts/Inter-Black.ttf',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: theme.textTheme.bodyText1?.color,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    text,
-                    style: TextStyle(color: theme.textTheme.bodyText1?.color),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

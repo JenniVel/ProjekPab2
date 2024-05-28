@@ -71,17 +71,23 @@ class _MasukScreenState extends State<MasukScreen> {
         password: _kataSandiController.text,
       );
 
-// stlh buat user, buat doc di -tes (ins)
-      FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({
-        'username': _emailController.text.split('@')[0], //initial username
-        'namalengkap': 'Nama'
-      });
+// // stlh buat user, buat doc di -tes (ins)
+//       FirebaseFirestore.instance
+//           .collection("Users")
+//           .doc(userCredential.user!.email)
+//           .set({
+//         'username': _emailController.text.split('@')[0], //initial username
+//         'namalengkap': 'Nama',
+//       });
 
       User? user = userCredential.user;
-
+      //C OBA COBA
+      DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .doc(user?.email)
+          .get();
+          
       if (user != null) {
         setState(() {
           _errorText = '';
