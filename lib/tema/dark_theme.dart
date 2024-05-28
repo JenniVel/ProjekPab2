@@ -5,11 +5,11 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Color(0xFF0F0E13),
     appBarTheme: AppBarTheme(
-      backgroundColor: Color(0xFF0F0E13),
+      backgroundColor: Color(0xFF21262B),
       iconTheme: IconThemeData(color: Color(0xFF93A1B1)),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFF176FF2),
+      backgroundColor: Color(0xFF303239),
     ),
     textTheme: TextTheme(
       bodyText1: TextStyle(color: Color(0xFF93A1B1)),
