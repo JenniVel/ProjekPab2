@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:projek/screens/nav_pages/text_box.dart';
 import 'package:projek/tema/theme_screen.dart';
 
 class ProfilPage extends StatefulWidget {
@@ -24,7 +22,21 @@ class _ProfilPageState extends State<ProfilPage> {
   @override
   void initState() {
     super.initState();
+    _initializeUserData();
     _loadProfileImage();
+  }
+
+  Future<void> _initializeUserData() async {
+    DocumentSnapshot userDoc =
+        await usersCollection.doc(currentUser.email).get();
+    if (!userDoc.exists) {
+      await usersCollection.doc(currentUser.email).set({
+        'username': currentUser.displayName ?? '',
+        'namalengkap': currentUser.displayName ?? '',
+        'email': currentUser.email,
+        'image_url': '',
+      });
+    }
   }
 
   Future<void> _loadProfileImage() async {
@@ -100,7 +112,10 @@ class _ProfilPageState extends State<ProfilPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            leading: Icon(Icons.camera_alt),
+            leading: Icon(
+              Icons.camera_alt,
+              color: Theme.of(context).iconTheme.color,
+            ),
             title: Text('Change Profile Picture'),
             onTap: () {
               Navigator.pop(context);
@@ -109,7 +124,10 @@ class _ProfilPageState extends State<ProfilPage> {
           ),
           if (imageUrl != null)
             ListTile(
-              leading: Icon(Icons.delete),
+              leading: Icon(
+                Icons.delete,
+                color: Theme.of(context).iconTheme.color,
+              ),
               title: Text('Remove Profile Picture'),
               onTap: () {
                 Navigator.pop(context);
@@ -126,14 +144,15 @@ class _ProfilPageState extends State<ProfilPage> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.pink,
-        title: Text("Edit $field"),
+        backgroundColor: Theme.of(context).backgroundColor,
+        title:
+            Text("Edit $field", style: Theme.of(context).textTheme.headline6),
         content: TextField(
           autofocus: true,
-          style: TextStyle(color: Colors.amber),
+          style: Theme.of(context).textTheme.bodyText1,
           decoration: InputDecoration(
             hintText: "Enter new $field",
-            hintStyle: TextStyle(color: Colors.brown),
+            hintStyle: TextStyle(color: Color.fromARGB(255, 71, 101, 136)),
           ),
           onChanged: (value) {
             newValue = value;
@@ -141,11 +160,11 @@ class _ProfilPageState extends State<ProfilPage> {
         ),
         actions: [
           TextButton(
-            child: Text('Cancel', style: TextStyle(color: Colors.black)),
+            child: Text('Cancel', style: Theme.of(context).textTheme.bodyText1),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text('Save', style: TextStyle(color: Colors.black)),
+            child: Text('Save', style: Theme.of(context).textTheme.bodyText1),
             onPressed: () => Navigator.of(context).pop(newValue),
           ),
         ],
@@ -161,15 +180,17 @@ class _ProfilPageState extends State<ProfilPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Konfirmasi Keluar'),
-        content: Text('Apakah Anda yakin ingin keluar?'),
+        title: Text('Konfirmasi Keluar',
+            style: Theme.of(context).textTheme.headline6),
+        content: Text('Apakah Anda yakin ingin keluar?',
+            style: Theme.of(context).textTheme.bodyText1),
         actions: [
           TextButton(
-            child: Text('Tidak', style: TextStyle(color: Colors.black)),
+            child: Text('Tidak', style: Theme.of(context).textTheme.bodyText1),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text('Ya', style: TextStyle(color: Colors.black)),
+            child: Text('Ya', style: Theme.of(context).textTheme.bodyText1),
             onPressed: () async {
               Navigator.pop(context);
               await _signOut();
@@ -181,10 +202,6 @@ class _ProfilPageState extends State<ProfilPage> {
   }
 
   Future<void> _signOut() async {
-    await usersCollection.doc(currentUser.email).update({
-      'username': '',
-      'namalengkap': '',
-    });
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
@@ -197,7 +214,7 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Pengaturan", style: TextStyle(color: textColor)),
-        backgroundColor: theme.appBarTheme.backgroundColor,
+        backgroundColor: theme.backgroundColor,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: usersCollection.doc(currentUser.email).snapshots(),
@@ -214,7 +231,7 @@ class _ProfilPageState extends State<ProfilPage> {
                     children: [
                       CircleAvatar(
                         radius: 75,
-                        backgroundColor: Colors.white,
+                        backgroundColor: theme.backgroundColor,
                         backgroundImage: _imageFile != null
                             ? FileImage(_imageFile!)
                             : (userData['image_url'] != null
@@ -224,7 +241,7 @@ class _ProfilPageState extends State<ProfilPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.camera_alt,
-                            color: Color(0xFF176FF2)),
+                            color: Color.fromARGB(255, 47, 106, 195)),
                         onPressed: _showImageOptions,
                       ),
                     ],
@@ -235,36 +252,55 @@ class _ProfilPageState extends State<ProfilPage> {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
                     'Informasi Akun',
-                    style: TextStyle(color: theme.primaryColor),
+                    style: TextStyle(
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
                 ),
                 MyTextBox(
-                  text: userData['username'],
+                  text: userData['username'].isEmpty
+                      ? currentUser.displayName ?? 'Username'
+                      : userData['username'],
                   sectionName: 'Nama Pengguna',
                   onPressed: () => editField('username'),
                   theme: theme,
+                  icon: Icons.person,
+                  color: theme.iconTheme.color,
                 ),
                 MyTextBox(
-                  text: userData['namalengkap'],
+                  text: userData['namalengkap'].isEmpty
+                      ? currentUser.displayName ?? 'Nama Lengkap'
+                      : userData['namalengkap'],
                   sectionName: 'Nama Lengkap',
                   onPressed: () => editField('namalengkap'),
                   theme: theme,
+                  icon: Icons.badge,
+                  color: theme.iconTheme.color,
                 ),
                 ReadOnlyTextBox(
                   text: currentUser.email!,
                   sectionName: 'Email',
-                  color: theme.primaryColor, // Pass theme's primary color
+                  color: theme.primaryColor,
+                  icon: Icons.email,
                 ),
                 const SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
                     'Pengaturan',
-                    style: TextStyle(color: Color(0xFF176FF2)),
+                    style: TextStyle(
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: theme.primaryColor,
+                    ),
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.color_lens),
+                  leading: Icon(Icons.color_lens, color: theme.iconTheme.color),
                   title: Text('Tema', style: TextStyle(color: textColor)),
                   onTap: () {
                     Navigator.push(
@@ -274,7 +310,8 @@ class _ProfilPageState extends State<ProfilPage> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.exit_to_app),
+                  leading:
+                      Icon(Icons.exit_to_app, color: theme.iconTheme.color),
                   title: Text('Keluar', style: TextStyle(color: textColor)),
                   onTap: _confirmSignOut,
                 ),
@@ -298,37 +335,117 @@ class _ProfilPageState extends State<ProfilPage> {
 class ReadOnlyTextBox extends StatelessWidget {
   final String text;
   final String sectionName;
-  final Color color; // Add color parameter
+  final Color color;
+  final IconData icon;
 
   const ReadOnlyTextBox({
     Key? key,
     required this.text,
     required this.sectionName,
-    required this.color, // Update constructor to include color parameter
+    required this.color,
+    required this.icon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        Theme.of(context).textTheme.bodyText1?.color ?? Colors.black;
+    final textColor = Theme.of(context).textTheme.bodyText1?.color;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.cyan,
-        borderRadius: BorderRadius.circular(8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.blue.shade800,
+          padding: const EdgeInsets.all(15),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          backgroundColor: Theme.of(context).backgroundColor,
+        ),
+        onPressed: () {}, // Add functionality if needed
+        child: Row(
+          children: [
+            Icon(icon, color: Theme.of(context).iconTheme.color),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sectionName,
+                    style: TextStyle(
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(text, style: TextStyle(color: textColor)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      padding: const EdgeInsets.only(left: 15, bottom: 15),
-      margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            sectionName,
-            style: TextStyle(color: color), // Use color parameter here
-          ),
-          const SizedBox(height: 5),
-          Text(text, style: TextStyle(color: textColor)),
-        ],
+    );
+  }
+}
+
+class MyTextBox extends StatelessWidget {
+  final String text;
+  final String sectionName;
+  final void Function()? onPressed;
+  final ThemeData theme;
+  final IconData icon;
+
+  const MyTextBox({
+    Key? key,
+    required this.text,
+    required this.sectionName,
+    required this.onPressed,
+    required this.theme,
+    required this.icon,
+    Color? color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.all(15),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          backgroundColor: Theme.of(context).backgroundColor,
+        ),
+        onPressed: onPressed,
+        child: Row(
+          children: [
+            Icon(icon, color: Theme.of(context).iconTheme.color),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sectionName,
+                    style: TextStyle(
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: theme.textTheme.bodyText1?.color,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    text,
+                    style: TextStyle(color: theme.textTheme.bodyText1?.color),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

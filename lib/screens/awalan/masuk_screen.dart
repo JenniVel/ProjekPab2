@@ -77,7 +77,7 @@ class _MasukScreenState extends State<MasukScreen> {
           .doc(userCredential.user!.email)
           .set({
         'username': _emailController.text.split('@')[0], //initial username
-        'namalengkap': 'Nama saya..'
+        'namalengkap': 'Nama'
       });
 
       User? user = userCredential.user;
