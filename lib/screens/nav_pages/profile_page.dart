@@ -230,7 +230,7 @@ class _ProfilPageState extends State<ProfilPage> {
         title: Text("Pengaturan", style: TextStyle(color: textColor)),
         backgroundColor: theme.backgroundColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: textColor),
+          icon: Icon(Icons.arrow_back_ios, color: textColor),
           onPressed: () {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
