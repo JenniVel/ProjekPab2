@@ -55,13 +55,13 @@ class TabViewChild extends StatelessWidget {
               itemBuilder: (context, index) {
                 final wisataItem = wisata[index];
                 return GestureDetector(
-                  onTap: () => Navigator.push(
+                  onTap: () { Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
                           DetailsPage(wisataId: wisataItem.id!),
                     ),
-                  ),
+                  );},
                   child: Stack(
                     alignment: Alignment.bottomLeft,
                     children: [
