@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projek/screens/home/home_screen.dart';
 import 'package:projek/screens/home/list_screen.dart';
 import 'package:projek/screens/home/ujicoba_kategori.dart';
 import 'package:projek/tema/theme_screen.dart';
@@ -42,7 +44,19 @@ class MainApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: theme.currentTheme,
-            home: const LandingScreen(),
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  User? user = snapshot.data;
+                  return HomePage(
+                    user: user,
+                  );
+                } else {
+                  return const MasukScreen();
+                }
+              },
+            ),
             initialRoute: '/',
             routes: {
               '/daftar': (context) => const DaftarScreen(),
