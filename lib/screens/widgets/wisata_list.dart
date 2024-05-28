@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/models/wisata.dart';
+import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/services/upload_service.dart';
 
 class WisataList extends StatelessWidget {
@@ -38,9 +39,13 @@ class WisataList extends StatelessWidget {
                         milliseconds: index * 100), // Stagger animations
                     child: Card(
                       child: InkWell(
-                        onTap: () {
-                          
-                        },
+                        onTap: () { Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetailsPage(wisataId: document.id!),
+                    ),
+                  );},
                         child: Row(
                           children: [
                             document.imageUrl != null &&
