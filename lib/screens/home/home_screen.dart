@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/details_page.dart';
+import 'package:projek/screens/home/see_all_pages.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/tab_view_child.dart';
@@ -27,15 +28,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final TabController tabController;
   int _selectedIndex = 0;
   List<PeopleAlsoLikeModel> favorites = [];
-  final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 10.0);
+  final EdgeInsetsGeometry padding =
+      const EdgeInsets.symmetric(horizontal: 10.0);
 
-   final Stream<List<Wisata>>? wisataStream = // Replace with your actual Stream/Future
+  final Stream<List<Wisata>>?
+      wisataStream = // Replace with your actual Stream/Future
       FirebaseFirestore.instance
-          .collection('Destinations') // Replace 'wisata' with your collection name
+          .collection(
+              'Destinations') // Replace 'wisata' with your collection name
           .snapshots()
           .map((snapshot) {
-        return snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList();
-      });
+    return snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList();
+  });
 
   List<Wisata> allWisata = []; // List to store all Wisata objects
   List<Wisata> filteredWisata = []; // List to store filtered Wisata objects
@@ -46,7 +50,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (category == 'All') {
         filteredWisata = allWisata;
       } else {
-        filteredWisata = allWisata.where((wisata) => wisata.kategori == category).toList();
+        filteredWisata =
+            allWisata.where((wisata) => wisata.kategori == category).toList();
       }
     });
   }
@@ -54,7 +59,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(length: 4, vsync: this);
-     wisataStream!.listen((data) {
+    wisataStream!.listen((data) {
       allWisata = data;
       filteredWisata = allWisata;
       setState(() {});
@@ -177,32 +182,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             radius: 4,
                           ),
                           tabs: [
-              Tab(child: Text('pantai')),
-              Tab(child: Text('gunung')),
-              Tab(child: Text('danau')),
-              Tab(child: Text('perkotaan')), // Add more tabs for other categories
-            ],
-            onTap: (index) {
-              String category;
-              switch (index) {
-                case 0:
-                  category = 'pantai';
-                  break;
-                case 1:
-                  category = 'gunung';
-                  break;
-                case 2:
-                  category = 'danau';
-                  break;
-                case 3:
-                  category = 'perkotaan';
-                  break;
-                default:
-                  category = 'pantai';
-              }
-              filterByCategory(category);
-            },
-          ),
+                            Tab(child: Text('pantai')),
+                            Tab(child: Text('gunung')),
+                            Tab(child: Text('danau')),
+                            Tab(
+                                child: Text(
+                                    'perkotaan')), // Add more tabs for other categories
+                          ],
+                          onTap: (index) {
+                            String category;
+                            switch (index) {
+                              case 0:
+                                category = 'pantai';
+                                break;
+                              case 1:
+                                category = 'gunung';
+                                break;
+                              case 2:
+                                category = 'danau';
+                                break;
+                              case 3:
+                                category = 'perkotaan';
+                                break;
+                              default:
+                                category = 'pantai';
+                            }
+                            filterByCategory(category);
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -216,10 +223,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: tabController,
                           children: [
-                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'pantai').toList()),
-                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'gunung').toList()),
-                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'danau').toList()),
-                            TabViewChild(wisata: filteredWisata.where((wisata) => wisata.kategori == 'perkotaan').toList()),
+                            TabViewChild(
+                                wisata: filteredWisata
+                                    .where(
+                                        (wisata) => wisata.kategori == 'pantai')
+                                    .toList()),
+                            TabViewChild(
+                                wisata: filteredWisata
+                                    .where(
+                                        (wisata) => wisata.kategori == 'gunung')
+                                    .toList()),
+                            TabViewChild(
+                                wisata: filteredWisata
+                                    .where(
+                                        (wisata) => wisata.kategori == 'danau')
+                                    .toList()),
+                            TabViewChild(
+                                wisata: filteredWisata
+                                    .where((wisata) =>
+                                        wisata.kategori == 'perkotaan')
+                                    .toList()),
                           ]),
                     ),
                   ),
@@ -236,12 +259,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                         InkWell(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => SeeAllPage(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SeeAllPage(), // Navigasi ke SeeAllPage
+                              ),
+                            );
                           },
                           child: const AppText(
                             text: "Lihat Semua",
@@ -257,9 +281,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   FadeInUp(
                     delay: const Duration(milliseconds: 1000),
                     child: const SizedBox(
-                      child:  WisataList(),
-                      ),
+                      child:
+                          WisataList(itemCount: 5), // Menampilkan hanya 5 item
                     ),
+                  ),
                 ],
               ),
             ),
@@ -302,4 +327,3 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 }
-
