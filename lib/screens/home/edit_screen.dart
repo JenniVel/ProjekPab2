@@ -22,6 +22,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
+  final TextEditingController _kategoriController = TextEditingController();
   File? _imageFile;
   Position? _currentPosition;
 
@@ -32,6 +33,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
       _nameController.text = widget.wisata!.name;
       _descriptionController.text = widget.wisata!.description;
       _hargaController.text = widget.wisata!.harga;
+      _kategoriController.text = widget.wisata!.kategori;
     }
   }
 
@@ -107,6 +109,15 @@ Future<void> _uploadImageToFirebase(XFile imageFile) async {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Kategori: ',
+                ),
+              ),
+              TextField(
+                controller: _kategoriController,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
                 child: Text('Image: '),
               ),
               _imageFile != null
@@ -175,6 +186,7 @@ Future<void> _uploadImageToFirebase(XFile imageFile) async {
                           name: _nameController.text,
                           description: _descriptionController.text,
                           harga: _hargaController.text,
+                          kategori: _kategoriController.text,
                           imageUrl: imageUrl,
                           // latitude: _currentPosition?.latitude,
                           // longitude: _currentPosition?.longitude,
