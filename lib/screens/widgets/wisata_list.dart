@@ -39,6 +39,7 @@ class WisataList extends StatelessWidget {
                     child: Card(
                       child: InkWell(
                         onTap: () {
+                          
                         },
                         child: Row(
                           children: [

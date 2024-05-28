@@ -72,13 +72,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    List<PeopleAlsoLikeModel> _peopleAlsoLikeModelList =
-        PeopleAlsoLikeModel.peopleAlsoLikeModeList +
-            PeopleAlsoLikeModel.peopleAlsoLikeModeList1 +
-            PeopleAlsoLikeModel.inspiration +
-            PeopleAlsoLikeModel.perkotaan +
-            PeopleAlsoLikeModel.places +
-            PeopleAlsoLikeModel.popular;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/models/people_also_like_model.dart';
 import 'package:projek/screens/widgets/reuseable_text.dart';
+import 'package:projek/models/wisata.dart';
 
 class WisataWidget extends StatelessWidget {
   
@@ -19,16 +20,16 @@ class WisataWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailsPage(
-            personData: combinedPeopleAlsoLikeModelList[index],
-            isCameFromPersonSection: true,
-            id: combinedPeopleAlsoLikeModelList[index].id,
-          ),
-        ),
-      ),
+      // onTap: () => Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => DetailsPage(
+      //       personData: combinedPeopleAlsoLikeModelList[index],
+      //       isCameFromPersonSection: true,
+      //       id: combinedPeopleAlsoLikeModelList[index].id,
+      //     ),
+      //   ),
+      // ),
       child: Container(
         margin: const EdgeInsets.all(8.0),
         width: size.width,
