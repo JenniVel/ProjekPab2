@@ -15,9 +15,9 @@ import '../widgets/reuseable_text.dart';
 import '../widgets/painter.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.user});
+  User? user;
 
-  final User user;
+  HomePage({Key? key, this.user});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainWrapper(user: widget.user),
+                      builder: (context) => MainWrapper(user: widget.user!),
                     ),
                   );
                 },
