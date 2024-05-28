@@ -11,22 +11,20 @@ import 'reuseable_text.dart';
 class TabViewChild extends StatelessWidget {
   final List<Wisata> wisata;
 
-  const TabViewChild({
-    Key? key,
-    required this.wisata
-  }) : super(key: key);
+  const TabViewChild({Key? key, required this.wisata}) : super(key: key);
 
   Future<ImageProvider> _getImageProvider(String imageUrl) async {
-  final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
-  try {
-    final imageData = await storageRef.getData();
-    return MemoryImage(imageData!);
-  } catch (error) {
-    // Handle errors (e.g., log the error or display a placeholder image)
-    print('Error getting image: $error');
-    return const AssetImage('assets/placeholder_image.png'); // Replace with placeholder asset
+    final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+    try {
+      final imageData = await storageRef.getData();
+      return MemoryImage(imageData!);
+    } catch (error) {
+      // Handle errors (e.g., log the error or display a placeholder image)
+      print('Error getting image: $error');
+      return const AssetImage(
+          'assets/placeholder_image.png'); // Replace with placeholder asset
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -57,50 +55,55 @@ class TabViewChild extends StatelessWidget {
               itemBuilder: (context, index) {
                 final wisataItem = wisata[index];
                 return GestureDetector(
-                  // onTap: () => Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => DetailsPage(
-                  //         personData: current,
-                  //         isCameFromPersonSection: true,
-                  //         id: combinedPeopleAlsoLikeModelList[index].id),
-                  //   ),
-                  // ),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetailsPage(wisataId: wisataItem.id!),
+                    ),
+                  ),
                   child: Stack(
                     alignment: Alignment.bottomLeft,
                     children: [
                       Hero(
                         tag: wisataItem.id!,
-                        child: wisataItem.imageUrl != null && Uri.parse(wisataItem.imageUrl!).isAbsolute
-              ? FutureBuilder<ImageProvider>(
-                  future: _getImageProvider(wisataItem.imageUrl!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                          return const Center(child: Icon(Icons.error));
-                        }
+                        child: wisataItem.imageUrl != null &&
+                                Uri.parse(wisataItem.imageUrl!).isAbsolute
+                            ? FutureBuilder<ImageProvider>(
+                                future: _getImageProvider(wisataItem.imageUrl!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return const Center(
+                                        child: Icon(Icons.error));
+                                  }
 
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
 
-                        return Row(
-                          children: [
-                            ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0), 
-                            child: Image.network(
-                                          wisataItem.imageUrl!,
-                                          fit: BoxFit.cover,
-                                          alignment: Alignment.center,
-                                          width: 200.0, // Adjust width as needed
-                                          height: 300.0,
-                                        )
-                                        ),
-                                        SizedBox(width: 20,)
-                          ],
-                        );
-                      },
-                    )
-                  : Container(color: Colors.grey[200]),
+                                  return Row(
+                                    children: [
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          child: Image.network(
+                                            wisataItem.imageUrl!,
+                                            fit: BoxFit.cover,
+                                            alignment: Alignment.center,
+                                            width:
+                                                200.0, // Adjust width as needed
+                                            height: 300.0,
+                                          )),
+                                      SizedBox(
+                                        width: 20,
+                                      )
+                                    ],
+                                  );
+                                },
+                              )
+                            : Container(color: Colors.grey[200]),
                       ),
                       Positioned(
                         bottom: 0,
@@ -150,7 +153,8 @@ class TabViewChild extends StatelessWidget {
                               width: size.width * 0.01,
                             ),
                             AppText(
-                              text: "lokasi",//current.location,  //Harus lokasi kita
+                              text:
+                                  "lokasi", //current.location,  //Harus lokasi kita
                               size: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
