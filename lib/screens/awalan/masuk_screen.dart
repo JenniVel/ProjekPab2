@@ -87,7 +87,7 @@ class _MasukScreenState extends State<MasukScreen> {
           .collection("Users")
           .doc(user?.email)
           .get();
-          
+
       if (user != null) {
         setState(() {
           _errorText = '';
@@ -130,7 +130,7 @@ class _MasukScreenState extends State<MasukScreen> {
           child: Align(
             alignment: const AlignmentDirectional(0.00, 0.00),
             child: Container(
-              color: Colors.blue,
+              color: Theme.of(context).appBarTheme.backgroundColor,
             ),
           ),
         ),
@@ -141,9 +141,9 @@ class _MasukScreenState extends State<MasukScreen> {
         child: CircleAvatar(
           backgroundColor: Colors.white,
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF49A2F4),
+              color: Theme.of(context).iconTheme.color,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -163,7 +163,8 @@ class _MasukScreenState extends State<MasukScreen> {
               width: 337,
               height: 720,
               decoration: BoxDecoration(
-                color: const Color(0xFFBADBFA),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                // color: Theme.of(context).backgroundColor,
                 borderRadius: BorderRadius.circular(41),
               ),
               child: Column(
@@ -177,11 +178,11 @@ class _MasukScreenState extends State<MasukScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Email',
                               style: TextStyle(
                                 fontFamily: 'fonts/Inter-Black.ttf',
-                                color: Color(0xFF1284EE),
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -192,9 +193,10 @@ class _MasukScreenState extends State<MasukScreen> {
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 hintText: "Email",
-                                labelStyle: const TextStyle(
+                                labelStyle: TextStyle(
                                   fontFamily: 'fonts/Inter-Bold.ttf',
-                                  color: Color(0xFF4583DF),
+                                  // color: Color(0xFF4583DF),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 border: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -204,15 +206,18 @@ class _MasukScreenState extends State<MasukScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 filled: true,
-                                fillColor: Colors.white,
+                                // fillColor: Colors.white,
+                                fillColor: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .backgroundColor,
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
+                            Text(
                               'Kata Sandi',
                               style: TextStyle(
                                 fontFamily: 'fonts/Inter-Black.ttf',
-                                color: Color(0xFF1284EE),
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -247,7 +252,9 @@ class _MasukScreenState extends State<MasukScreen> {
                                       : Icons.visibility),
                                 ),
                                 filled: true,
-                                fillColor: Colors.white,
+                                fillColor: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .backgroundColor,
                               ),
                               obscureText: _obscurePassword,
                             ),
@@ -262,11 +269,11 @@ class _MasukScreenState extends State<MasukScreen> {
                                     });
                                   },
                                 ),
-                                const Text(
+                                Text(
                                   'Ingat saya',
                                   style: TextStyle(
                                     fontFamily: 'fonts/Inter-Black.ttf',
-                                    color: Color(0xFF1284EE),
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -284,13 +291,26 @@ class _MasukScreenState extends State<MasukScreen> {
                                       fontSize: 20,
                                       fontFamily: 'fonts/Inter-Bold.ttf',
                                     ),
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.blue.shade400,
+                                    foregroundColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
+                                    // Theme.of(context).backgroundColor,
+                                    // backgroundColor: Colors.blue.shade400,
+                                    backgroundColor: Theme.of(context)
+                                        .appBarTheme
+                                        .backgroundColor,
                                     shape: const StadiumBorder()),
-                                child: const Text("MASUK"),
+                                child: Text(
+                                  "MASUK",
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
                               ),
                             ),
-
                             const SizedBox(height: 20),
 
                             // or continue with
@@ -310,7 +330,9 @@ class _MasukScreenState extends State<MasukScreen> {
                                         horizontal: 10.0),
                                     child: Text(
                                       'Or continue with',
-                                      style: TextStyle(color: Colors.grey[700]),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
                                   ),
                                   Expanded(
@@ -344,9 +366,9 @@ class _MasukScreenState extends State<MasukScreen> {
                               child: RichText(
                                   text: TextSpan(
                                       text: 'Tidak Punya Akun? ',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.white,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                       children: [
                                     TextSpan(
@@ -382,8 +404,8 @@ class _MasukScreenState extends State<MasukScreen> {
         child: Container(
           width: 256,
           height: 100,
-          decoration: const BoxDecoration(
-            color: Color(0xFF49A2F4),
+          decoration: BoxDecoration(
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(41),
               bottomRight: Radius.circular(0),
@@ -391,13 +413,13 @@ class _MasukScreenState extends State<MasukScreen> {
               topRight: Radius.circular(0),
             ),
           ),
-          child: const Align(
+          child: Align(
             alignment: AlignmentDirectional(0.00, 0.00),
             child: Text(
               'MASUK',
               style: TextStyle(
                 fontFamily: 'fonts/Inter-Black.ttf',
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
                 fontSize: 25,
               ),
             ),
