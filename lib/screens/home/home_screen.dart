@@ -10,7 +10,6 @@ import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/tab_view_child.dart';
 import 'package:projek/screens/widgets/wisata_list.dart';
 import 'package:projek/services/upload_service.dart';
-import '../../models/category_model.dart';
 import '../../models/people_also_like_model.dart';
 import '../widgets/reuseable_text.dart';
 import '../widgets/painter.dart';

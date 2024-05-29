@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/home/home_screen.dart';
-import 'package:projek/screens/nav_pages/box.dart';
-import 'package:projek/screens/nav_pages/text_box.dart';
+import 'package:projek/screens/widgets/box.dart';
+import 'package:projek/screens/widgets/text_box.dart';
 import 'package:projek/tema/theme_screen.dart';
 
 class ProfilPage extends StatefulWidget {

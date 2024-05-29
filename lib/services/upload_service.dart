@@ -42,6 +42,7 @@ class UploadService {
       'image_url': wisata.imageUrl,
       'created_at': FieldValue.serverTimestamp(),
       'updated_at': FieldValue.serverTimestamp(),
+      'isFavorite': false,
     };
     await _DestinationsCollection.add(newDestination);
   }
@@ -55,6 +56,7 @@ class UploadService {
       'image_url': wisata.imageUrl,
       'created_at': wisata.createdAt,
       'updated_at': FieldValue.serverTimestamp(),
+      'isFavorite': false,
     };
 
     await _DestinationsCollection.doc(wisata.id).update(updatedDestination);
@@ -87,6 +89,7 @@ class UploadService {
               : null, 
           latitude: data['latitude'], 
           longitude: data['longitude'],
+          isFavorite: data['isFavorite'],
         );
       }).toList();
     });

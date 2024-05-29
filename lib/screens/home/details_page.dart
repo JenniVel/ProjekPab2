@@ -3,10 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:projek/komponen/like_button.dart';
+import 'package:projek/services/favorite_service.dart';
 import 'package:projek/screens/home/google_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
-import '../../models/people_also_like_model.dart';
 import 'package:projek/models/wisata.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -27,8 +28,10 @@ class _DetailsPageState extends State<DetailsPage> {
   final EdgeInsetsGeometry padding =
       const EdgeInsets.symmetric(horizontal: 20.0);
   dynamic current;
+
   List<Marker> markers = [];
   Wisata? wisata;
+  bool _isFavorite = false;
 
   @override
   void initState() {
@@ -37,6 +40,19 @@ class _DetailsPageState extends State<DetailsPage> {
     _fetchWisataDetails();
   }
 
+  void toggleFavorite() {
+    setState(() {
+      _isFavorite = !_isFavorite;
+      wisata!.isFavorite = _isFavorite;
+    });
+
+    if (_isFavorite) {
+      FavoriteService.addToFavorites(wisata!);
+    } else {
+      FavoriteService.removeFromFavorites(wisata!.id!);
+    }
+  }
+  
   Future<void> fetchLocations() async {
     try {
       QuerySnapshot snapshot =
@@ -59,8 +75,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> _launchMaps(double latitude, double longitude) async {
-    Uri googleUrl = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    Uri googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
     if (await canLaunch(googleUrl.toString())) {
       await launch(googleUrl.toString());
     } else {
@@ -75,8 +90,16 @@ class _DetailsPageState extends State<DetailsPage> {
     final docSnapshot = await docRef.get();
 
     if (docSnapshot.exists) {
+      final fetchedWisata = Wisata.fromDocument(docSnapshot);
+
+      // Check if the Wisata is in favorites
+      final favDocRef = FirebaseFirestore.instance.collection('Destination_favorites').doc(widget.wisataId);
+      final favDocSnapshot = await favDocRef.get();
+
       setState(() {
-        wisata = Wisata.fromDocument(docSnapshot);
+        wisata = fetchedWisata;
+        _isFavorite = favDocSnapshot.exists;
+        wisata!.isFavorite = _isFavorite;
       });
     } else {
       print("Wisata not found with ID: ${widget.wisataId}");
@@ -86,18 +109,6 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    final List<PeopleAlsoLikeModel> _peopleAlsoLikeModelList =
-        PeopleAlsoLikeModel.peopleAlsoLikeModeList +
-            PeopleAlsoLikeModel.peopleAlsoLikeModeList1 +
-            PeopleAlsoLikeModel.inspiration +
-            PeopleAlsoLikeModel.perkotaan +
-            PeopleAlsoLikeModel.places +
-            PeopleAlsoLikeModel.popular;
-
-    bool toggleIsFavorite(bool isFavorite) {
-      return !isFavorite;
-    }
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
@@ -114,8 +125,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     left: 0,
                     top: 0,
                     right: 0,
-                    child: wisata!.imageUrl != null &&
-                            Uri.parse(wisata!.imageUrl!).isAbsolute
+                    child: wisata!.imageUrl != null && Uri.parse(wisata!.imageUrl!).isAbsolute
                         ? Hero(
                             tag: wisata!.name,
                             child: Image.network(
@@ -183,24 +193,24 @@ class _DetailsPageState extends State<DetailsPage> {
                                                   color: Colors.black54,
                                                   fontWeight: FontWeight.w400,
                                                 ),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) => GoogleMapsScreen(
-                                                                latitude: wisata!.latitude,
-                                                                longitude: wisata!.longitude,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
+                                                recognizer: TapGestureRecognizer()
+                                                  ..onTap = () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => GoogleMapsScreen(markers: markers),
+                                                      ),
+                                                    );
+                                                  },
                                               ),
                                             ),
                                           ],
                                         ),
                                       ],
+                                    ),
+                                    LikeButton(
+                                      isLiked: _isFavorite,
+                                      onTap: toggleFavorite,
                                     ),
                                   ],
                                 ),
@@ -216,9 +226,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                     color: Colors.black54,
                                     size: 20,
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
+                                  SizedBox(width: 10),
                                   AppText(
                                     text: "\Rp. " + wisata!.harga,
                                     size: 20,
@@ -303,45 +311,6 @@ class _DetailsPageState extends State<DetailsPage> {
                             SizedBox(height: size.height * 0.08),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-      bottomNavigationBar: wisata == null
-          ? SizedBox.shrink()
-          : Container(
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 1000),
-                    child: Padding(
-                      padding: EdgeInsets.all(size.height * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              debugPrint('favorite');
-                            },
-                            child: Container(
-                              width: size.width * 0.14,
-                              height: size.height * 0.06,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color:
-                                        const Color.fromARGB(255, 26, 123, 214),
-                                    width: 2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: size.width * 0.03),
-                        ],
                       ),
                     ),
                   ),

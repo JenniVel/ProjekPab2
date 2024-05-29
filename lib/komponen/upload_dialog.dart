@@ -168,6 +168,7 @@ class _UploadDialogState extends State<UploadDialog> {
               createdAt: widget.wisata?.createdAt, 
               latitude: double.tryParse(_latitudeController.text) ?? 0.0,
               longitude: double.tryParse(_longitudeController.text) ?? 0.0,
+              isFavorite: false,
             );
 
             if (widget.wisata == null) {
