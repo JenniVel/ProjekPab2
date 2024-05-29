@@ -25,7 +25,7 @@ class _MainWrapperState extends State<MainWrapper> {
   List<Widget> _widgetOptions() {
     return [
       HomePage(user: widget.user),
-      FavoritePage(favoriteWisata: favorites),
+      FavoriteScreen(),
       SearchScreen(),
       ProfilPage(),
     ];

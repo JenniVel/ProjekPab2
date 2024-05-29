@@ -8,6 +8,7 @@ class Wisata {
   final String kategori;
   final double latitude;
   final double longitude;
+  bool isFavorite;
   String? imageUrl;
   Timestamp? createdAt;
   Timestamp? updatedAt;
@@ -20,6 +21,7 @@ class Wisata {
     required this.kategori,
     required this.latitude, 
     required this.longitude,
+    required this.isFavorite,
     this.imageUrl,
     this.createdAt,
     this.updatedAt,
@@ -38,6 +40,7 @@ class Wisata {
       imageUrl: data['image_url'],
       createdAt: data['created_at'] as Timestamp,
       updatedAt: data['updated_at'] as Timestamp, 
+      isFavorite: data['isFavorite'], 
     );
   }
 
@@ -52,6 +55,7 @@ class Wisata {
       'image_url': imageUrl,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'isFavorite': isFavorite
     };
   }
 }

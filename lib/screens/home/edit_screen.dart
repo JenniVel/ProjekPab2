@@ -205,6 +205,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                           latitude: double.tryParse(_latitudeController.text) ?? 0.0,
                           longitude: double.tryParse(_longitudeController.text) ?? 0.0,
                           createdAt: widget.wisata?.createdAt,
+                          isFavorite: false,
                         );
 
                         if (widget.wisata == null) {
