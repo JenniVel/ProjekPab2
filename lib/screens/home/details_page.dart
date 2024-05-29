@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projek/komponen/like_button.dart';
 import 'package:projek/services/favorite_service.dart';
+import 'package:projek/screens/home/google_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
 import 'package:projek/models/wisata.dart';
@@ -22,7 +23,12 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 20.0);
+  TextEditingController datetimeinput = TextEditingController();
+  int selected = 0;
+  final EdgeInsetsGeometry padding =
+      const EdgeInsets.symmetric(horizontal: 20.0);
+  dynamic current;
+
   List<Marker> markers = [];
   Wisata? wisata;
   bool _isFavorite = false;
@@ -46,10 +52,11 @@ class _DetailsPageState extends State<DetailsPage> {
       FavoriteService.removeFromFavorites(wisata!.id!);
     }
   }
-
+  
   Future<void> fetchLocations() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('locations').get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('locations').get();
       List<DocumentSnapshot> documents = snapshot.docs;
 
       setState(() {
@@ -77,7 +84,9 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> _fetchWisataDetails() async {
-    final docRef = FirebaseFirestore.instance.collection('Destinations').doc(widget.wisataId);
+    final docRef = FirebaseFirestore.instance
+        .collection('Destinations')
+        .doc(widget.wisataId);
     final docSnapshot = await docRef.get();
 
     if (docSnapshot.exists) {
@@ -150,12 +159,15 @@ class _DetailsPageState extends State<DetailsPage> {
                             FadeInUp(
                               delay: const Duration(milliseconds: 200),
                               child: Padding(
-                                padding: EdgeInsets.only(top: size.height * 0.02),
+                                padding:
+                                    EdgeInsets.only(top: size.height * 0.02),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         AppText(
                                           text: wisata!.name,
@@ -232,8 +244,12 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Wrap(
                                     children: List.generate(5, (index) {
                                       return Icon(
-                                        index < 4 ? Icons.star : Icons.star_border,
-                                        color: index < 4 ? Colors.amber : Colors.grey,
+                                        index < 4
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: index < 4
+                                            ? Colors.amber
+                                            : Colors.grey,
                                       );
                                     }),
                                   ),
@@ -262,12 +278,24 @@ class _DetailsPageState extends State<DetailsPage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    _launchMaps(wisata!.latitude, wisata!.longitude);
-                                  },
-                                  child: const Text('Tampilkan Peta'),
-                                ),
+                                IconButton(
+                                icon: const Icon(Icons.map),
+                                onPressed: wisata?.latitude != null &&
+                                        wisata?.longitude != null
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                GoogleMapsScreen(
+                                              latitude: wisata!.latitude,
+                                              longitude: wisata!.longitude,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    : null, // Disable the button if latitude or longitude is null
+                              ),
                               ],
                             ),
                             SizedBox(height: size.height * 0.01),
@@ -312,28 +340,6 @@ class _DetailsPageState extends State<DetailsPage> {
           icon: const Icon(Icons.reviews),
         ),
       ],
-    );
-  }
-}
-
-class GoogleMapsScreen extends StatelessWidget {
-  final List<Marker> markers;
-
-  GoogleMapsScreen({required this.markers});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Google Maps'),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(-6.1751, 106.8650), // Example coordinates (Jakarta)
-          zoom: 12,
-        ),
-        markers: Set.from(markers),
-      ),
     );
   }
 }

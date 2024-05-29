@@ -117,6 +117,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(
                           bottom: size.height * 0.01, top: size.height * 0.02),
                       child: TextField(
+                        readOnly: true,
                         style: TextStyle(
                           fontFamily: 'fonts/Inter-Black.ttf',
                           fontSize: 14,
@@ -128,12 +129,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               vertical: 0, horizontal: 20),
                           filled: true,
                           fillColor: Theme.of(context).canvasColor,
-                          prefixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.search,
-                              color: Theme.of(context).iconTheme.color,
-                            ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'fonts/Inter-Black.ttf',

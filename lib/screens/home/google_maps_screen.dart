@@ -5,6 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class GoogleMapsScreen extends StatefulWidget {
+  final double latitude;
+  final double longitude;
+
+  const GoogleMapsScreen({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+  });
+
   @override
   State<GoogleMapsScreen> createState() => _GoogleMapsScreenState();
 }
@@ -13,35 +22,28 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition _cameraPosition;
   late Set<Marker> _markers = {};
-  
+
   @override
   void initState() {
     super.initState();
-    _cameraPosition = const CameraPosition(
-      target: LatLng(-6.200000, 106.816666), // Default to Jakarta
-      zoom: 5,
+    _cameraPosition = CameraPosition(
+      target: LatLng(widget.latitude, widget.longitude),
+      zoom: 14,
     );
-    _fetchDestinations();
+    _addMarker();
   }
 
-  Future<void> _fetchDestinations() async {
-    await Firebase.initializeApp();
-    FirebaseFirestore.instance.collection('destinations').get().then((querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        final data = doc.data();
-        final markerId = MarkerId(doc.id);
-        final marker = Marker(
-          markerId: markerId,
-          position: LatLng(data['latitude'], data['longitude']),
-          infoWindow: InfoWindow(
-            title: data['title'],
-            snippet: data['description'],
+  void _addMarker() {
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId('destination'),
+          position: LatLng(widget.latitude, widget.longitude),
+          infoWindow: const InfoWindow(
+            title: 'Destination',
           ),
-        );
-        setState(() {
-          _markers.add(marker);
-        });
-      });
+        ),
+      );
     });
   }
 
