@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:projek/screens/home/google_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
 import '../../models/people_also_like_model.dart';
@@ -188,9 +189,9 @@ class _DetailsPageState extends State<DetailsPage> {
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                GoogleMapsScreen(
-                                                              markers: [],
+                                                            builder: (context) => GoogleMapsScreen(
+                                                                latitude: wisata!.latitude,
+                                                                longitude: wisata!.longitude,
                                                             ),
                                                           ),
                                                         );
@@ -269,13 +270,24 @@ class _DetailsPageState extends State<DetailsPage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    _launchMaps(
-                                        current.latitude, current.longitude);
-                                  },
-                                  child: const Text('Tampilkan Peta'),
-                                ),
+                                IconButton(
+                                icon: const Icon(Icons.map),
+                                onPressed: wisata?.latitude != null &&
+                                        wisata?.longitude != null
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                GoogleMapsScreen(
+                                              latitude: wisata!.latitude,
+                                              longitude: wisata!.longitude,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    : null, // Disable the button if latitude or longitude is null
+                              ),
                               ],
                             ),
                             SizedBox(height: size.height * 0.01),
@@ -326,22 +338,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                     width: 2),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              // child: IconButton(
-                              //   onPressed: () {
-                              //     setState(() {
-                              //       bool isFavorite = toggleIsFavorite(
-                              //           _peopleAlsoLikeModelList[widget.id].isFavorite);
-                              //       _peopleAlsoLikeModelList[widget.id].isFavorite =
-                              //           isFavorite;
-                              //     });
-                              //   },
-                              //   icon: Icon(
-                              //     _peopleAlsoLikeModelList[widget.id].isFavorite
-                              //         ? Icons.favorite
-                              //         : Icons.favorite_border,
-                              //     color: const Color.fromARGB(255, 26, 123, 214),
-                              //   ),
-                              // ),
                             ),
                           ),
                           SizedBox(width: size.width * 0.03),
@@ -375,28 +371,6 @@ class _DetailsPageState extends State<DetailsPage> {
           icon: const Icon(Icons.reviews),
         ),
       ],
-    );
-  }
-}
-
-class GoogleMapsScreen extends StatelessWidget {
-  final List<Marker> markers;
-
-  GoogleMapsScreen({required this.markers});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Google Maps'),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(-6.1751, 106.8650), // Example coordinates (Jakarta)
-          zoom: 12,
-        ),
-        markers: Set.from(markers),
-      ),
     );
   }
 }
