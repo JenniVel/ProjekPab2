@@ -28,7 +28,6 @@ class _DetailsPageState extends State<DetailsPage> {
   final EdgeInsetsGeometry padding =
       const EdgeInsets.symmetric(horizontal: 20.0);
   dynamic current;
-
   List<Marker> markers = [];
   Wisata? wisata;
   bool _isFavorite = false;
@@ -196,11 +195,14 @@ class _DetailsPageState extends State<DetailsPage> {
                                                 recognizer: TapGestureRecognizer()
                                                   ..onTap = () {
                                                     Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => GoogleMapsScreen(markers: markers),
-                                                      ),
-                                                    );
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => GoogleMapsScreen(
+                                                                latitude: wisata!.latitude,
+                                                                longitude: wisata!.longitude,
+                                                            ),
+                                                          ),
+                                                        );
                                                   },
                                               ),
                                             ),
@@ -278,24 +280,27 @@ class _DetailsPageState extends State<DetailsPage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                IconButton(
-                                icon: const Icon(Icons.map),
-                                onPressed: wisata?.latitude != null &&
-                                        wisata?.longitude != null
-                                    ? () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                GoogleMapsScreen(
-                                              latitude: wisata!.latitude,
-                                              longitude: wisata!.longitude,
+                                FadeInUp(
+                                  delay: const Duration(milliseconds: 1000),
+                                  child: IconButton(
+                                  icon: const Icon(Icons.map),
+                                  onPressed: wisata?.latitude != null &&
+                                          wisata?.longitude != null
+                                      ? () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GoogleMapsScreen(
+                                                latitude: wisata!.latitude,
+                                                longitude: wisata!.longitude,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }
-                                    : null, // Disable the button if latitude or longitude is null
-                              ),
+                                          );
+                                        }
+                                      : null, // Disable the button if latitude or longitude is null
+                                                                ),
+                                ),
                               ],
                             ),
                             SizedBox(height: size.height * 0.01),

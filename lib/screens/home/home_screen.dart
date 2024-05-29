@@ -3,14 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/models/wisata.dart';
-import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/screens/home/see_all_pages.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:projek/screens/widgets/tab_view_child.dart';
 import 'package:projek/screens/widgets/wisata_list.dart';
-import 'package:projek/services/upload_service.dart';
-import '../../models/people_also_like_model.dart';
 import '../widgets/reuseable_text.dart';
 import '../widgets/painter.dart';
 
@@ -25,8 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final TabController tabController;
-  int _selectedIndex = 0;
-  List<PeopleAlsoLikeModel> favorites = [];
   final EdgeInsetsGeometry padding =
       const EdgeInsets.symmetric(horizontal: 10.0);
 
