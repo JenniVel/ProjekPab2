@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projek/screens/home/edit_screen.dart';
 import 'package:projek/services/upload_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DestinationListScreen extends StatefulWidget {
   const DestinationListScreen({super.key});

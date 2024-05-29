@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:projek/screens/home/home_screen.dart';
-import 'package:projek/models/people_also_like_model.dart';
 import 'package:projek/screens/nav_pages/profile_page.dart';
 import 'package:projek/screens/nav_pages/search_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
@@ -19,7 +18,6 @@ class MainWrapper extends StatefulWidget {
 
 class _MainWrapperState extends State<MainWrapper> {
   late final PageController pageController;
-  List<PeopleAlsoLikeModel> favorites = [];
 
   int currentIndex = 0;
   List<Widget> _widgetOptions() {
@@ -46,9 +44,6 @@ class _MainWrapperState extends State<MainWrapper> {
   void onTap(int index) {
     setState(() {
       currentIndex = index;
-      final List<PeopleAlsoLikeModel> favoritedWisata =
-          PeopleAlsoLikeModel.getFavoriteWisata();
-      favorites = favoritedWisata;
     });
     pageController.animateToPage(index,
         duration: const Duration(milliseconds: 400), curve: Curves.linear);
