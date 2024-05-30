@@ -7,10 +7,10 @@ import 'package:path/path.dart' as path;
 
 class UploadService {
   static final FirebaseFirestore _database = FirebaseFirestore.instance;
-  static final CollectionReference _DestinationsCollection =
-      _database.collection('Destinations');
+  static final CollectionReference _DestinationsCollection = _database.collection('Destinations');
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
+  // Method to upload an image to Firebase Storage
   static Future<String?> uploadImage(File imageFile) async {
     try {
       String fileName = path.basename(imageFile.path);
@@ -31,6 +31,7 @@ class UploadService {
     }
   }
 
+  // Method to add a new destination to Firestore
   static Future<void> addDestination(Wisata wisata) async {
     Map<String, dynamic> newDestination = {
       'name': wisata.name,
@@ -45,6 +46,7 @@ class UploadService {
     await _DestinationsCollection.add(newDestination);
   }
 
+  // Method to update an existing destination in Firestore
   static Future<void> updateDestination(Wisata wisata) async {
     Map<String, dynamic> updatedDestination = {
       'name': wisata.name,
@@ -60,14 +62,17 @@ class UploadService {
     await _DestinationsCollection.doc(wisata.id).update(updatedDestination);
   }
 
+  // Method to delete a destination from Firestore
   static Future<void> deleteDestination(Wisata wisata) async {
     await _DestinationsCollection.doc(wisata.id).delete();
   }
 
+  // Method to retrieve all destinations from Firestore
   static Future<QuerySnapshot> retrieveDestinations() {
     return _DestinationsCollection.get();
   }
 
+  // Method to get a stream of destination list from Firestore
   static Stream<List<Wisata>> getDestinationList() {
     return _DestinationsCollection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -79,17 +84,35 @@ class UploadService {
           harga: data['harga'],
           kategori: data['kategori'],
           imageUrl: data['image_url'],
-          createdAt: data['created_at'] != null
-              ? data['created_at'] as Timestamp
-              : null,
-          updatedAt: data['updated_at'] != null
-              ? data['updated_at'] as Timestamp
-              : null, 
+          createdAt: data['created_at'] != null ? data['created_at'] as Timestamp : null,
+          updatedAt: data['updated_at'] != null ? data['updated_at'] as Timestamp : null, 
           latitude: data['latitude'], 
           longitude: data['longitude'],
           isFavorite: data['isFavorite'],
         );
       }).toList();
     });
+  }
+
+  // Method to add a comment to a destination
+  static Future<void> addComment(String destinationId, String comment, String userId) async {
+    // Reference to the comments sub-collection for a specific destination
+    CollectionReference commentsCollection = _DestinationsCollection.doc(destinationId).collection('Comments');
+
+    // Map representing the comment data
+    Map<String, dynamic> newComment = {
+      'comment': comment,
+      'user_id': userId,
+      'created_at': FieldValue.serverTimestamp(),
+    };
+
+    // Add the new comment to the comments sub-collection
+    await commentsCollection.add(newComment);
+  }
+
+  // Method to retrieve comments for a specific destination
+  static Future<QuerySnapshot> getComments(String destinationId) {
+    // Get all comments from the comments sub-collection for the specified destination
+    return _DestinationsCollection.doc(destinationId).collection('Comments').get();
   }
 }
