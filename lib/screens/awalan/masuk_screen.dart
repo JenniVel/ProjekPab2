@@ -5,9 +5,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
+import 'package:projek/screens/home/home_screen.dart';
+import 'package:projek/screens/home/list_screen.dart';
 import 'package:projek/services/auth_provider.dart';
-import 'package:projek/screens/home/home_screen.dart';
-import 'package:projek/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -71,17 +71,7 @@ class _MasukScreenState extends State<MasukScreen> {
         password: _kataSandiController.text,
       );
 
-// // stlh buat user, buat doc di -tes (ins)
-//       FirebaseFirestore.instance
-//           .collection("Users")
-//           .doc(userCredential.user!.email)
-//           .set({
-//         'username': _emailController.text.split('@')[0], //initial username
-//         'namalengkap': 'Nama',
-//       });
-
       User? user = userCredential.user;
-      //C OBA COBA
       DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
           .instance
           .collection("Users")
@@ -95,10 +85,18 @@ class _MasukScreenState extends State<MasukScreen> {
         });
 
         Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage(user: user)),
-        );
+
+        if (user.email == 'jeo1@gmail.com') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DestinationListScreen()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage(user: user)),
+          );
+        }
       } else {
         setState(() {
           _errorText = 'Login gagal: User tidak ditemukan';
@@ -123,154 +121,61 @@ class _MasukScreenState extends State<MasukScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-      Align(
-        alignment: const AlignmentDirectional(0.00, 0.00),
-        child: ClipRRect(
-          child: Align(
+      body: Stack(
+        children: [
+          Align(
             alignment: const AlignmentDirectional(0.00, 0.00),
-            child: Container(
-              color: Theme.of(context).appBarTheme.backgroundColor,
-            ),
-          ),
-        ),
-      ),
-
-      Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
-
-      // Tempat Form
-      Align(
-        alignment: const AlignmentDirectional(0.00, 0.00),
-        child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
-          child: SingleChildScrollView(
-            physics: FixedExtentScrollPhysics(),
-            child: Container(
-              width: 337,
-              height: 720,
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                // color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.circular(41),
+            child: ClipRRect(
+              child: Align(
+                alignment: const AlignmentDirectional(0.00, 0.00),
+                child: Container(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(-1.00, 0.00),
-                    child: Form(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 150, 8, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email',
-                              style: TextStyle(
-                                fontFamily: 'fonts/Inter-Black.ttf',
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: "Email",
-                                labelStyle: TextStyle(
-                                  fontFamily: 'fonts/Inter-Bold.ttf',
-                                  // color: Color(0xFF4583DF),
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFF4583DF),
-                                    width: 10,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                filled: true,
-                                // fillColor: Colors.white,
-                                fillColor: Theme.of(context)
-                                    .floatingActionButtonTheme
-                                    .backgroundColor,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Kata Sandi',
-                              style: TextStyle(
-                                fontFamily: 'fonts/Inter-Black.ttf',
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            TextFormField(
-                              controller: _kataSandiController,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: "Kata Sandi",
-                                errorText:
-                                    _errorText.isNotEmpty ? _errorText : null,
-                                labelStyle: const TextStyle(
-                                  fontFamily: 'fonts/Inter-Bold.ttf',
-                                  color: Color(0xFF4583DF),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFF4583DF),
-                                    width: 10,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
-                                  icon: Icon(_obscurePassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility),
-                                ),
-                                filled: true,
-                                fillColor: Theme.of(context)
-                                    .floatingActionButtonTheme
-                                    .backgroundColor,
-                              ),
-                              obscureText: _obscurePassword,
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+          Align(
+            alignment: const AlignmentDirectional(0.00, 0.00),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
+              child: SingleChildScrollView(
+                physics: const FixedExtentScrollPhysics(),
+                child: Container(
+                  width: 337,
+                  height: 720,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(41),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-1.00, 0.00),
+                        child: Form(
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                8, 150, 8, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Checkbox(
-                                  value: _isSignedIn,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isSignedIn = !_isSignedIn;
-                                    });
-                                  },
-                                ),
                                 Text(
-                                  'Ingat saya',
+                                  'Email',
                                   style: TextStyle(
                                     fontFamily: 'fonts/Inter-Black.ttf',
                                     color: Theme.of(context).primaryColor,
@@ -278,154 +183,235 @@ class _MasukScreenState extends State<MasukScreen> {
                                     fontSize: 16,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 0, 0, 0),
-                              child: ElevatedButton(
-                                onPressed: _signIn,
-                                style: ElevatedButton.styleFrom(
-                                    fixedSize: const Size(360, 60),
-                                    textStyle: const TextStyle(
-                                      fontSize: 20,
+                                const SizedBox(height: 10),
+                                TextFormField(
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Email",
+                                    labelStyle: TextStyle(
                                       fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Theme.of(context).primaryColor,
                                     ),
-                                    foregroundColor: Theme.of(context)
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
                                         .floatingActionButtonTheme
                                         .backgroundColor,
-                                    // Theme.of(context).backgroundColor,
-                                    // backgroundColor: Colors.blue.shade400,
-                                    backgroundColor: Theme.of(context)
-                                        .appBarTheme
-                                        .backgroundColor,
-                                    shape: const StadiumBorder()),
-                                child: Text(
-                                  "MASUK",
-                                  style: TextStyle(
-                                    fontFamily: 'fonts/Inter-Black.ttf',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // or continue with
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Kata Sandi',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Text(
-                                      'Or continue with',
+                                ),
+                                const SizedBox(height: 10),
+                                TextFormField(
+                                  controller: _kataSandiController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Kata Sandi",
+                                    errorText:
+                                        _errorText.isNotEmpty ? _errorText : null,
+                                    labelStyle: const TextStyle(
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Color(0xFF4583DF),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscurePassword = !_obscurePassword;
+                                        });
+                                      },
+                                      icon: Icon(_obscurePassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
+                                  ),
+                                  obscureText: _obscurePassword,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _isSignedIn,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _isSignedIn = !_isSignedIn;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      'Ingat saya',
                                       style: TextStyle(
+                                        fontFamily: 'fonts/Inter-Black.ttf',
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  child: ElevatedButton(
+                                    onPressed: _signIn,
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size(360, 60),
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'fonts/Inter-Bold.ttf',
+                                        ),
+                                        foregroundColor: Theme.of(context)
+                                            .floatingActionButtonTheme
+                                            .backgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .appBarTheme
+                                            .backgroundColor,
+                                        shape: const StadiumBorder()),
+                                    child: Text(
+                                      "MASUK",
+                                      style: TextStyle(
+                                        fontFamily: 'fonts/Inter-Black.ttf',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            // google
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // google button
-                                Tombol(
-                                  imagePath: 'images/google/google.png',
-                                  onTap: () =>
-                                      authenticateWithGoogle(context: context),
                                 ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            Center(
-                              child: RichText(
-                                  text: TextSpan(
+                                const SizedBox(height: 20),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 25.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Divider(
+                                          thickness: 0.5,
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Text(
+                                          'Or continue with',
+                                          style: TextStyle(
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Divider(
+                                          thickness: 0.5,
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Tombol(
+                                      imagePath: 'images/google/google.png',
+                                      onTap: () =>
+                                          authenticateWithGoogle(context: context),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Center(
+                                  child: RichText(
+                                    text: TextSpan(
                                       text: 'Tidak Punya Akun? ',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Theme.of(context).primaryColor,
                                       ),
                                       children: [
-                                    TextSpan(
-                                      text: 'Daftar',
-                                      style: const TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 16,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.pushNamed(
-                                              context, '/daftar');
-                                        },
+                                        TextSpan(
+                                          text: 'Daftar',
+                                          style: const TextStyle(
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.underline,
+                                            fontSize: 16,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.pushNamed(
+                                                  context, '/daftar');
+                                            },
+                                        ),
+                                      ],
                                     ),
-                                  ])),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          Align(
+            alignment: const AlignmentDirectional(0.99, -0.94),
+            child: Container(
+              width: 256,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(41),
+                  bottomRight: Radius.circular(0),
+                  topLeft: Radius.circular(41),
+                  topRight: Radius.circular(0),
+                ),
+              ),
+              child: Align(
+                alignment: const AlignmentDirectional(0.00, 0.00),
+                child: Text(
+                  'MASUK',
+                  style: TextStyle(
+                    fontFamily: 'fonts/Inter-Black.ttf',
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-
-      //Bagian tag
-      Align(
-        alignment: const AlignmentDirectional(0.99, -0.94),
-        child: Container(
-          width: 256,
-          height: 100,
-          decoration: BoxDecoration(
-            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(41),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(41),
-              topRight: Radius.circular(0),
-            ),
-          ),
-          child: Align(
-            alignment: AlignmentDirectional(0.00, 0.00),
-            child: Text(
-              'MASUK',
-              style: TextStyle(
-                fontFamily: 'fonts/Inter-Black.ttf',
-                color: Theme.of(context).primaryColor,
-                fontSize: 25,
-              ),
-            ),
-          ),
-        ),
-      )
-    ]));
+    );
   }
 }
