@@ -1,12 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/home/edit_screen.dart';
+import 'package:projek/screens/nav_pages/profile_page.dart';
 import 'package:projek/services/upload_service.dart';
 
 class DestinationListScreen extends StatefulWidget {
-  const DestinationListScreen({super.key});
+  const DestinationListScreen({Key? key}) : super(key: key);
 
   @override
   State<DestinationListScreen> createState() => _DestinationListScreenState();
+
+  static Future<void> confirmSignOut(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Konfirmasi Keluar',
+            style: Theme.of(context).textTheme.headline6),
+        content: Text('Apakah Anda yakin ingin keluar?',
+            style: Theme.of(context).textTheme.bodyText1),
+        actions: [
+          TextButton(
+            child: Text('Tidak', style: Theme.of(context).textTheme.bodyText1),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: Text('Ya', style: Theme.of(context).textTheme.bodyText1),
+            onPressed: () async {
+              Navigator.pop(context);
+              await _signOut(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Use Future.delayed to ensure navigation happens after the widget tree update
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => MasukScreen()),
+          (Route<dynamic> route) => false,
+        );
+      });
+    } catch (e) {
+      print('Error signing out: $e');
+    }
+  }
 }
 
 class _DestinationListScreenState extends State<DestinationListScreen> {
@@ -14,7 +57,18 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Destinations'),
+        title: Row(
+          children: [
+            const Text('Destinations'),
+            SizedBox(
+              width: 150,
+            ),
+            TextButton(
+              onPressed: () => DestinationListScreen.confirmSignOut(context),
+              child: Text('Sign Out'),
+            ),
+          ],
+        ),
       ),
       body: const DestinationList(),
       floatingActionButton: FloatingActionButton(
@@ -33,18 +87,7 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
 }
 
 class DestinationList extends StatelessWidget {
-  const DestinationList({super.key});
-
-  // Future<void> _launchMaps(double latitude, double longitude) async {
-  //   Uri googleUrl = Uri.parse(
-  //       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
-  //   try {
-  //     await launchUrl(googleUrl);
-  //   } catch (e) {
-  //     print('Could not open the map: $e');
-  //     // Optionally, show a message to the user
-  //   }
-  // }
+  const DestinationList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +160,8 @@ class DestinationList extends StatelessWidget {
                                           TextButton(
                                             child: const Text('Hapus'),
                                             onPressed: () {
-                                              UploadService.deleteDestination(document)
+                                              UploadService.deleteDestination(
+                                                      document)
                                                   .whenComplete(() =>
                                                       Navigator.of(context)
                                                           .pop());
