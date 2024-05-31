@@ -227,17 +227,9 @@ class _ProfilPageState extends State<ProfilPage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Pengaturan", style: TextStyle(color: textColor)),
         backgroundColor: theme.backgroundColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: textColor),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                  builder: (context) => HomePage(user: currentUser)),
-            );
-          },
-        ),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: usersCollection.doc(currentUser.email).snapshots(),

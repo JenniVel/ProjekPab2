@@ -130,35 +130,12 @@ class TabViewChild extends StatelessWidget {
                       ),
                       Positioned(
                         left: size.width * 0.07,
-                        bottom: size.height * 0.045,
+                        bottom: size.height * 0.025,
                         child: AppText(
                           text: wisataItem.name,
                           size: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Positioned(
-                        left: size.width * 0.07,
-                        bottom: size.height * 0.025,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: size.width * 0.01,
-                            ),
-                            AppText(
-                              text:
-                                  "lokasi", //current.location,  //Harus lokasi kita
-                              size: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ],
                         ),
                       ),
                     ],

@@ -57,7 +57,16 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyText1?.color ?? Colors.black;
+
     return Scaffold(
+       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text("Search", style: TextStyle(color: textColor)),
+        backgroundColor: theme.backgroundColor,
+      ),
       body: Column(
         children: [
           Row(
@@ -210,7 +219,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: Text(
                                   document.name,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
