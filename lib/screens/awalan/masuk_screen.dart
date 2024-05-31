@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/komponen/google.dart';
+import 'package:projek/screens/awalan/reset_password.dart';
 import 'package:projek/screens/home/home_screen.dart';
 import 'package:projek/screens/home/list_screen.dart';
 import 'package:projek/services/auth_provider.dart';
@@ -90,7 +91,8 @@ class _MasukScreenState extends State<MasukScreen> {
         if (user.email == 'jeo1@gmail.com') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const DestinationListScreen()),
+            MaterialPageRoute(
+                builder: (context) => const DestinationListScreen()),
           );
         } else {
           Navigator.pushReplacement(
@@ -223,8 +225,9 @@ class _MasukScreenState extends State<MasukScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     hintText: "Kata Sandi",
-                                    errorText:
-                                        _errorText.isNotEmpty ? _errorText : null,
+                                    errorText: _errorText.isNotEmpty
+                                        ? _errorText
+                                        : null,
                                     labelStyle: const TextStyle(
                                       fontFamily: 'fonts/Inter-Bold.ttf',
                                       color: Color(0xFF4583DF),
@@ -255,22 +258,53 @@ class _MasukScreenState extends State<MasukScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Checkbox(
-                                      value: _isSignedIn,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _isSignedIn = !_isSignedIn;
-                                        });
-                                      },
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          value: _isSignedIn,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _isSignedIn = !_isSignedIn;
+                                            });
+                                          },
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                            text: 'Ingat saya',
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  'fonts/Inter-Black.ttf',
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      'Ingat saya',
-                                      style: TextStyle(
-                                        fontFamily: 'fonts/Inter-Black.ttf',
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                    //tambahan ke reset pass
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Lupa kata sandi?',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ResetPass(),
+                                              ),
+                                            );
+                                          },
                                       ),
                                     ),
                                   ],
@@ -306,8 +340,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 25.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25.0),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -322,7 +356,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                         child: Text(
                                           'Or continue with',
                                           style: TextStyle(
-                                            color: Theme.of(context).primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                           ),
                                         ),
                                       ),
@@ -341,8 +376,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                   children: [
                                     Tombol(
                                       imagePath: 'images/google/google.png',
-                                      onTap: () =>
-                                          authenticateWithGoogle(context: context),
+                                      onTap: () => authenticateWithGoogle(
+                                          context: context),
                                     ),
                                   ],
                                 ),
@@ -360,7 +395,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                           text: 'Daftar',
                                           style: const TextStyle(
                                             color: Colors.blue,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                             fontSize: 16,
                                           ),
                                           recognizer: TapGestureRecognizer()
@@ -390,7 +426,8 @@ class _MasukScreenState extends State<MasukScreen> {
               width: 256,
               height: 100,
               decoration: BoxDecoration(
-                color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                color:
+                    Theme.of(context).floatingActionButtonTheme.backgroundColor,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(41),
                   bottomRight: Radius.circular(0),
