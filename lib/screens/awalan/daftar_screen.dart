@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:projek/global/showmessage.dart';
 import 'package:projek/services/auth_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -163,247 +164,249 @@ class _DaftarScreenState extends State<DaftarScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Form(
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(8, 80, 8, 0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Nama Lengkap',
-                                style: TextStyle(
-                                  fontFamily: 'fonts/Inter-Black.ttf',
-                                  color: Theme.of(context).primaryColor,
-                                  // color: Color(0xFF1284EE),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              TextFormField(
-                                controller: _namapenggunaController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  hintText: "Nama Pengguna",
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'fonts/Inter-Bold.ttf',
+                    SingleChildScrollView(
+                      child: Form(
+                        child: Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(8, 80, 8, 0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nama Lengkap',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
                                     color: Theme.of(context).primaryColor,
-                                    //  color: Theme.of(context).primaryColor,
+                                    // color: Color(0xFF1284EE),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFF4583DF),
-                                      width: 10,
+                                ),
+                                const SizedBox(height: 10),
+                                TextFormField(
+                                  controller: _namapenggunaController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Nama Pengguna",
+                                    labelStyle: TextStyle(
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Theme.of(context).primaryColor,
+                                      //  color: Theme.of(context).primaryColor,
                                     ),
-                                    borderRadius: BorderRadius.circular(15),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
                                   ),
-                                  filled: true,
-                                  fillColor: Theme.of(context)
-                                      .floatingActionButtonTheme
-                                      .backgroundColor,
                                 ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                'Email',
-                                style: TextStyle(
-                                  fontFamily: 'fonts/Inter-Black.ttf',
-                                  // color: Color(0xFF1284EE),
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  hintText: "Email",
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'fonts/Inter-Bold.ttf',
+                                const SizedBox(height: 5),
+                                Text(
+                                  'Email',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
+                                    // color: Color(0xFF1284EE),
                                     color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFF4583DF),
-                                      width: 10,
+                                ),
+                                const SizedBox(height: 5),
+                                TextFormField(
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Email",
+                                    labelStyle: TextStyle(
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Theme.of(context).primaryColor,
                                     ),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  filled: true,
-                                  fillColor: Theme.of(context)
-                                      .floatingActionButtonTheme
-                                      .backgroundColor,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Kata Sandi',
-                                style: TextStyle(
-                                  fontFamily: 'fonts/Inter-Black.ttf',
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              TextFormField(
-                                controller: _kataSandiController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  hintText: "Kata Sandi",
-                                  errorText:
-                                      _errorText.isNotEmpty ? _errorText : null,
-                                  labelStyle: const TextStyle(
-                                    fontFamily: 'fonts/Inter-Bold.ttf',
-                                    color: Color(0xFF4583DF),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFF4583DF),
-                                      width: 10,
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                    borderRadius: BorderRadius.circular(15),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
                                   ),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscureKataSandi = !_obscureKataSandi;
-                                      });
-                                    },
-                                    icon: Icon(_obscureKataSandi
-                                        ? Icons.visibility_off
-                                        : Icons.visibility),
-                                  ),
-                                  filled: true,
-                                  fillColor: Theme.of(context)
-                                      .floatingActionButtonTheme
-                                      .backgroundColor,
                                 ),
-                                obscureText: _obscureKataSandi,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Konfirmasi Kata Sandi',
-                                style: TextStyle(
-                                  fontFamily: 'fonts/Inter-Black.ttf',
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              TextFormField(
-                                controller: _konfirmasiSandiController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  hintText: "Konfirmasi Kata Sandi",
-                                  errorText:
-                                      _errorText.isNotEmpty ? _errorText : null,
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'fonts/Inter-Bold.ttf',
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Kata Sandi',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
                                     color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFF4583DF),
-                                      width: 10,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscureKonfirmasi =
-                                            !_obscureKonfirmasi;
-                                      });
-                                    },
-                                    icon: Icon(_obscureKonfirmasi
-                                        ? Icons.visibility_off
-                                        : Icons.visibility),
-                                  ),
-                                  filled: true,
-                                  fillColor: Theme.of(context)
-                                      .floatingActionButtonTheme
-                                      .backgroundColor,
-                                  // fillColor: Theme.of(context).backgroundColor,
                                 ),
-                                obscureText: _obscureKonfirmasi,
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: isAgreed,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isAgreed = !isAgreed;
-                                      });
-                                    },
+                                const SizedBox(height: 5),
+                                TextFormField(
+                                  controller: _kataSandiController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Kata Sandi",
+                                    errorText:
+                                        _errorText.isNotEmpty ? _errorText : null,
+                                    labelStyle: const TextStyle(
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Color(0xFF4583DF),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureKataSandi = !_obscureKataSandi;
+                                        });
+                                      },
+                                      icon: Icon(_obscureKataSandi
+                                          ? Icons.visibility_off
+                                          : Icons.visibility),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
                                   ),
-                                  Text(
-                                    'Saya setuju dengan syarat dan ketentuan',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold),
+                                  obscureText: _obscureKataSandi,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Konfirmasi Kata Sandi',
+                                  style: TextStyle(
+                                    fontFamily: 'fonts/Inter-Black.ttf',
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 20, 0, 10),
-                                child: ElevatedButton(
-                                    onPressed: _signUp,
-                                    style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(100, 0, 100, 0),
-                                        fixedSize: const Size(360, 60),
-                                        textStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'fonts/Inter-Bold.ttf',
-                                        ),
-                                        foregroundColor: Theme.of(context)
-                                            .floatingActionButtonTheme
-                                            .backgroundColor,
-                                        // backgroundColor: Colors.blue.shade400,
-                                        backgroundColor: Theme.of(context)
-                                            .appBarTheme
-                                            .backgroundColor,
-                                        shape: const StadiumBorder()),
-                                    child: Text(
-                                      "DAFTAR",
+                                ),
+                                const SizedBox(height: 5),
+                                TextFormField(
+                                  controller: _konfirmasiSandiController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    hintText: "Konfirmasi Kata Sandi",
+                                    errorText:
+                                        _errorText.isNotEmpty ? _errorText : null,
+                                    labelStyle: TextStyle(
+                                      fontFamily: 'fonts/Inter-Bold.ttf',
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF4583DF),
+                                        width: 10,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureKonfirmasi =
+                                              !_obscureKonfirmasi;
+                                        });
+                                      },
+                                      icon: Icon(_obscureKonfirmasi
+                                          ? Icons.visibility_off
+                                          : Icons.visibility),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .floatingActionButtonTheme
+                                        .backgroundColor,
+                                    // fillColor: Theme.of(context).backgroundColor,
+                                  ),
+                                  obscureText: _obscureKonfirmasi,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: isAgreed,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isAgreed = !isAgreed;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      'Saya setuju dengan syarat dan ketentuan',
                                       style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    )),
-                              ),
-                              Center(
-                                child: RichText(
-                                    text: TextSpan(
-                                        text: 'Sudah punya akun? ',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      0, 20, 0, 10),
+                                  child: ElevatedButton(
+                                      onPressed: _signUp,
+                                      style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(100, 0, 100, 0),
+                                          fixedSize: const Size(360, 60),
+                                          textStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'fonts/Inter-Bold.ttf',
+                                          ),
+                                          foregroundColor: Theme.of(context)
+                                              .floatingActionButtonTheme
+                                              .backgroundColor,
+                                          // backgroundColor: Colors.blue.shade400,
+                                          backgroundColor: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
+                                          shape: const StadiumBorder()),
+                                      child: Text(
+                                        "DAFTAR",
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
                                         ),
-                                        children: [
-                                      TextSpan(
-                                        text: 'Masuk',
-                                        style: const TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline,
-                                          fontSize: 16,
+                                      )),
+                                ),
+                                Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Sudah punya akun? ',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                          children: [
+                                        TextSpan(
+                                          text: 'Masuk',
+                                          style: const TextStyle(
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.underline,
+                                            fontSize: 16,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.pushNamed(
+                                                  context, '/masuk');
+                                            },
                                         ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.pushNamed(
-                                                context, '/masuk');
-                                          },
-                                      ),
-                                    ])),
-                              ),
-                            ]),
+                                      ])),
+                                ),
+                              ]),
+                        ),
                       ),
                     ),
                   ],

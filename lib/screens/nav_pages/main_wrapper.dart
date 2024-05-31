@@ -74,8 +74,8 @@ class _MainWrapperState extends State<MainWrapper> {
               outlinedIcon: Icons.favorite_border_rounded,
             ),
             BarItem(
-              filledIcon: Icons.history_sharp,
-              outlinedIcon: Icons.history_toggle_off_sharp,
+              filledIcon: Icons.search,
+              outlinedIcon: Icons.search,
             ),
             BarItem(
               filledIcon: Icons.people,
