@@ -36,14 +36,39 @@ class _DaftarScreenState extends State<DaftarScreen> {
     String password = _kataSandiController.text.trim();
     String namaPengguna = _namapenggunaController.text.trim();
 
-    if (password.length < 8 ||
-        !password.contains(RegExp(r'[A-Z]')) ||
-        !password.contains(RegExp(r'[a-z]')) ||
-        !password.contains(RegExp(r'[0-9]')) ||
-        !password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+    List<String> errors = [];
+
+    if (password.length < 8) {
+      errors.add('Minimal 8 karakter');
+    }
+
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      errors.add('Mengandung kombinasi [A-Z]');
+    }
+
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      errors.add('Mengandung kombinasi [a-z]');
+    }
+
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      errors.add('Mengandung kombinasi [0-9]');
+    }
+
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      errors.add('Menggunakan [!@#%\$^&*(),.?":{}|<>]');
+    }
+
+    if (errors.isEmpty) {
+      // Password is valid, no errors
       setState(() {
-        _errorText =
-            'Minimal 8 karakter, kombinasi [A-Z], [a-z], [!@#%^&*(),.?":{}|<>]';
+        _errorText = ""; // Clear error text if no errors
+      });
+    } else {
+      // Errors exist, combine them into a single string
+      String errorText =
+          "Harap perbaiki password Anda dengan:\n" + errors.join("\n");
+      setState(() {
+        _errorText = errorText;
       });
       return;
     }
@@ -59,15 +84,23 @@ class _DaftarScreenState extends State<DaftarScreen> {
         .signUpWithEmailAndPassword(context, email, password);
     if (user != null) {
       showMessage(context, "Akun Pengguna berhasil di buat");
-      //Menyimpan nama pengguna
-      String? uid = user.uid;
-      _database.child('users/$uid').set({
-        'namaPengguna': namaPengguna,
-      }).then((_) {
-        // Berhasil menyimpan data tambahan
+      String? email = user.email;
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('Users');
+      DocumentReference userDocRef = usersRef.doc(email);
+
+      Map<String, dynamic> userData = {
+        'username': namaPengguna,
+        'email': email,
+        'image_url': "",
+        'namalengkap': "",
+      };
+
+      await userDocRef.set(userData).then((_) {
+        print('Berhasil menyimpan data pengguna: $userData');
+        Navigator.pushNamed(context, '/masuk');
       }).catchError((error) {
-        print('Gagal menyimpan nama pengguna: ${error.toString()}');
-        // Gagal menyimpan data tambahan, tangani kesalahan
+        print('Gagal menyimpan data pengguna: ${error.toString()}');
       });
       Navigator.pushNamed(context, '/masuk');
     } else {

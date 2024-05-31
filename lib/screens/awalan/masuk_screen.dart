@@ -65,6 +65,7 @@ class _MasukScreenState extends State<MasukScreen> {
     }
 
     try {
+      //Data masuk
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
