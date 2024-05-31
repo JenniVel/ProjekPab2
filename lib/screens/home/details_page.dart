@@ -128,7 +128,7 @@ class _DetailsPageState extends State<DetailsPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Theme.of(context).backgroundColor,
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       body: wisata == null
@@ -153,7 +153,9 @@ class _DetailsPageState extends State<DetailsPage> {
                               height: size.height * 0.45,
                             ),
                           )
-                        : Container(color: Colors.grey[200]),
+                        : Container(
+                            color: Theme.of(context).backgroundColor,
+                          ),
                   ),
                   Positioned(
                     left: 0,
@@ -163,8 +165,8 @@ class _DetailsPageState extends State<DetailsPage> {
                       padding: padding,
                       width: size.width,
                       height: size.height * 0.65,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
@@ -190,7 +192,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         AppText(
                                           text: wisata!.name,
                                           size: 28,
-                                          color: Colors.black,
+                                          color: Theme.of(context).primaryColor,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ],
@@ -210,14 +212,14 @@ class _DetailsPageState extends State<DetailsPage> {
                                 children: [
                                   Icon(
                                     Icons.monetization_on,
-                                    color: Colors.black54,
+                                    color: Theme.of(context).iconTheme.color,
                                     size: 20,
                                   ),
                                   SizedBox(width: 10),
                                   AppText(
                                     text: "\Rp. " + wisata!.harga,
                                     size: 20,
-                                    color: Colors.black54,
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ],
@@ -243,10 +245,10 @@ class _DetailsPageState extends State<DetailsPage> {
                                   SizedBox(
                                     width: size.width * 0.01,
                                   ),
-                                  const AppText(
+                                  AppText(
                                     text: "(4.0)",
                                     size: 15,
-                                    color: Colors.black54,
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ],
@@ -258,17 +260,20 @@ class _DetailsPageState extends State<DetailsPage> {
                               children: [
                                 FadeInUp(
                                   delay: const Duration(milliseconds: 1000),
-                                  child: const AppText(
+                                  child: AppText(
                                     text: "Deskripsi",
                                     size: 21,
-                                    color: Colors.black,
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 FadeInUp(
                                   delay: const Duration(milliseconds: 1000),
                                   child: IconButton(
-                                    icon: const Icon(Icons.map),
+                                    icon: Icon(
+                                      Icons.map,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
                                     onPressed: wisata?.latitude != null &&
                                             wisata?.longitude != null
                                         ? () {
@@ -291,11 +296,16 @@ class _DetailsPageState extends State<DetailsPage> {
                             SizedBox(height: size.height * 0.01),
                             FadeInUp(
                               delay: const Duration(milliseconds: 1100),
-                              child: AppText(
-                                text: wisata!.description,
-                                size: 13,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w300,
+                              child: Text(
+                                wisata!.description,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
                             ),
                             SizedBox(height: size.height * 0.08),
