@@ -12,10 +12,11 @@ DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("users");
 class ResetPass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Reset(), routes: {
-      'homepage': (context) => const MasukScreen(),
-      'login': (context) => const MasukScreen(),
-    });
+    return MaterialApp(
+      home: Reset(),
+      theme: Theme.of(
+          context), // Menggunakan Theme.of(context) yang telah didefinisikan
+    );
   }
 }
 
@@ -44,58 +45,66 @@ class ResetPage extends State<Reset> {
     return Scaffold(
       body: Container(
         child: Scaffold(
-          backgroundColor: const Color(0xFFF1F8FF),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
                   Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: Color(0xFF49A2F4),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context)
+                            .backgroundColor, // Menggunakan warna latar belakang dari Theme.of(context)
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Theme.of(context)
+                                .iconTheme
+                                .color, // Menggunakan warna ikon dari Theme.of(context)
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const MasukScreen()));
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                        child: Text(
+                          'Ubah Kata Sandi',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Theme.of(context)
+                                .primaryColor, // Menggunakan warna primer dari Theme.of(context)
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-                  child: Text(
-                    'Ubah Kata Sandi',
-                    style: TextStyle(
-                      fontFamily: 'fonts/Inter-Black.ttf',
-                      color: Color(0xFF1284EE),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    ),
-                  ),
-                ),
-              ],
-            ),
                   Container(
                     padding: const EdgeInsets.only(top: 150.0, bottom: 30),
                     child: (Text(
-                      ' Reset Password ',
+                      ' Ubah Kata Sandi ',
                       style: GoogleFonts.workSans(
                         fontSize: 30,
-                        color: Color(0xFF1284EE),
+                        color: Theme.of(context)
+                            .primaryColor, // Menggunakan warna primer dari Theme.of(context)
                       ),
                     )),
                   ),
                   Container(
                     padding: const EdgeInsets.only(),
                     child: (Text(
-                      'Please enter your email below to receive your password reset instructions',
+                      'Masukkan email untuk menerima link verifikasi ganti kata sandi',
                       style: GoogleFonts.workSans(
                         fontSize: 15,
-                        color: Colors.grey,
+                        color: Theme.of(context)
+                            .primaryColor, // Menggunakan warna teks dari Theme.of(context)
                       ),
                       textAlign: TextAlign.center,
                     )),
@@ -106,17 +115,23 @@ class ResetPage extends State<Reset> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Theme.of(context)
+                            .primaryColor, // Menggunakan warna primer dari Theme.of(context)
+                      ),
                       decoration: InputDecoration(
-                          prefixIcon: const Icon(
+                          prefixIcon: Icon(
                             Icons.mail_outline_rounded,
-                            color: Colors.grey,
+                            color: Theme.of(context)
+                                .iconTheme
+                                .color, // Menggunakan warna ikon dari Theme.of(context)
                           ),
                           filled: true,
                           fillColor: Colors.black12,
                           labelStyle: GoogleFonts.workSans(
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: Theme.of(context)
+                                .primaryColor, // Menggunakan warna primer dari Theme.of(context)
                           ),
                           hintStyle: const TextStyle(color: Colors.white54),
                           enabledBorder: const OutlineInputBorder(
@@ -143,8 +158,10 @@ class ResetPage extends State<Reset> {
                         margin: const EdgeInsets.only(top: 10),
                         child: LinearProgressIndicator(
                           minHeight: 2,
-                          backgroundColor: Colors.white,
-                          valueColor: const AlwaysStoppedAnimation(Colors.white),
+                          backgroundColor: Theme.of(context)
+                              .scaffoldBackgroundColor, // Menggunakan warna latar belakang dari Theme.of(context)
+                          valueColor:
+                              const AlwaysStoppedAnimation(Colors.white),
                         ),
                       ),
                     ),
@@ -155,7 +172,7 @@ class ResetPage extends State<Reset> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_emailController.text.isEmpty) {
-                          displaySnackBar(context, 'Enter a valid Email');
+                          displaySnackBar(context, 'Masukkan email yang benar');
                         } else {
                           setState(() {
                             load();
@@ -164,11 +181,12 @@ class ResetPage extends State<Reset> {
                         }
                       },
                       child: Text(
-                        'Register',
+                        'Kirim Link Verifikasi',
                         style: GoogleFonts.workSans(
                           fontSize: 19,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: Theme.of(context)
+                              .primaryColor, // Menggunakan warna primer dari Theme.of(context)
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -176,13 +194,18 @@ class ResetPage extends State<Reset> {
                         elevation: 8,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          side: const BorderSide(
-                            color: Colors.blue,
+                          side: BorderSide(
+                            color: Theme.of(context)
+                                .backgroundColor, // Menggunakan warna latar belakang AppBar dari Theme.of(context)
                             width: 2,
                           ),
                         ),
-                        backgroundColor: Colors.blue.shade400,
-                        foregroundColor: Colors.white,
+                        foregroundColor: Theme.of(context)
+                            .floatingActionButtonTheme
+                            .backgroundColor,
+                        backgroundColor: Theme.of(context)
+                            .appBarTheme
+                            .backgroundColor, // Menggunakan warna latar belakang AppBar dari Theme.of(context)
                       ),
                     ),
                   ),
