@@ -27,6 +27,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
   final TextEditingController _longitudeController = TextEditingController();
   File? _imageFile;
   Position? _currentPosition;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,7 +44,8 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _imageFile = File(pickedFile.path);
@@ -74,155 +76,210 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.wisata == null ? 'Add Destination' : 'Update Destination'),
+        title: Text(
+            widget.wisata == null ? 'Add Destination' : 'Update Destination'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Nama Destinasi: ',
-                textAlign: TextAlign.start,
-              ),
-              TextField(
-                controller: _nameController,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Deskripsi: ',
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Nama Destinasi: ',
+                  textAlign: TextAlign.start,
                 ),
-              ),
-              TextField(
-                controller: _descriptionController,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Harga: ',
+                TextFormField(
+                  controller: _nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the name';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              TextField(
-                controller: _hargaController,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Kategori: ',
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Deskripsi: ',
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _kategoriController,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Latitude: ',
+                TextFormField(
+                  controller: _descriptionController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the description';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              TextField(
-                controller: _latitudeController,
-                keyboardType: TextInputType.number,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Longitude: ',
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Harga: ',
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _longitudeController,
-                keyboardType: TextInputType.number,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text('Image: '),
-              ),
-              _imageFile != null
-                  ? AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: kIsWeb
-                          ? Image.network(
-                              _imageFile!.path,
+                TextFormField(
+                  controller: _hargaController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the price';
+                    }
+                    return null;
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Kategori: ',
+                  ),
+                ),
+                TextFormField(
+                  controller: _kategoriController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the category';
+                    }
+                    return null;
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Latitude: ',
+                  ),
+                ),
+                TextFormField(
+                  controller: _latitudeController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the latitude';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Longitude: ',
+                  ),
+                ),
+                TextFormField(
+                  controller: _longitudeController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the longitude';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text('Image: '),
+                ),
+                _imageFile != null
+                    ? AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: kIsWeb
+                            ? Image.network(
+                                _imageFile!.path,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(_imageFile!.path),
+                                fit: BoxFit.cover,
+                              ),
+                      )
+                    : (widget.wisata?.imageUrl != null &&
+                            Uri.parse(widget.wisata!.imageUrl!).isAbsolute
+                        ? AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: CachedNetworkImage(
+                              imageUrl: widget.wisata!.imageUrl!,
                               fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              File(_imageFile!.path),
-                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
                             ),
-                    )
-                  : (widget.wisata?.imageUrl != null &&
-                          Uri.parse(widget.wisata!.imageUrl!).isAbsolute
-                      ? AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: CachedNetworkImage(
-                            imageUrl: widget.wisata!.imageUrl!,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Center(
-                              child: Icon(Icons.error),
-                            ),
-                          ),
-                        )
-                      : Container()),
-              TextButton(
-                onPressed: _pickImage,
-                child: const Text('Pick Image'),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancel'),
+                          )
+                        : Container()),
+                TextButton(
+                  onPressed: _pickImage,
+                  child: const Text('Pick Image'),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        String? imageUrl;
-                        if (_imageFile != null) {
-                          imageUrl = await _uploadImageToFirebase(_imageFile!);
-                        } else {
-                          imageUrl = widget.wisata?.imageUrl;
-                        }
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            String? imageUrl;
+                            if (_imageFile != null) {
+                              imageUrl =
+                                  await _uploadImageToFirebase(_imageFile!);
+                            } else {
+                              imageUrl = widget.wisata?.imageUrl;
+                            }
 
-                        final destination = Wisata(
-                          id: widget.wisata?.id ?? '',
-                          name: _nameController.text,
-                          description: _descriptionController.text,
-                          harga: _hargaController.text,
-                          kategori: _kategoriController.text,
-                          imageUrl: imageUrl ?? '',
-                          latitude: double.tryParse(_latitudeController.text) ?? 0.0,
-                          longitude: double.tryParse(_longitudeController.text) ?? 0.0,
-                          createdAt: widget.wisata?.createdAt,
-                          isFavorite: false,
-                        );
+                            final destination = Wisata(
+                              id: widget.wisata?.id ?? '',
+                              name: _nameController.text,
+                              description: _descriptionController.text,
+                              harga: _hargaController.text,
+                              kategori: _kategoriController.text,
+                              imageUrl: imageUrl ?? '',
+                              latitude:
+                                  double.tryParse(_latitudeController.text) ??
+                                      0.0,
+                              longitude:
+                                  double.tryParse(_longitudeController.text) ??
+                                      0.0,
+                              createdAt: widget.wisata?.createdAt,
+                              isFavorite: false,
+                            );
 
-                        if (widget.wisata == null) {
-                          await UploadService.addDestination(destination);
-                        } else {
-                          await UploadService.updateDestination(destination);
+                            if (widget.wisata == null) {
+                              await UploadService.addDestination(destination);
+                            } else {
+                              await UploadService.updateDestination(
+                                  destination);
+                            }
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            print("Error saving destination: $e");
+                          }
                         }
-                        Navigator.of(context).pop();
-                      } catch (e) {
-                        print("Error saving destination: $e");
-                      }
-                    },
-                    child: Text(widget.wisata == null ? 'Add' : 'Update'),
-                  ),
-                ],
-              ),
-            ],
+                      },
+                      child: Text(widget.wisata == null ? 'Add' : 'Update'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
