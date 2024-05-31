@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'review_model.dart';  // Import the Review model
+import 'package:projek/models/review.dart';
 
 class ReviewScreen extends StatefulWidget {
   final String destinationId;
@@ -90,10 +90,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 }
 
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'review_model.dart';  // Import the Review model
-
 class ReviewsList extends StatelessWidget {
   final String destinationId;
 
@@ -131,24 +127,6 @@ class ReviewsList extends StatelessWidget {
   }
 }
 
-
-import 'package:flutter/material.dart';
-import 'review_screen.dart';  // Import the ReviewScreen
-import 'reviews_list.dart';  // Import the ReviewsList
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DestinationScreen(destinationId: 'some_destination_id', userId: 'user_id'),
-    );
-  }
-}
-
 class DestinationScreen extends StatelessWidget {
   final String destinationId;
   final String userId;
@@ -167,7 +145,8 @@ class DestinationScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ReviewScreen(destinationId: destinationId, userId: userId),
+                  builder: (context) => ReviewScreen(
+                      destinationId: destinationId, userId: userId),
                 ),
               );
             },
@@ -178,4 +157,3 @@ class DestinationScreen extends StatelessWidget {
     );
   }
 }
-

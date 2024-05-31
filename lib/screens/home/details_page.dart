@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projek/komponen/like_button.dart';
 import 'package:projek/services/favorite_service.dart';
 import 'package:projek/screens/home/google_maps_screen.dart';
+import 'package:projek/services/review_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
 import 'package:projek/models/wisata.dart';
@@ -51,7 +53,7 @@ class _DetailsPageState extends State<DetailsPage> {
       FavoriteService.removeFromFavorites(wisata!.id!);
     }
   }
-  
+
   Future<void> fetchLocations() async {
     try {
       QuerySnapshot snapshot =
@@ -74,7 +76,8 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> _launchMaps(double latitude, double longitude) async {
-    Uri googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    Uri googleUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
     if (await canLaunch(googleUrl.toString())) {
       await launch(googleUrl.toString());
     } else {
@@ -92,7 +95,9 @@ class _DetailsPageState extends State<DetailsPage> {
       final fetchedWisata = Wisata.fromDocument(docSnapshot);
 
       // Check if the Wisata is in favorites
-      final favDocRef = FirebaseFirestore.instance.collection('Destination_favorites').doc(widget.wisataId);
+      final favDocRef = FirebaseFirestore.instance
+          .collection('Destination_favorites')
+          .doc(widget.wisataId);
       final favDocSnapshot = await favDocRef.get();
 
       setState(() {
@@ -104,6 +109,8 @@ class _DetailsPageState extends State<DetailsPage> {
       print("Wisata not found with ID: ${widget.wisataId}");
     }
   }
+
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +131,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     left: 0,
                     top: 0,
                     right: 0,
-                    child: wisata!.imageUrl != null && Uri.parse(wisata!.imageUrl!).isAbsolute
+                    child: wisata!.imageUrl != null &&
+                            Uri.parse(wisata!.imageUrl!).isAbsolute
                         ? Hero(
                             tag: wisata!.name,
                             child: Image.network(
@@ -192,18 +200,22 @@ class _DetailsPageState extends State<DetailsPage> {
                                                   color: Colors.black54,
                                                   fontWeight: FontWeight.w400,
                                                 ),
-                                                recognizer: TapGestureRecognizer()
-                                                  ..onTap = () {
-                                                    Navigator.push(
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                            builder: (context) => GoogleMapsScreen(
-                                                                latitude: wisata!.latitude,
-                                                                longitude: wisata!.longitude,
+                                                            builder: (context) =>
+                                                                GoogleMapsScreen(
+                                                              latitude: wisata!
+                                                                  .latitude,
+                                                              longitude: wisata!
+                                                                  .longitude,
                                                             ),
                                                           ),
                                                         );
-                                                  },
+                                                      },
                                               ),
                                             ),
                                           ],
@@ -283,23 +295,23 @@ class _DetailsPageState extends State<DetailsPage> {
                                 FadeInUp(
                                   delay: const Duration(milliseconds: 1000),
                                   child: IconButton(
-                                  icon: const Icon(Icons.map),
-                                  onPressed: wisata?.latitude != null &&
-                                          wisata?.longitude != null
-                                      ? () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GoogleMapsScreen(
-                                                latitude: wisata!.latitude,
-                                                longitude: wisata!.longitude,
+                                    icon: const Icon(Icons.map),
+                                    onPressed: wisata?.latitude != null &&
+                                            wisata?.longitude != null
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GoogleMapsScreen(
+                                                  latitude: wisata!.latitude,
+                                                  longitude: wisata!.longitude,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        }
-                                      : null, // Disable the button if latitude or longitude is null
-                                                                ),
+                                            );
+                                          }
+                                        : null, // Disable the button if latitude or longitude is null
+                                  ),
                                 ),
                               ],
                             ),
@@ -338,9 +350,12 @@ class _DetailsPageState extends State<DetailsPage> {
       actions: [
         IconButton(
           onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) {
-            //   return const ReviewScreen();
-            // }));
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ReviewScreen(
+                destinationId: widget.wisataId,
+                userId: currentUser.uid,
+              );
+            }));
           },
           icon: const Icon(Icons.reviews),
         ),
