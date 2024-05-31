@@ -249,7 +249,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         backgroundColor: theme.backgroundColor,
                         backgroundImage: _imageFile != null
                             ? FileImage(_imageFile!)
-                            : (userData['image_url'] != null
+                            : (userData['image_url'] != null  || userData['image_url'] == ""
                                     ? NetworkImage(userData['image_url'])
                                     : AssetImage('images/google/hello.png'))
                                 as ImageProvider,

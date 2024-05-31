@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projek/models/wisata.dart';
 
 class FavoriteService {
-
   static Future<void> addToFavorites(Wisata wisata) async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('Destination_favorites').doc(wisata.id);
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("User not logged in");
+      }
+      final userId = user.uid;
+      final docRef = FirebaseFirestore.instance
+          .collection('Destination_favorites')
+          .doc('${userId}_${wisata.id}');
+
       await docRef.set({
+        'userId': userId,
         'name': wisata.name,
         'description': wisata.description,
         'harga': wisata.harga,
@@ -20,18 +28,48 @@ class FavoriteService {
         'longitude': wisata.longitude,
       });
 
-      
+      print("Added to favorites successfully.");
     } catch (error) {
       print("Error adding to favorites: $error");
+      // Consider using a logging service or showing a user-friendly message
     }
   }
 
   static Future<void> removeFromFavorites(String wisataId) async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('Destination_favorites').doc(wisataId);
-      await docRef.delete();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("User not logged in");
+      }
+      final userId = user.uid;
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Destination_favorites')
+          .where('userId', isEqualTo: userId)
+          .where(FieldPath.documentId, isEqualTo: '${userId}_${wisataId}')
+          .get();
+
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      print("Removed from favorites successfully.");
     } catch (error) {
       print("Error removing from favorites: $error");
+      // Consider using a logging service or showing a user-friendly message
     }
+  }
+
+  static Stream<List<Wisata>> getFavoritesForUser() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception("User not logged in");
+    }
+    final userId = user.uid;
+    return FirebaseFirestore.instance
+        .collection('Destination_favorites')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList());
   }
 }

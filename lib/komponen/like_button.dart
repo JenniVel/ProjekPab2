@@ -12,6 +12,7 @@ class LikeButton extends StatelessWidget {
       child: Icon(
         isLiked ? Icons.favorite : Icons.favorite_border,
         color: isLiked ? Colors.red : Colors.grey,
+        size: 35,
       ),
     );
   }

@@ -86,28 +86,39 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> _fetchWisataDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("No user is signed in");
+      return;
+    }
+
+    final userId = user.uid;
+
+    // Get the Wisata document
     final docRef = FirebaseFirestore.instance
         .collection('Destinations')
         .doc(widget.wisataId);
     final docSnapshot = await docRef.get();
 
-    if (docSnapshot.exists) {
-      final fetchedWisata = Wisata.fromDocument(docSnapshot);
-
-      // Check if the Wisata is in favorites
-      final favDocRef = FirebaseFirestore.instance
-          .collection('Destination_favorites')
-          .doc(widget.wisataId);
-      final favDocSnapshot = await favDocRef.get();
-
-      setState(() {
-        wisata = fetchedWisata;
-        _isFavorite = favDocSnapshot.exists;
-        wisata!.isFavorite = _isFavorite;
-      });
-    } else {
+    if (!docSnapshot.exists) {
       print("Wisata not found with ID: ${widget.wisataId}");
+      return;
     }
+
+    final fetchedWisata = Wisata.fromDocument(docSnapshot);
+
+    // Check if the Wisata is in the user's favorites
+    final favDocRef = FirebaseFirestore.instance
+        .collection('Destination_favorites')
+        .doc(
+            '${userId}_${widget.wisataId}'); // Use userId and wisataId combination as doc ID
+    final favDocSnapshot = await favDocRef.get();
+
+    setState(() {
+      wisata = fetchedWisata;
+      _isFavorite = favDocSnapshot.exists;
+      wisata!.isFavorite = _isFavorite;
+    });
   }
 
   final currentUser = FirebaseAuth.instance.currentUser!;
@@ -181,44 +192,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                           size: 28,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on,
-                                              color: Colors.black54,
-                                              size: 15,
-                                            ),
-                                            SizedBox(
-                                              width: size.width * 0.01,
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: "Lokasi",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                GoogleMapsScreen(
-                                                              latitude: wisata!
-                                                                  .latitude,
-                                                              longitude: wisata!
-                                                                  .longitude,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ],
                                     ),

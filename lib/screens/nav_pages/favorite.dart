@@ -1,8 +1,9 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/details_page.dart';
+import 'package:projek/services/favorite_service.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key});
@@ -12,13 +13,6 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  Stream<List<Wisata>> _getFavoriteWisataStream() {
-    return FirebaseFirestore.instance
-        .collection('Destination_favorites')
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +28,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       ),
       body: FadeInUp(
         delay: const Duration(milliseconds: 100),
-        child: const SizedBox(
+        child:  SizedBox(
           child: FavoriteList()
           )
           )
@@ -42,22 +36,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   }
 }
 
-
 class FavoriteList extends StatelessWidget {
-  const FavoriteList({super.key});
-
-  Stream<List<Wisata>> _getFavoriteWisataStream() {
-    return FirebaseFirestore.instance
-        .collection('Destination_favorites')
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Wisata.fromDocument(doc)).toList());
-  }
+  FavoriteList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Wisata>>(
-      stream: _getFavoriteWisataStream(),
+      stream: FavoriteService.getFavoritesForUser(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -70,8 +55,33 @@ class FavoriteList extends StatelessWidget {
           default:
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(
-                child: Text('No destinations available'),
-              );
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 100,
+                        child: Icon(
+                          Icons.favorite,
+                          size: 90.0,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Your Favorited Locations',
+                        style: TextStyle(
+                          fontFamily: 'fonts/Inter-Black.ttf',
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      )
+                    ],
+                  ),
+                );
             }
 
             final data = snapshot.data!;
