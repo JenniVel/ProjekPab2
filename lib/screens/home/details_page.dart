@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projek/komponen/like_button.dart';
 import 'package:projek/services/favorite_service.dart';
 import 'package:projek/screens/home/google_maps_screen.dart';
+import 'package:projek/services/review_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
 import 'package:projek/models/wisata.dart';
@@ -104,6 +106,8 @@ class _DetailsPageState extends State<DetailsPage> {
       print("Wisata not found with ID: ${widget.wisataId}");
     }
   }
+
+final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -338,9 +342,9 @@ class _DetailsPageState extends State<DetailsPage> {
       actions: [
         IconButton(
           onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) {
-            //   return const ReviewScreen();
-            // }));
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ReviewScreen(destinationId: widget.wisataId, userId: currentUser.uid,);
+            }));
           },
           icon: const Icon(Icons.reviews),
         ),
