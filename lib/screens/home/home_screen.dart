@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/mapstest2/buatke_maps.dart';
 import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/see_all_pages.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
@@ -94,6 +95,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       size: 30,
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  FadeInUp(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NoteEditScreen()),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add_location,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      // child: Text('LOKASI SAAT INI'),
                     ),
                   ),
                   FadeInUp(
