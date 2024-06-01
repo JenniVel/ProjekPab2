@@ -228,8 +228,13 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Pengaturan", style: TextStyle(color: textColor)),
-        backgroundColor: theme.backgroundColor,
+        title: Text("Pengaturan",
+            style: TextStyle(
+              color: theme.primaryColor,
+              fontFamily: 'fonts/Inter-Bold.ttf',
+              fontSize: 25,
+            )),
+        backgroundColor: theme.scaffoldBackgroundColor,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: usersCollection.doc(currentUser.email).snapshots(),
@@ -249,7 +254,8 @@ class _ProfilPageState extends State<ProfilPage> {
                         backgroundColor: theme.backgroundColor,
                         backgroundImage: _imageFile != null
                             ? FileImage(_imageFile!)
-                            : (userData['image_url'] != null  || userData['image_url'] == ""
+                            : (userData['image_url'] != null ||
+                                        userData['image_url'] == ""
                                     ? NetworkImage(userData['image_url'])
                                     : AssetImage('images/google/hello.png'))
                                 as ImageProvider,

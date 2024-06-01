@@ -13,26 +13,26 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textColor = theme.textTheme.bodyText1?.color ?? Colors.black;
 
     return Scaffold(
-       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Favorite", style: TextStyle(color: textColor)),
-        backgroundColor: theme.backgroundColor,
-      ),
-      body: FadeInUp(
-        delay: const Duration(milliseconds: 100),
-        child:  SizedBox(
-          child: FavoriteList()
-          )
-          )
-    );
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text("Favorite",
+              style: TextStyle(
+                color: theme.primaryColor,
+                fontFamily: 'fonts/Inter-Bold.ttf',
+                fontSize: 25,
+              )),
+          backgroundColor: theme.scaffoldBackgroundColor,
+        ),
+        body: FadeInUp(
+            delay: const Duration(milliseconds: 100),
+            child: SizedBox(child: FavoriteList())));
   }
 }
 
@@ -55,33 +55,33 @@ class FavoriteList extends StatelessWidget {
           default:
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 100,
-                        child: Icon(
-                          Icons.favorite,
-                          size: 90.0,
-                          color: Colors.blue,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      child: Icon(
+                        Icons.favorite,
+                        size: 90.0,
+                        color: Colors.blue,
                       ),
-                      SizedBox(
-                        height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Your Favorited Locations',
+                      style: TextStyle(
+                        fontFamily: 'fonts/Inter-Black.ttf',
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
-                      Text(
-                        'Your Favorited Locations',
-                        style: TextStyle(
-                          fontFamily: 'fonts/Inter-Black.ttf',
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                    )
+                  ],
+                ),
+              );
             }
 
             final data = snapshot.data!;

@@ -58,15 +58,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyText1?.color ?? Colors.black;
+    final textColor = theme.textTheme.bodyText1?.color;
 
     return Scaffold(
-       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Search", style: TextStyle(color: textColor)),
-        backgroundColor: theme.backgroundColor,
-      ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Row(
@@ -99,8 +94,17 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
                     },
                     decoration: InputDecoration(
+                      hintStyle: TextStyle(
+                        fontFamily: 'fonts/Inter-Black.ttf',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       hintText: "Cari nama wisata...",
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
@@ -121,11 +125,20 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   Text(
                     "Riwayat",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor),
                   ),
                   TextButton(
                     onPressed: _clearSearchHistory,
-                    child: Text("Hapus"),
+                    child: Text(
+                      "Hapus",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
+                    ),
                   ),
                 ],
               ),
@@ -219,9 +232,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: Text(
                                   document.name,
                                   style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                               ),
                             ],

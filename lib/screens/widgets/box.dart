@@ -22,11 +22,10 @@ class ReadOnlyTextBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextButton(
         style: TextButton.styleFrom(
-          foregroundColor: Colors.blue.shade800,
           padding: const EdgeInsets.all(15),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).canvasColor,
         ),
         onPressed: () {}, // Add functionality if needed
         child: Row(
@@ -43,11 +42,15 @@ class ReadOnlyTextBox extends StatelessWidget {
                       fontFamily: 'fonts/Inter-Black.ttf',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: textColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Text(text, style: TextStyle(color: textColor)),
+                  Text(text,
+                      style: TextStyle(
+                        color: textColor,
+                        fontFamily: 'fonts/Inter-Black.ttf',
+                      )),
                 ],
               ),
             ),

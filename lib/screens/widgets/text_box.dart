@@ -26,7 +26,7 @@ class MyTextBox extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).canvasColor,
         ),
         onPressed: onPressed,
         child: Row(
@@ -43,13 +43,16 @@ class MyTextBox extends StatelessWidget {
                       fontFamily: 'fonts/Inter-Black.ttf',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: theme.textTheme.bodyText1?.color,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     text,
-                    style: TextStyle(color: theme.textTheme.bodyText1?.color),
+                    style: TextStyle(
+                      color: theme.textTheme.bodyText1?.color,
+                      fontFamily: 'fonts/Inter-Black.ttf',
+                    ),
                   ),
                 ],
               ),
