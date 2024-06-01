@@ -140,7 +140,7 @@ class _MasukScreenState extends State<MasukScreen> {
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
             child: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               child: IconButton(
                 icon: Icon(
                   Icons.arrow_back_ios_new_rounded,
@@ -205,7 +205,7 @@ class _MasukScreenState extends State<MasukScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                   ),
                                 ),
@@ -251,7 +251,7 @@ class _MasukScreenState extends State<MasukScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                   ),
                                   obscureText: _obscurePassword,
@@ -320,11 +320,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                           fontSize: 20,
                                           fontFamily: 'fonts/Inter-Bold.ttf',
                                         ),
-                                        foregroundColor: Theme.of(context)
-                                            .floatingActionButtonTheme
-                                            .backgroundColor,
                                         backgroundColor: Theme.of(context)
-                                            .appBarTheme
+                                            .floatingActionButtonTheme
                                             .backgroundColor,
                                         shape: const StadiumBorder()),
                                     child: Text(
@@ -364,7 +361,8 @@ class _MasukScreenState extends State<MasukScreen> {
                                       Expanded(
                                         child: Divider(
                                           thickness: 0.5,
-                                          color: Colors.grey[400],
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
                                         ),
                                       ),
                                     ],
@@ -393,8 +391,9 @@ class _MasukScreenState extends State<MasukScreen> {
                                       children: [
                                         TextSpan(
                                           text: 'Daftar',
-                                          style: const TextStyle(
-                                            color: Colors.blue,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
                                             decoration:
                                                 TextDecoration.underline,
                                             fontSize: 16,

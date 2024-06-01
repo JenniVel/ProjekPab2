@@ -255,15 +255,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ]),
                     ),
                   ),
+                  SizedBox(height: size.height * 0.03),
                   FadeInUp(
                     delay: const Duration(milliseconds: 900),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const AppText(
+                        AppText(
                           text: "Rekomendasi",
                           size: 20,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                         InkWell(
@@ -276,11 +277,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ),
                             );
                           },
-                          child: const AppText(
+                          child: AppText(
                             text: "Lihat Semua",
                             size: 16,
-                            color: Colors
-                                .blue, // Sesuaikan dengan warna yang diinginkan
+                            color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.w700,
                           ),
                         ),

@@ -135,7 +135,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
           child: CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             child: IconButton(
               icon: Icon(Icons.arrow_back_ios_new_rounded,
                   // color: Color(0xFF49A2F4),
@@ -202,7 +202,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                   ),
                                 ),
@@ -236,7 +236,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                   ),
                                 ),
@@ -256,8 +256,9 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     hintText: "Kata Sandi",
-                                    errorText:
-                                        _errorText.isNotEmpty ? _errorText : null,
+                                    errorText: _errorText.isNotEmpty
+                                        ? _errorText
+                                        : null,
                                     labelStyle: const TextStyle(
                                       fontFamily: 'fonts/Inter-Bold.ttf',
                                       color: Color(0xFF4583DF),
@@ -272,7 +273,8 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                     suffixIcon: IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          _obscureKataSandi = !_obscureKataSandi;
+                                          _obscureKataSandi =
+                                              !_obscureKataSandi;
                                         });
                                       },
                                       icon: Icon(_obscureKataSandi
@@ -281,7 +283,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                   ),
                                   obscureText: _obscureKataSandi,
@@ -302,8 +304,9 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     hintText: "Konfirmasi Kata Sandi",
-                                    errorText:
-                                        _errorText.isNotEmpty ? _errorText : null,
+                                    errorText: _errorText.isNotEmpty
+                                        ? _errorText
+                                        : null,
                                     labelStyle: TextStyle(
                                       fontFamily: 'fonts/Inter-Bold.ttf',
                                       color: Theme.of(context).primaryColor,
@@ -328,7 +331,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                     ),
                                     filled: true,
                                     fillColor: Theme.of(context)
-                                        .floatingActionButtonTheme
+                                        .appBarTheme
                                         .backgroundColor,
                                     // fillColor: Theme.of(context).backgroundColor,
                                   ),
@@ -367,11 +370,11 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                             fontFamily: 'fonts/Inter-Bold.ttf',
                                           ),
                                           foregroundColor: Theme.of(context)
-                                              .floatingActionButtonTheme
+                                              .appBarTheme
                                               .backgroundColor,
                                           // backgroundColor: Colors.blue.shade400,
                                           backgroundColor: Theme.of(context)
-                                              .appBarTheme
+                                              .floatingActionButtonTheme
                                               .backgroundColor,
                                           shape: const StadiumBorder()),
                                       child: Text(
@@ -385,16 +388,19 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                   child: RichText(
                                       text: TextSpan(
                                           text: 'Sudah punya akun? ',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 16,
-                                            color: Colors.white,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                           ),
                                           children: [
                                         TextSpan(
                                           text: 'Masuk',
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                            decoration: TextDecoration.underline,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            decoration:
+                                                TextDecoration.underline,
                                             fontSize: 16,
                                           ),
                                           recognizer: TapGestureRecognizer()
