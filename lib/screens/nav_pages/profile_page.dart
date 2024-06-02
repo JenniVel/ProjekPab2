@@ -339,7 +339,7 @@ class _ProfilPageState extends State<ProfilPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ResetPass(),
+                        builder: (context) => Reset(),
                       ),
                     );
                   },

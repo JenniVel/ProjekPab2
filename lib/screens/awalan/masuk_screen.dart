@@ -290,8 +290,7 @@ class _MasukScreenState extends State<MasukScreen> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ResetPass(),
+                                                builder: (context) => Reset(),
                                               ),
                                             );
                                           },
