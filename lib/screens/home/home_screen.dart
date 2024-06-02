@@ -98,6 +98,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
                   FadeInUp(
+                    delay: const Duration(milliseconds: 350),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -107,7 +108,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         );
                       },
                       child: Icon(
-                        Icons.add_location,
+                        Icons.location_pin,
                         color: Theme.of(context).iconTheme.color,
                       ),
                       // child: Text('LOKASI SAAT INI'),
@@ -182,8 +183,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             right: size.width * 0.05,
                           ),
                           controller: tabController,
-                          labelColor: Colors.black,
-                          unselectedLabelColor: Colors.grey,
+                          labelColor: Theme.of(context).primaryColor,
+                          unselectedLabelColor:
+                              Theme.of(context).appBarTheme.backgroundColor,
                           isScrollable: true,
                           indicatorSize: TabBarIndicatorSize.label,
                           indicator: const CircleTabBarIndicator(

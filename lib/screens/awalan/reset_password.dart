@@ -71,19 +71,6 @@ class ResetPage extends State<Reset> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-                        child: Text(
-                          'Ubah Kata Sandi',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: Theme.of(context)
-                                .primaryColor, // Menggunakan warna primer dari Theme.of(context)
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   Container(
