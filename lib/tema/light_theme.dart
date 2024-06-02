@@ -14,7 +14,7 @@ final ThemeData lightTheme = ThemeData(
           Color(0xFF5D9EFF)), //box tombol daftar dn masuk (birugelap)
   textTheme: const TextTheme(
     bodyText1:
-        TextStyle(color: Color.fromARGB(255, 93, 152, 218)), //text deskripsi
+        TextStyle(color: Color.fromARGB(255, 21, 30, 41)), //text deskripsi
   ),
   backgroundColor: Color.fromARGB(255, 194, 216, 238), //nav bawah
 );
