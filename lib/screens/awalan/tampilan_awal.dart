@@ -46,7 +46,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
               alignment: const AlignmentDirectional(0.00, 0.00),
               child: ClipRRect(
                 child: Image.asset(
-                  'images/google/hello.png',
+                  'images/hello.png',
                   width: 271,
                   height: 240,
                   fit: BoxFit.contain,
@@ -70,7 +70,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
                       const Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: Text(
-                          'TruExplore',
+                          'TraveLine',
                           style: TextStyle(
                             fontFamily: 'fonts/Inter-Black.ttf',
                             color: Color(0xFF1284EE),

@@ -257,7 +257,7 @@ class _ProfilPageState extends State<ProfilPage> {
                             : (userData['image_url'] != null ||
                                         userData['image_url'] == ""
                                     ? NetworkImage(userData['image_url'])
-                                    : AssetImage('images/google/hello.png'))
+                                    : AssetImage('images/hello.png'))
                                 as ImageProvider,
                       ),
                       IconButton(
