@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:projek/mapstest2/loc.dart';
+import 'package:projek/map_home/location_service_home.dart';
 
 class GoogleMapsScreens extends StatefulWidget {
   const GoogleMapsScreens({super.key});

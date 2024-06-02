@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projek/mapstest2/gmapbuathome.dart';
+import 'package:projek/map_home/google_map_current_location.dart';
 import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/see_all_pages.dart';
 import 'package:projek/screens/nav_pages/main_wrapper.dart';
