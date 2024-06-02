@@ -39,24 +39,6 @@ class _MasukScreenState extends State<MasukScreen> {
     }
   }
 
-  Future<Map<String, String>> _retrieveAndDecryptDataFromPrefs(
-      SharedPreferences sharedPreferences) async {
-    final encryptedUsername = sharedPreferences.getString('username') ?? '';
-    final encryptedPassword = sharedPreferences.getString('password') ?? '';
-    final keyString = sharedPreferences.getString('key') ?? '';
-    final ivString = sharedPreferences.getString('iv') ?? '';
-
-    final encrypt.Key key = encrypt.Key.fromBase64(keyString);
-    final iv = encrypt.IV.fromBase64(ivString);
-
-    final encrypter = encrypt.Encrypter(encrypt.AES(key));
-    final decryptedUsername = encrypter.decrypt64(encryptedUsername, iv: iv);
-    final decryptedPassword = encrypter.decrypt64(encryptedPassword, iv: iv);
-
-    // Mengembalikan data terdekripsi
-    return {'username': decryptedUsername, 'password': decryptedPassword};
-  }
-
   void _signIn() async {
     if (_emailController.text.isEmpty || _kataSandiController.text.isEmpty) {
       setState(() {
@@ -373,7 +355,7 @@ class _MasukScreenState extends State<MasukScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Tombol(
-                                      imagePath: 'images/google/google.png',
+                                      imagePath: 'images/google.png',
                                       onTap: () => authenticateWithGoogle(
                                           context: context),
                                     ),
