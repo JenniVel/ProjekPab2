@@ -22,12 +22,15 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
-  final TextEditingController _kategoriController = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   File? _imageFile;
   Position? _currentPosition;
   final _formKey = GlobalKey<FormState>();
+
+  final List<String> _kategori = ['pantai', 'gunung', 'danau', 'perkotaan'];
+
+  String? _selectedKategori;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
       _nameController.text = widget.wisata!.name;
       _descriptionController.text = widget.wisata!.description;
       _hargaController.text = widget.wisata!.harga;
-      _kategoriController.text = widget.wisata!.kategori;
+      _selectedKategori = widget.wisata!.kategori;
       _latitudeController.text = widget.wisata!.latitude.toString();
       _longitudeController.text = widget.wisata!.longitude.toString();
     }
@@ -107,6 +110,8 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                   ),
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                   controller: _descriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -136,14 +141,25 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                     'Kategori: ',
                   ),
                 ),
-                TextFormField(
-                  controller: _kategoriController,
+                DropdownButtonFormField<String>(
+                  value: _selectedKategori,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedKategori = newValue;
+                    });
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter the category';
+                      return 'Please select a category';
                     }
                     return null;
                   },
+                  items: _kategori.map((String category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 20),
@@ -245,19 +261,27 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                               imageUrl = widget.wisata?.imageUrl;
                             }
 
+                            // Handle null values properly before conversion
+                            double latitude = 0.0;
+                            double longitude = 0.0;
+
+                            if (_latitudeController.text.isNotEmpty) {
+                              latitude = double.tryParse(_latitudeController.text) ?? 0.0;
+                            }
+
+                            if (_longitudeController.text.isNotEmpty) {
+                              longitude = double.tryParse(_longitudeController.text) ?? 0.0;
+                            }
+
                             final destination = Wisata(
                               id: widget.wisata?.id ?? '',
                               name: _nameController.text,
                               description: _descriptionController.text,
                               harga: _hargaController.text,
-                              kategori: _kategoriController.text,
+                               kategori: _selectedKategori ?? '',
                               imageUrl: imageUrl ?? '',
-                              latitude:
-                                  double.tryParse(_latitudeController.text) ??
-                                      0.0,
-                              longitude:
-                                  double.tryParse(_longitudeController.text) ??
-                                      0.0,
+                              latitude: latitude,
+                              longitude: longitude,
                               createdAt: widget.wisata?.createdAt,
                               isFavorite: false,
                             );
@@ -265,8 +289,7 @@ class _DestinationEditScreenState extends State<DestinationEditScreen> {
                             if (widget.wisata == null) {
                               await UploadService.addDestination(destination);
                             } else {
-                              await UploadService.updateDestination(
-                                  destination);
+                              await UploadService.updateDestination(destination);
                             }
                             Navigator.of(context).pop();
                           } catch (e) {

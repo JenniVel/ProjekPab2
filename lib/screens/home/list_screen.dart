@@ -59,16 +59,26 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
       appBar: AppBar(
         title: Row(
           children: [
+            const SizedBox(width: 10),
             const Text('Destinations'),
-            SizedBox(
-              width: 150,
-            ),
-            TextButton(
-              onPressed: () => DestinationListScreen.confirmSignOut(context),
-              child: Text('Sign Out'),
+            Spacer(),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextButton(
+                onPressed: () => DestinationListScreen.confirmSignOut(context),
+                child: Text(
+                  'Sign Out',
+                  style: TextStyle(color: Colors.redAccent),
+                ),
+              ),
             ),
           ],
         ),
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
       ),
       body: const DestinationList(),
       floatingActionButton: FloatingActionButton(
@@ -81,6 +91,7 @@ class _DestinationListScreenState extends State<DestinationListScreen> {
         },
         tooltip: 'Add Destination',
         child: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
       ),
     );
   }
@@ -95,7 +106,9 @@ class DestinationList extends StatelessWidget {
       stream: UploadService.getDestinationList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(
+            child: Text('Error: ${snapshot.error}', style: TextStyle(color: Colors.redAccent)),
+          );
         }
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -107,6 +120,11 @@ class DestinationList extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 80),
               children: snapshot.data!.map((document) {
                 return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
@@ -123,8 +141,8 @@ class DestinationList extends StatelessWidget {
                                 Uri.parse(document.imageUrl!).isAbsolute
                             ? ClipRRect(
                                 borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(16),
-                                  topRight: Radius.circular(16),
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
                                 ),
                                 child: Image.network(
                                   document.imageUrl!,
@@ -136,8 +154,13 @@ class DestinationList extends StatelessWidget {
                               )
                             : Container(),
                         ListTile(
-                          title: Text(document.name),
-                          subtitle: Text(document.description),
+                          title: Text(
+                            document.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          subtitle: Text(document.kategori,
+                              style: TextStyle(color: Colors.grey[700])),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -174,7 +197,7 @@ class DestinationList extends StatelessWidget {
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
-                                  child: Icon(Icons.delete),
+                                  child: Icon(Icons.delete, color: Colors.redAccent),
                                 ),
                               ),
                             ],
@@ -190,4 +213,22 @@ class DestinationList extends StatelessWidget {
       },
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    theme: ThemeData(
+      primaryColor: Colors.blueAccent,
+      textTheme: TextTheme(
+        headline6: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        bodyText1: TextStyle(color: Colors.black),
+      ),
+      dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    ),
+    home: DestinationListScreen(),
+  ));
 }
