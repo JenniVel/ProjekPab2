@@ -191,7 +191,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Nama Lengkap',
+                                  'Nama Pengguna',
                                   style: TextStyle(
                                     fontFamily: 'fonts/Inter-Black.ttf',
                                     color: Theme.of(context).primaryColor,

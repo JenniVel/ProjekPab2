@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projek/komponen/like_button.dart';
 import 'package:projek/models/wisata.dart';
 import 'package:projek/screens/home/details_page.dart';
 import 'package:projek/services/favorite_service.dart';
