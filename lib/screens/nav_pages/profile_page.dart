@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
+import 'package:projek/screens/awalan/reset_password.dart';
 import 'package:projek/screens/home/home_screen.dart';
 import 'package:projek/screens/widgets/box.dart';
 import 'package:projek/screens/widgets/text_box.dart';
@@ -336,6 +337,19 @@ class _ProfilPageState extends State<ProfilPage> {
                   title: Text('Keluar', style: TextStyle(color: textColor)),
                   onTap: _confirmSignOut,
                 ),
+                ListTile(
+                  leading: Icon(Icons.password, color: theme.iconTheme.color),
+                  title: Text('Ganti Kata Sandi',
+                      style: TextStyle(color: textColor)),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResetPass(),
+                      ),
+                    );
+                  },
+                )
               ],
             );
           } else if (snapshot.hasError) {
