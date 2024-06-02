@@ -332,12 +332,6 @@ class _ProfilPageState extends State<ProfilPage> {
                   },
                 ),
                 ListTile(
-                  leading:
-                      Icon(Icons.exit_to_app, color: theme.iconTheme.color),
-                  title: Text('Keluar', style: TextStyle(color: textColor)),
-                  onTap: _confirmSignOut,
-                ),
-                ListTile(
                   leading: Icon(Icons.password, color: theme.iconTheme.color),
                   title: Text('Ganti Kata Sandi',
                       style: TextStyle(color: textColor)),
@@ -349,7 +343,13 @@ class _ProfilPageState extends State<ProfilPage> {
                       ),
                     );
                   },
-                )
+                ),
+                ListTile(
+                  leading:
+                      Icon(Icons.exit_to_app, color: theme.iconTheme.color),
+                  title: Text('Keluar', style: TextStyle(color: textColor)),
+                  onTap: _confirmSignOut,
+                ),
               ],
             );
           } else if (snapshot.hasError) {

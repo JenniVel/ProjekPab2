@@ -4,9 +4,9 @@ final ThemeData lightTheme = ThemeData(
   primaryColor: const Color(0xFF004B90), //text judul
   brightness: Brightness.light,
   scaffoldBackgroundColor:
-      const Color.fromARGB(255, 228, 239, 250), //background
+      const Color.fromARGB(255, 228, 239, 250), //background & container di masuk/dftr
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFFAFD4F5), //di masuk/daftar bgian luar
+    backgroundColor: Color(0xFFAFD4F5), //di bg masuk/daftar bgian luar
     iconTheme: IconThemeData(color: Colors.white), // icon
   ),
   floatingActionButtonTheme:
