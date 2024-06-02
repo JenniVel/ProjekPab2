@@ -9,17 +9,6 @@ import 'package:projek/screens/awalan/masuk_screen.dart';
 FirebaseAuth auth = FirebaseAuth.instance;
 DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("users");
 
-class ResetPass extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Reset(),
-      theme: Theme.of(
-          context), // Menggunakan Theme.of(context) yang telah didefinisikan
-    );
-  }
-}
-
 class Reset extends StatefulWidget {
   @override
   ResetPage createState() => ResetPage();
@@ -28,6 +17,7 @@ class Reset extends StatefulWidget {
 class ResetPage extends State<Reset> {
   static bool visible = false;
 
+  @override
   void initState() {
     super.initState();
     visible = false;
@@ -55,19 +45,14 @@ class ResetPage extends State<Reset> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Theme.of(context)
-                            .backgroundColor, // Menggunakan warna latar belakang dari Theme.of(context)
+                        backgroundColor: Theme.of(context).backgroundColor,
                         child: IconButton(
                           icon: Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: Theme.of(context)
-                                .iconTheme
-                                .color, // Menggunakan warna ikon dari Theme.of(context)
+                            color: Theme.of(context).iconTheme.color,
                           ),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const MasukScreen()));
+                            Navigator.pop(context);
                           },
                         ),
                       ),
@@ -75,26 +60,24 @@ class ResetPage extends State<Reset> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 150.0, bottom: 30),
-                    child: (Text(
+                    child: Text(
                       ' Ubah Kata Sandi ',
                       style: GoogleFonts.workSans(
                         fontSize: 30,
-                        color: Theme.of(context)
-                            .primaryColor, // Menggunakan warna primer dari Theme.of(context)
+                        color: Theme.of(context).primaryColor,
                       ),
-                    )),
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.only(),
-                    child: (Text(
+                    child: Text(
                       'Masukkan email untuk menerima link verifikasi ganti kata sandi',
                       style: GoogleFonts.workSans(
                         fontSize: 15,
-                        color: Theme.of(context)
-                            .primaryColor, // Menggunakan warna teks dari Theme.of(context)
+                        color: Theme.of(context).primaryColor,
                       ),
                       textAlign: TextAlign.center,
-                    )),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -103,34 +86,31 @@ class ResetPage extends State<Reset> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       style: TextStyle(
-                        color: Theme.of(context)
-                            .primaryColor, // Menggunakan warna primer dari Theme.of(context)
+                        color: Theme.of(context).primaryColor,
                       ),
                       decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.mail_outline_rounded,
-                            color: Theme.of(context)
-                                .iconTheme
-                                .color, // Menggunakan warna ikon dari Theme.of(context)
-                          ),
-                          filled: true,
-                          fillColor: Colors.black12,
-                          labelStyle: GoogleFonts.workSans(
-                            fontSize: 16,
-                            color: Theme.of(context)
-                                .primaryColor, // Menggunakan warna primer dari Theme.of(context)
-                          ),
-                          hintStyle: const TextStyle(color: Colors.white54),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 0.5),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 1.5),
-                          ),
-                          labelText: 'Email',
-                          hintText: ''),
+                        prefixIcon: Icon(
+                          Icons.mail_outline_rounded,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        filled: true,
+                        fillColor: Colors.black12,
+                        labelStyle: GoogleFonts.workSans(
+                          fontSize: 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        hintStyle: const TextStyle(color: Colors.white54),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 0.5),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 1.5),
+                        ),
+                        labelText: 'Email',
+                        hintText: '',
+                      ),
                     ),
                   ),
                   Visibility(
@@ -145,8 +125,8 @@ class ResetPage extends State<Reset> {
                         margin: const EdgeInsets.only(top: 10),
                         child: LinearProgressIndicator(
                           minHeight: 2,
-                          backgroundColor: Theme.of(context)
-                              .scaffoldBackgroundColor, // Menggunakan warna latar belakang dari Theme.of(context)
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
                           valueColor:
                               const AlwaysStoppedAnimation(Colors.white),
                         ),
@@ -172,8 +152,7 @@ class ResetPage extends State<Reset> {
                         style: GoogleFonts.workSans(
                           fontSize: 19,
                           fontWeight: FontWeight.w500,
-                          color: Theme.of(context)
-                              .primaryColor, // Menggunakan warna primer dari Theme.of(context)
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -182,17 +161,15 @@ class ResetPage extends State<Reset> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(
-                            color: Theme.of(context)
-                                .backgroundColor, // Menggunakan warna latar belakang AppBar dari Theme.of(context)
+                            color: Theme.of(context).backgroundColor,
                             width: 2,
                           ),
                         ),
                         foregroundColor: Theme.of(context)
                             .floatingActionButtonTheme
                             .backgroundColor,
-                        backgroundColor: Theme.of(context)
-                            .appBarTheme
-                            .backgroundColor, // Menggunakan warna latar belakang AppBar dari Theme.of(context)
+                        backgroundColor:
+                            Theme.of(context).appBarTheme.backgroundColor,
                       ),
                     ),
                   ),
@@ -206,7 +183,6 @@ class ResetPage extends State<Reset> {
   }
 
   Future<void> resetPwd(BuildContext context) async {
-    // Periksa apakah email telah terdaftar sebelumnya
     final user =
         await auth.fetchSignInMethodsForEmail(_emailController.text.trim());
     if (user.isEmpty) {

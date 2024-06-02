@@ -34,45 +34,36 @@ class _DaftarScreenState extends State<DaftarScreen> {
     });
 
     String email = _emailController.text.trim();
-    String password = _kataSandiController.text.trim();
-    String namaPengguna = _namapenggunaController.text.trim();
+String password = _kataSandiController.text.trim();
+String namaPengguna = _namapenggunaController.text.trim();
 
-    List<String> errors = [];
+String error;
 
-    if (password.length < 8) {
-      errors.add('Minimal 8 karakter');
-    }
+if (password.length < 8) {
+  error = 'Minimal 8 karakter';
+} else if (!password.contains(RegExp(r'[A-Z]'))) {
+  error = 'Mengandung kombinasi [A-Z]';
+} else if (!password.contains(RegExp(r'[a-z]'))) {
+  error = 'Mengandung kombinasi [a-z]';
+} else if (!password.contains(RegExp(r'[0-9]'))) {
+  error = 'Mengandung kombinasi [0-9]';
+} else if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  error = 'Menggunakan [!@#%\$^&*(),.?":{}|<>]';
+} else {
+  // Password is valid, no errors
+  error = "";
+}
 
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      errors.add('Mengandung kombinasi [A-Z]');
-    }
-
-    if (!password.contains(RegExp(r'[a-z]'))) {
-      errors.add('Mengandung kombinasi [a-z]');
-    }
-
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      errors.add('Mengandung kombinasi [0-9]');
-    }
-
-    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      errors.add('Menggunakan [!@#%\$^&*(),.?":{}|<>]');
-    }
-
-    if (errors.isEmpty) {
-      // Password is valid, no errors
-      setState(() {
-        _errorText = ""; // Clear error text if no errors
-      });
-    } else {
-      // Errors exist, combine them into a single string
-      String errorText =
-          "Harap perbaiki password Anda dengan:\n" + errors.join("\n");
-      setState(() {
-        _errorText = errorText;
-      });
-      return;
-    }
+if (error == null) {
+  setState(() {
+    _errorText = ""; // Clear error text if no errors
+  });
+} else {
+  setState(() {
+    _errorText = error; // Display the first error
+  });
+  return;
+}
 
     if (_konfirmasiSandiController.text != _kataSandiController.text) {
       setState(() {
