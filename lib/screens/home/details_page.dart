@@ -205,7 +205,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: size.height * 0.02),
+                            SizedBox(height: size.height * 0.01),
                             FadeInUp(
                               delay: const Duration(milliseconds: 300),
                               child: Row(
@@ -254,7 +254,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: size.height * 0.03),
+                            SizedBox(height: size.height * 0.01),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -262,7 +262,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   delay: const Duration(milliseconds: 1000),
                                   child: AppText(
                                     text: "Deskripsi",
-                                    size: 21,
+                                    size: 22,
                                     color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -299,16 +299,16 @@ class _DetailsPageState extends State<DetailsPage> {
                               child: Text(
                                 wisata!.description,
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
                                       .color,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
-                            SizedBox(height: size.height * 0.08),
+                            SizedBox(height: size.height * 0.04),
                           ],
                         ),
                       ),
