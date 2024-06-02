@@ -1,15 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 import 'package:projek/screens/awalan/reset_password.dart';
-import 'package:projek/screens/home/home_screen.dart';
 import 'package:projek/screens/widgets/box.dart';
 import 'package:projek/screens/widgets/text_box.dart';
 import 'package:projek/tema/theme_screen.dart';
+import 'package:projek/services/profile_service.dart'; // Import the new service
 
 class ProfilPage extends StatefulWidget {
   const ProfilPage({Key? key}) : super(key: key);
@@ -20,7 +18,7 @@ class ProfilPage extends StatefulWidget {
 
 class _ProfilPageState extends State<ProfilPage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  final usersCollection = FirebaseFirestore.instance.collection("Users");
+  final ProfileService _profileService = ProfileService();
   String? imageUrl;
   File? _imageFile;
 
@@ -32,82 +30,31 @@ class _ProfilPageState extends State<ProfilPage> {
   }
 
   Future<void> _initializeUserData() async {
-    DocumentSnapshot userDoc =
-        await usersCollection.doc(currentUser.email).get();
-    if (!userDoc.exists) {
-      await usersCollection.doc(currentUser.email).set({
-        'username': currentUser.displayName ?? '',
-        'namalengkap': currentUser.displayName ?? '',
-        'email': currentUser.email,
-        'image_url': '',
-      });
-    }
+    await _profileService.initializeUserData(currentUser);
   }
 
   Future<void> _loadProfileImage() async {
-    DocumentSnapshot userDoc =
-        await usersCollection.doc(currentUser.email).get();
-    if (userDoc.exists && userDoc.data() != null) {
-      setState(() {
-        imageUrl = (userDoc.data() as Map<String, dynamic>)['image_url'];
-      });
-    }
+    String? url = await _profileService.loadProfileImage(currentUser);
+    setState(() {
+      imageUrl = url;
+    });
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+    String? url = await _profileService.pickImage(currentUser);
+    if (url != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        imageUrl = url;
       });
-
-      String? uploadedImageUrl = await _uploadImageToFirebase(_imageFile!);
-      if (uploadedImageUrl != null) {
-        await usersCollection.doc(currentUser.email).update({
-          'image_url': uploadedImageUrl,
-        });
-
-        setState(() {
-          imageUrl = uploadedImageUrl;
-        });
-      }
-    }
-  }
-
-  Future<String?> _uploadImageToFirebase(File imageFile) async {
-    try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images')
-          .child('${currentUser.email}.jpg');
-      await storageRef.putFile(imageFile);
-      return await storageRef.getDownloadURL();
-    } catch (e) {
-      print('Error uploading image: $e');
-      return null;
     }
   }
 
   Future<void> _removeImage() async {
-    try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images')
-          .child('${currentUser.email}.jpg');
-      await storageRef.delete();
-
-      await usersCollection.doc(currentUser.email).update({
-        'image_url': FieldValue.delete(),
-      });
-
-      setState(() {
-        imageUrl = null;
-        _imageFile = null;
-      });
-    } catch (e) {
-      print('Error deleting image: $e');
-    }
+    await _profileService.removeImage(currentUser);
+    setState(() {
+      imageUrl = null;
+      _imageFile = null;
+    });
   }
 
   Future<void> _showImageOptions() async {
@@ -177,7 +124,7 @@ class _ProfilPageState extends State<ProfilPage> {
     );
 
     if (newValue.trim().isNotEmpty) {
-      await usersCollection.doc(currentUser.email).update({field: newValue});
+      await _profileService.editField(currentUser, field, newValue);
     }
   }
 
@@ -238,7 +185,7 @@ class _ProfilPageState extends State<ProfilPage> {
         backgroundColor: theme.scaffoldBackgroundColor,
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: usersCollection.doc(currentUser.email).snapshots(),
+        stream: _profileService.usersCollection.doc(currentUser.email).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final userData = snapshot.data!.data() as Map<String, dynamic>;
