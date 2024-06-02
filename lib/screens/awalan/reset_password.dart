@@ -206,17 +206,24 @@ class ResetPage extends State<Reset> {
   }
 
   Future<void> resetPwd(BuildContext context) async {
+    // Periksa apakah email telah terdaftar sebelumnya
+    final user =
+        await auth.fetchSignInMethodsForEmail(_emailController.text.trim());
+    if (user.isEmpty) {
+      displaySnackBar(context, 'Email belum terdaftar');
+      return;
+    }
     try {
       await auth.sendPasswordResetEmail(email: _emailController.text.trim());
-      displaySnackBar(context, 'Email has been sent to the given id');
+      displaySnackBar(context, 'Link sudah dikirim di email, cek email anda');
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => const MasukScreen()));
       });
     } catch (e) {
-      String errorMessage = 'An error occurred';
+      String errorMessage = 'Terjadi kesalahan';
       if (e is FirebaseAuthException) {
-        errorMessage = e.message ?? 'An error occurred';
+        errorMessage = e.message ?? 'Terjadi kesalahan';
       }
       displaySnackBar(context, errorMessage);
       setState(() {
