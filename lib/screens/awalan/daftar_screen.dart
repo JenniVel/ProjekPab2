@@ -80,32 +80,50 @@ class _DaftarScreenState extends State<DaftarScreen> {
       });
       return;
     }
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    User? user = await FirebaseAuthService()
-        .signUpWithEmailAndPassword(context, email, password);
-    if (user != null) {
-      showMessage(context, "Akun Pengguna berhasil di buat");
-      String? email = user.email;
-      CollectionReference usersRef =
-          FirebaseFirestore.instance.collection('Users');
-      DocumentReference userDocRef = usersRef.doc(email);
+      User? user = userCredential.user;
+      if (user != null) {
+        await user.sendEmailVerification();
+        showMessage(context, "Email verifikasi telah dikirim ke ${user.email}");
+        // User? user = await FirebaseAuthService()
+        //     .signUpWithEmailAndPassword(context, email, password);
+        // if (user != null) {
+        //   showMessage(context, "Akun Pengguna berhasil di buat");
+        //   String? email = user.email;
+        CollectionReference usersRef =
+            FirebaseFirestore.instance.collection('Users');
+        DocumentReference userDocRef = usersRef.doc(email);
 
-      Map<String, dynamic> userData = {
-        'username': namaPengguna,
-        'email': email,
-        'image_url': "",
-        'namalengkap': "",
-      };
+        Map<String, dynamic> userData = {
+          'username': namaPengguna,
+          'email': email,
+          'image_url': "",
+          'namalengkap': "",
+        };
 
-      await userDocRef.set(userData).then((_) {
-        print('Berhasil menyimpan data pengguna: $userData');
-        Navigator.pushNamed(context, '/masuk');
-      }).catchError((error) {
-        print('Gagal menyimpan data pengguna: ${error.toString()}');
+        await userDocRef.set(userData).then((_) {
+          print('Berhasil menyimpan data pengguna: $userData');
+          Navigator.pushNamed(context, '/masuk');
+        }).catchError((error) {
+          print('Gagal menyimpan data pengguna: ${error.toString()}');
+        });
+      }
+    } catch (e) {
+      String errorMessage = 'Terjadi kesalahan';
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? 'Terjadi kesalahan';
+      }
+      showMessage(context, errorMessage);
+    } finally {
+      setState(() {
+        isSigningUp = false;
       });
-      Navigator.pushNamed(context, '/masuk');
-    } else {
-      showMessage(context, "Terjadinya Error");
     }
   }
 

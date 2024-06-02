@@ -63,28 +63,38 @@ class _MasukScreenState extends State<MasukScreen> {
           .get();
 
       if (user != null) {
-        setState(() {
-          _errorText = '';
-          _isSignedIn = true;
-        });
+        // Cek apakah pengguna telah diverifikasi melalui email
+        if (user.emailVerified) {
+          setState(() {
+            _errorText = '';
+            _isSignedIn = true;
+          });
 
-        Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).popUntil((route) => route.isFirst);
 
-        if (user.email == 'jeo1@gmail.com') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const DestinationListScreen()),
-          );
+          if (user.email == 'jeo1@gmail.com') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const DestinationListScreen()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage(user: user)),
+            );
+          }
         } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(user: user)),
-          );
+          // Jika pengguna belum diverifikasi
+          setState(() {
+            _errorText = 'Login gagal Akun belum diverifikasi';
+          });
+          // Keluar dari sesi masuk
+          await FirebaseAuth.instance.signOut();
         }
       } else {
         setState(() {
-          _errorText = 'Login gagal: User tidak ditemukan';
+          _errorText = 'Login gagal User tidak ditemukan';
         });
       }
     } on FirebaseAuthException catch (e) {
@@ -177,6 +187,7 @@ class _MasukScreenState extends State<MasukScreen> {
                                     labelStyle: TextStyle(
                                       fontFamily: 'fonts/Inter-Bold.ttf',
                                       color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w300,
                                     ),
                                     border: OutlineInputBorder(
                                       borderSide: const BorderSide(
