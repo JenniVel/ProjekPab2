@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => GoogleMapsScreens()),
+                              builder: (context) => const GoogleMapsScreens()),
                         );
                       },
                       child: Icon(
@@ -193,10 +193,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             radius: 4,
                           ),
                           tabs: [
-                            Tab(child: Text('pantai')),
-                            Tab(child: Text('gunung')),
-                            Tab(child: Text('danau')),
-                            Tab(
+                            const Tab(child: Text('pantai')),
+                            const Tab(child: Text('gunung')),
+                            const Tab(child: Text('danau')),
+                            const Tab(
                                 child: Text(
                                     'perkotaan')), // Add more tabs for other categories
                           ],
@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    SeeAllPage(), // Navigasi ke SeeAllPage
+                                    const SeeAllPage(), // Navigasi ke SeeAllPage
                               ),
                             );
                           },

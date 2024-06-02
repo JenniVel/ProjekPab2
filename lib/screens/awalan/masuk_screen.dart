@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projek/global/showmessage.dart';
@@ -9,8 +8,6 @@ import 'package:projek/screens/awalan/reset_password.dart';
 import 'package:projek/screens/home/home_screen.dart';
 import 'package:projek/screens/home/list_screen.dart';
 import 'package:projek/services/auth_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 
 class MasukScreen extends StatefulWidget {
   const MasukScreen({super.key});
