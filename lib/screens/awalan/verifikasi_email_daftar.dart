@@ -23,7 +23,8 @@ class _VerifikasiEmailScreenState extends State<VerifikasiEmailScreen> {
 
   void _kirimVerifikasi() async {
     try {
-      await _auth.sendPasswordResetEmail(email: widget.email);
+      User? user = _auth.currentUser;
+      await user?.sendEmailVerification();
       print('Email verifikasi dikirim ke ${widget.email}');
     } catch (e) {
       print('Error: $e');
