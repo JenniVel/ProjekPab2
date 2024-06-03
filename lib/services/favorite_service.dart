@@ -36,28 +36,33 @@ class FavoriteService {
   }
 
   static Future<void> removeFromFavorites(String wisataId) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception("User not logged in");
-      }
-      final userId = user.uid;
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('Destination_favorites')
-          .where('userId', isEqualTo: userId)
-          .where(FieldPath.documentId, isEqualTo: '${userId}_${wisataId}')
-          .get();
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception("User not logged in");
+    }
+    final userId = user.uid;
 
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Destination_favorites')
+        .where('userId', isEqualTo: userId)
+        .where(FieldPath.documentId, isEqualTo: '${userId}_${wisataId}')
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
       for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
-
       print("Removed from favorites successfully.");
-    } catch (error) {
-      print("Error removing from favorites: $error");
-      // Consider using a logging service or showing a user-friendly message
+    } else {
+      print("Document not found in favorites.");
     }
+  } catch (error) {
+    print("Error removing from favorites: $error");
+    // Tangani kesalahan secara lebih spesifik
   }
+}
+
 
   static Stream<List<Wisata>> getFavoritesForUser() {
     final user = FirebaseAuth.instance.currentUser;

@@ -14,11 +14,10 @@ import 'package:projek/models/wisata.dart';
 
 class DetailsPage extends StatefulWidget {
   final String wisataId;
+  final Function(Wisata, bool)? updateFavoriteStatus;
 
-  const DetailsPage({
-    super.key,
-    required this.wisataId,
-  });
+  const DetailsPage({Key? key, required this.wisataId, this.updateFavoriteStatus}) : super(key: key);
+
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -41,18 +40,27 @@ class _DetailsPageState extends State<DetailsPage> {
     _fetchWisataDetails();
   }
 
-  void toggleFavorite() {
+  void toggleFavorite() async {
+  try {
     setState(() {
-      _isFavorite = !_isFavorite;
-      wisata!.isFavorite = _isFavorite;
+      wisata!.isFavorite = !wisata!.isFavorite;
+      if (widget.updateFavoriteStatus != null) {
+        wisata!.isFavorite = false;
+      }
     });
 
-    if (_isFavorite) {
-      FavoriteService.addToFavorites(wisata!);
+    if (wisata!.isFavorite == true) {
+      await FavoriteService.addToFavorites(wisata!);
     } else {
-      FavoriteService.removeFromFavorites(wisata!.id!);
+      await FavoriteService.removeFromFavorites(wisata!.id!);
     }
+    
+  } catch (error) {
+    print("Error toggling favorite: $error");
   }
+}
+
+
 
   Future<void> fetchLocations() async {
     try {
@@ -100,7 +108,7 @@ class _DetailsPageState extends State<DetailsPage> {
         .doc(widget.wisataId);
     final docSnapshot = await docRef.get();
 
-    if (!docSnapshot.exists) {
+    if (!docSnapshot.exists ) {
       print("Wisata not found with ID: ${widget.wisataId}");
       return;
     }
@@ -198,7 +206,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       ],
                                     ),
                                     LikeButton(
-                                      isLiked: _isFavorite,
+                                      isLiked: wisata!.isFavorite,
                                       onTap: toggleFavorite,
                                     ),
                                   ],
