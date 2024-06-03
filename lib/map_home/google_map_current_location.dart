@@ -14,8 +14,8 @@ class GoogleMapsScreens extends StatefulWidget {
 class _GoogleMapsScreenState extends State<GoogleMapsScreens> {
   final Completer<GoogleMapController> _controller = Completer();
   CameraPosition? _cameraPosition;
-  Set<Marker>? _markers;
-  late MarkerId _markerId;
+  Set<Marker> _markers = {};
+  late MarkerId _currentLocationMarkerId;
 
   @override
   void initState() {
@@ -31,20 +31,36 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreens> {
           target: LatLng(currentPosition.latitude, currentPosition.longitude),
           zoom: 15,
         );
-        _markerId = MarkerId('current_location');
-        _markers = {
+        _currentLocationMarkerId = MarkerId('current_location');
+        _markers.add(
           Marker(
-            markerId: _markerId,
+            markerId: _currentLocationMarkerId,
             position:
                 LatLng(currentPosition.latitude, currentPosition.longitude),
             infoWindow: const InfoWindow(
-              title: 'Your current location',
-              snippet: 'This is where you are',
+              title: 'Lokasi Anda Saat Ini',
+              snippet: 'Disini Anda Berada',
             ),
           ),
-        };
+        );
       });
     }
+  }
+
+  void _addMarker(LatLng position, String title, String snippet) {
+    final markerId = MarkerId(position.toString());
+    final marker = Marker(
+      markerId: markerId,
+      position: position,
+      infoWindow: InfoWindow(
+        title: title,
+        snippet: snippet,
+      ),
+    );
+
+    setState(() {
+      _markers.add(marker);
+    });
   }
 
   @override
@@ -59,11 +75,11 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreens> {
               myLocationButtonEnabled: true,
               mapType: MapType.normal,
               initialCameraPosition: _cameraPosition!,
-              markers: _markers!,
+              markers: _markers,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
                 Future.delayed(const Duration(milliseconds: 500), () {
-                  controller.showMarkerInfoWindow(_markerId);
+                  controller.showMarkerInfoWindow(_currentLocationMarkerId);
                 });
               },
             )

@@ -110,7 +110,8 @@ class _DetailsPageState extends State<DetailsPage> {
     // Check if the Wisata is in the user's favorites
     final favDocRef = FirebaseFirestore.instance
         .collection('Destination_favorites')
-        .doc('${widget.wisataId}'); // Use userId and wisataId combination as doc ID
+        .doc(
+            '${widget.wisataId}'); // Use userId and wisataId combination as doc ID
     final favDocSnapshot = await favDocRef.get();
 
     setState(() {
