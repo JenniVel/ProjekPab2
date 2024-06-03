@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
-DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("users");
 
 class Reset extends StatefulWidget {
   @override
@@ -183,18 +182,26 @@ class ResetPage extends State<Reset> {
   }
 
   Future<void> resetPwd(BuildContext context) async {
-    final user =
-        await auth.fetchSignInMethodsForEmail(_emailController.text.trim());
-    if (user.isEmpty) {
-      displaySnackBar(context, 'Email belum terdaftar');
-      return;
-    }
     try {
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(_emailController.text.trim())
+          .get();
+
+      if (!userSnapshot.exists) {
+        displaySnackBar(context, 'Email belum terdaftar');
+        setState(() {
+          load();
+        });
+        return;
+      }
+    
+
       await auth.sendPasswordResetEmail(email: _emailController.text.trim());
       displaySnackBar(context, 'Link sudah dikirim di email, cek email anda');
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => const MasukScreen()));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const MasukScreen()));
       });
     } catch (e) {
       String errorMessage = 'Terjadi kesalahan';
@@ -202,6 +209,7 @@ class ResetPage extends State<Reset> {
         errorMessage = e.message ?? 'Terjadi kesalahan';
       }
       displaySnackBar(context, errorMessage);
+    } finally {
       setState(() {
         load();
       });

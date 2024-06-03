@@ -185,7 +185,8 @@ class _ProfilPageState extends State<ProfilPage> {
         backgroundColor: theme.scaffoldBackgroundColor,
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: _profileService.usersCollection.doc(currentUser.email).snapshots(),
+        stream:
+            _profileService.usersCollection.doc(currentUser.email).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final userData = snapshot.data!.data() as Map<String, dynamic>;
@@ -202,8 +203,8 @@ class _ProfilPageState extends State<ProfilPage> {
                         backgroundColor: theme.backgroundColor,
                         backgroundImage: _imageFile != null
                             ? FileImage(_imageFile!)
-                            : (userData['image_url'] != null ||
-                                        userData['image_url'] == ""
+                            : (userData['image_url'] != null &&
+                                        userData['image_url'].isNotEmpty
                                     ? NetworkImage(userData['image_url'])
                                     : AssetImage('images/hello.png'))
                                 as ImageProvider,
