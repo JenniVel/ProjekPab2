@@ -1,13 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projek/komponen/like_button.dart';
+import 'package:projek/screens/home/review/review_list_screen.dart';
 import 'package:projek/services/favorite_service.dart';
 import 'package:projek/screens/home/google_maps_screen.dart';
-import 'package:projek/services/review_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/reuseable_text.dart';
 import 'package:projek/models/wisata.dart';
@@ -328,19 +327,16 @@ class _DetailsPageState extends State<DetailsPage> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(Icons.arrow_back_ios),
+        icon: const Icon(Icons.arrow_back_ios, size: 30,),
       ),
       actions: [
         IconButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ReviewScreen(
-                destinationId: widget.wisataId,
-                userId: currentUser.uid,
-              );
+              return ReviewListScreen(destinationsTitle: wisata!.name);
             }));
           },
-          icon: const Icon(Icons.reviews),
+          icon: const Icon(Icons.reviews, size: 30,),
         ),
       ],
     );

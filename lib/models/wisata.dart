@@ -58,4 +58,35 @@ class Wisata {
       'isFavorite': isFavorite
     };
   }
+
+  factory Wisata.FromFirestore(Map<String, dynamic> data, String id) {
+    return Wisata(
+      id: id,
+      name: data['name'],
+      description: data['description'],
+      harga: data['harga'],
+      kategori: data['kategori'],
+      latitude: data['latitude'],
+      longitude: data['longitude'],
+      imageUrl: data['image_url'],
+      createdAt: data['created_at'] as Timestamp,
+      updatedAt: data['updated_at'] as Timestamp, 
+      isFavorite: data['isFavorite'], 
+    );
+  }
+
+  Map<String, dynamic> ToFirestore() {
+    return {
+      'name': name,
+      'description': description,
+      'harga' : harga,
+      'kategori' : kategori,
+      'latitude' : latitude,
+      'longitude': longitude,
+      'image_url': imageUrl,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'isFavorite': isFavorite
+    };
+  }
 }

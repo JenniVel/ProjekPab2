@@ -1,159 +1,126 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:projek/models/review.dart';
 
-class ReviewScreen extends StatefulWidget {
-  final String destinationId;
-  final String userId;
+class ReviewService {
+  static final FirebaseFirestore _database = FirebaseFirestore.instance;
+  static final CollectionReference _reviewsCollection =
+      _database.collection('reviews');
 
-  ReviewScreen({required this.destinationId, required this.userId});
+  static final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  @override
-  _ReviewScreenState createState() => _ReviewScreenState();
-}
+  static Future<String?> uploadImage(File imageFile) async {
+    try {
+      String fileName = path.basename(imageFile.path);
+      Reference ref = _storage.ref().child('images/$fileName');
 
-class _ReviewScreenState extends State<ReviewScreen> {
-  final _formKey = GlobalKey<FormState>();
-  double _rating = 3.0;
-  String _comment = '';
-
-  Future<void> _submitReview() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      Review review = Review(
-        id: '',
-        userId: widget.userId,
-        destinationId: widget.destinationId,
-        rating: _rating,
-        comment: _comment,
-        createdAt: Timestamp.now(),
-      );
-
-      await FirebaseFirestore.instance
-          .collection('Destinations')
-          .doc(widget.destinationId)
-          .collection('Reviews')
-          .add(review.toMap());
-
-      Navigator.pop(context);
+      UploadTask uploadTask; //upload ke ref yg dituju
+      if (kIsWeb) {
+        uploadTask = ref.putData(await imageFile.readAsBytes());
+      } else {
+        uploadTask = ref.putFile(imageFile);
+      }
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      return null;
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Review'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Slider(
-                value: _rating,
-                onChanged: (newRating) {
-                  setState(() {
-                    _rating = newRating;
-                  });
-                },
-                min: 1,
-                max: 5,
-                divisions: 4,
-                label: '$_rating',
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Comment'),
-                maxLines: 3,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a comment';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _comment = value!;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitReview,
-                child: Text('Submit Review'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  static Future<void> addReview(Review reviews) async {
+    Map<String, dynamic> newReview = {
+      'title': reviews.title,
+      'comment': reviews.comment,
+      'image_url': reviews.imageUrl,
+      'rating': reviews.rating,
+      'location': reviews.location,
+      'latitude': reviews.latitude,
+      'longitude': reviews.longitude,
+      'created_at': FieldValue.serverTimestamp(),
+      'updated_at': FieldValue.serverTimestamp(),
+    };
+    await _reviewsCollection.add(newReview);
   }
-}
 
-class ReviewsList extends StatelessWidget {
-  final String destinationId;
+  static Future<void> updateReview(Review reviews) async {
+    Map<String, dynamic> updatedReview = {
+      'title': reviews.title,
+      'comment': reviews.comment,
+      'image_url': reviews.imageUrl,
+      'rating': reviews.rating,
+      'location': reviews.location,
+      'latitude': reviews.latitude,
+      'longitude': reviews.longitude,
+      'created_at': reviews.createdAt,
+      'updated_at': FieldValue.serverTimestamp(),
+    };
 
-  ReviewsList({required this.destinationId});
+    await _reviewsCollection.doc(reviews.id).update(updatedReview);
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('Destinations')
-          .doc(destinationId)
-          .collection('Reviews')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
+  static Future<void> deleteReview(Review reviews) async {
+    await _reviewsCollection.doc(reviews.id).delete();
+  }
 
-        List<Review> reviews = snapshot.data!.docs.map((doc) {
-          return Review.fromDocument(doc);
-        }).toList();
+  static Future<QuerySnapshot> retrieveReviews() {
+    return _reviewsCollection.get();
+  }
 
-        return ListView.builder(
-          itemCount: reviews.length,
-          itemBuilder: (context, index) {
-            Review review = reviews[index];
-            return ListTile(
-              title: Text(review.comment),
-              subtitle: Text('Rating: ${review.rating}'),
-            );
-          },
+  static Stream<List<Review>> getReviewList() {
+    return _reviewsCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return Review(
+          id: doc.id,
+          title: data['title'],
+          comment: data['comment'],
+          imageUrl: data['image_url'],
+          rating: data['rating'] ?? 0.0,
+          location: data['location'],
+          latitude:
+              data['latitude'] != null ? data['latitude'] as double : null,
+          longitude:
+              data['longitude'] != null ? data['longitude'] as double : null,
+          createdAt: data['created_at'] != null
+              ? data['created_at'] as Timestamp
+              : null,
+          updatedAt: data['updated_at'] != null
+              ? data['updated_at'] as Timestamp
+              : null,
         );
-      },
-    );
+      }).toList();
+    });
   }
-}
 
-class DestinationScreen extends StatelessWidget {
-  final String destinationId;
-  final String userId;
+  static Future<Map<String, double>> getAverageRatings() async {
+    try {
+      QuerySnapshot reviewSnapshot = await _reviewsCollection.get();
+      Map<String, List<double>> destinationsRating = {};
 
-  DestinationScreen({required this.destinationId, required this.userId});
+      for (var doc in reviewSnapshot.docs) {
+        String destinationsId = doc['destinationsId']; 
+        double rating = doc['rating'];
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Destination Details'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReviewScreen(
-                      destinationId: destinationId, userId: userId),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ReviewsList(destinationId: destinationId),
-    );
+        if (destinationsRating.containsKey(destinationsId)) {
+          destinationsRating[destinationsId]!.add(rating);
+        } else {
+          destinationsRating[destinationsId] = [rating];
+        }
+      }
+
+      Map<String, double> averageRatings = {};
+      destinationsRating.forEach((destinationsId, ratings) {
+        double average = ratings.reduce((a, b) => a + b) / ratings.length;
+        averageRatings[destinationsId] = average;
+      });
+
+      return averageRatings;
+    } catch (e) {
+      throw Exception('Error getting average ratings: $e');
+    }
   }
 }

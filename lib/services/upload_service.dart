@@ -98,6 +98,25 @@ class UploadService {
     });
   }
 
+  Future<Wisata> getDestinationById(String id) async {
+    DocumentSnapshot doc = await _database.collection('Destinations').doc(id).get();
+    if (doc.exists) {
+      return Wisata.FromFirestore(doc.data() as Map<String, dynamic>, doc.id);
+    } else {
+      throw Exception('Destination not found');
+    }
+  }
+
+  Future<void> updateDestinationRating(String DestinationId, double rating) async {
+    try {
+      await _database.collection('Destinations').doc(DestinationId).update({
+        'rating': rating,
+      });
+    } catch (e) {
+      print('Error updating Destination rating: $e');
+    }
+  }
+
   // Method to add a comment to a destination
   static Future<void> addComment(String destinationId, String comment, String userId) async {
     // Reference to the comments sub-collection for a specific destination
