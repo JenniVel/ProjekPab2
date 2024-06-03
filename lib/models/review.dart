@@ -11,6 +11,7 @@ class Review {
   double? rating;
   Timestamp? createdAt;
   Timestamp? updatedAt;
+  String? userName; 
 
   Review({
     this.id,
@@ -23,23 +24,23 @@ class Review {
     this.rating,
     this.createdAt,
     this.updatedAt,
+    this.userName, 
   });
 
   factory Review.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    // Jika imageUrls tidak ada dalam dokumen, setel ke null
-
     return Review(
       id: doc.id,
       title: data['title'],
       comment: data['comment'],
       imageUrl: data['image_url'],
       location: data['location'],
-      latitude: data['latitude'] as double,
-      longitude: data['longitude'] as double,
-      rating: data['rating'] as double,
-      createdAt: data['created_at'] as Timestamp,
-      updatedAt: data['updated_at'] as Timestamp,
+      latitude: data['latitude'] as double?,
+      longitude: data['longitude'] as double?,
+      rating: data['rating'] as double?,
+      createdAt: data['created_at'] as Timestamp?,
+      updatedAt: data['updated_at'] as Timestamp?,
+      userName: data['userName'],
     );
   }
 
@@ -54,6 +55,7 @@ class Review {
       'rating': rating,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'userName': userName,
     };
   }
 }
