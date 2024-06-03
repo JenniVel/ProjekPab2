@@ -84,19 +84,6 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreens> {
               },
             )
           : const Center(child: CircularProgressIndicator()),
-      floatingActionButton: _cameraPosition != null
-          ? FloatingActionButton.extended(
-              onPressed: _goToLocation,
-              label: const Text('To the location!'),
-              icon: const Icon(Icons.directions_car),
-            )
-          : null,
     );
-  }
-
-  Future<void> _goToLocation() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller
-        .animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
   }
 }
