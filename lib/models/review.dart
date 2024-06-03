@@ -1,42 +1,59 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Review {
-  String id;
-  String userId;
-  String destinationId;
-  double rating;
-  String comment;
-  Timestamp createdAt;
+  String? id;
+  final String title;
+  final String comment;
+  String? imageUrl;
+  String? location;
+  double? latitude;
+  double? longitude;
+  double? rating;
+  Timestamp? createdAt;
+  Timestamp? updatedAt;
 
   Review({
-    required this.id,
-    required this.userId,
-    required this.destinationId,
-    required this.rating,
+    this.id,
+    required this.title,
     required this.comment,
-    required this.createdAt,
+    this.imageUrl,
+    this.location,
+    this.latitude,
+    this.longitude,
+    this.rating,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  // Factory method to create a Review object from a Firestore document
   factory Review.fromDocument(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    // Jika imageUrls tidak ada dalam dokumen, setel ke null
+
     return Review(
       id: doc.id,
-      userId: doc['user_id'],
-      destinationId: doc['destination_id'],
-      rating: doc['rating'],
-      comment: doc['comment'],
-      createdAt: doc['created_at'],
+      title: data['title'],
+      comment: data['comment'],
+      imageUrl: data['image_url'],
+      location: data['location'],
+      latitude: data['latitude'] as double,
+      longitude: data['longitude'] as double,
+      rating: data['rating'] as double,
+      createdAt: data['created_at'] as Timestamp,
+      updatedAt: data['updated_at'] as Timestamp,
     );
   }
 
-  // Method to convert a Review object to a map
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toDocument() {
     return {
-      'user_id': userId,
-      'destination_id': destinationId,
-      'rating': rating,
+      'title': title,
       'comment': comment,
+      'image_url': imageUrl,
+      'location': location,
+      'latitude': latitude,
+      'longitude': longitude,
+      'rating': rating,
       'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 }
