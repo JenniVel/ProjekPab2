@@ -69,7 +69,7 @@ class _MasukScreenState extends State<MasukScreen> {
 
           Navigator.of(context).popUntil((route) => route.isFirst);
 
-          if (user.email == 'jeo1@gmail.com') {
+          if (user.email == 'jvelencia01@gmail.com') {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
