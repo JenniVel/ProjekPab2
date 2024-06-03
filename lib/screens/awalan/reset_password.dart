@@ -43,16 +43,21 @@ class ResetPage extends State<Reset> {
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Theme.of(context).backgroundColor,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: Theme.of(context).iconTheme.color,
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(20, 25, 0, 0),
+                        child: CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
                         ),
                       ),
                     ],
@@ -195,7 +200,6 @@ class ResetPage extends State<Reset> {
         });
         return;
       }
-    
 
       await auth.sendPasswordResetEmail(email: _emailController.text.trim());
       displaySnackBar(context, 'Link sudah dikirim di email, cek email anda');
