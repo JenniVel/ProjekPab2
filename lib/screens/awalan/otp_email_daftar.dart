@@ -17,10 +17,10 @@ class _VerifikasiOtpScreenState extends State<VerifikasiOtpScreen> {
   @override
   void initState() {
     super.initState();
-    _kirimOtp();
+    _kirimVerifikasi();
   }
 
-  void _kirimOtp() async {
+  void _kirimVerifikasi() async {
     try {
       await _auth.sendPasswordResetEmail(email: widget.email);
       print('Email verifikasi dikirim ke ${widget.email}');
