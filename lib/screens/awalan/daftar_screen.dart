@@ -34,36 +34,35 @@ class _DaftarScreenState extends State<DaftarScreen> {
     });
 
     String email = _emailController.text.trim();
-String password = _kataSandiController.text.trim();
-String namaPengguna = _namapenggunaController.text.trim();
+    String password = _kataSandiController.text.trim();
+    String namaPengguna = _namapenggunaController.text.trim();
 
-String error;
+    String error;
 
-if (password.length < 8) {
-  error = 'Minimal 8 karakter';
-} else if (!password.contains(RegExp(r'[A-Z]'))) {
-  error = 'Mengandung kombinasi [A-Z]';
-} else if (!password.contains(RegExp(r'[a-z]'))) {
-  error = 'Mengandung kombinasi [a-z]';
-} else if (!password.contains(RegExp(r'[0-9]'))) {
-  error = 'Mengandung kombinasi [0-9]';
-} else if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-  error = 'Menggunakan [!@#%\$^&*(),.?":{}|<>]';
-} else {
-  // Password is valid, no errors
-  error = "";
-}
+    if (password.length < 8) {
+      error = 'Minimal 8 karakter';
+    } else if (!password.contains(RegExp(r'[A-Z]'))) {
+      error = 'Mengandung kombinasi [A-Z]';
+    } else if (!password.contains(RegExp(r'[a-z]'))) {
+      error = 'Mengandung kombinasi [a-z]';
+    } else if (!password.contains(RegExp(r'[0-9]'))) {
+      error = 'Mengandung kombinasi [0-9]';
+    } else if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      error = 'Menggunakan [!@#%\$^&*(),.?":{}|<>]';
+    } else {
+      // Password is valid, no errors
+      error = "";
+    }
 
-if (error == null) {
-  setState(() {
-    _errorText = ""; // Clear error text if no errors
-  });
-} else {
-  setState(() {
-    _errorText = error; // Display the first error
-  });
-  return;
-}
+    if (error == null) {
+      setState(() {
+        _errorText = ""; // Clear error text if no errors
+      });
+    } else {
+      setState(() {
+        _errorText = error; // Display the first error
+      });
+    }
 
     if (_konfirmasiSandiController.text != _kataSandiController.text) {
       setState(() {
