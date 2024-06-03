@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projek/screens/awalan/masuk_screen.dart';
 
-class VerifikasiOtpScreen extends StatefulWidget {
+class VerifikasiEmailScreen extends StatefulWidget {
   final String email;
 
-  const VerifikasiOtpScreen({Key? key, required this.email}) : super(key: key);
+  const VerifikasiEmailScreen({Key? key, required this.email})
+      : super(key: key);
 
   @override
-  _VerifikasiOtpScreenState createState() => _VerifikasiOtpScreenState();
+  _VerifikasiEmailScreenState createState() => _VerifikasiEmailScreenState();
 }
 
-class _VerifikasiOtpScreenState extends State<VerifikasiOtpScreen> {
+class _VerifikasiEmailScreenState extends State<VerifikasiEmailScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
