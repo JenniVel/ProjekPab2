@@ -36,9 +36,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   }
 }
 
-class FavoriteList extends StatelessWidget {
+class FavoriteList extends StatefulWidget {
   FavoriteList({super.key});
 
+  @override
+  State<FavoriteList> createState() => _FavoriteListState();
+}
+
+class _FavoriteListState extends State<FavoriteList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Wisata>>(
@@ -125,12 +130,36 @@ class FavoriteList extends StatelessWidget {
                                 width:
                                     10.0), // Add spacing between image and text
                             Expanded(
-                              // Text takes remaining space
                               child: ListTile(
                                 title: Text(document.name,
                                     style: const TextStyle(fontSize: 18)),
+                                trailing: LikeButton(
+                                  isLiked: true,
+                                  onTap: () {
+                                    // ... existing like state handling ...
+
+                                    // Remove wisata from favorites
+                                    FavoriteService.removeFromFavorites(
+                                            document.id!)
+                                        .then(
+                                      (value) {
+                                        // Success callback: Update UI or show a success message
+                                        setState(() {
+                                          // Remove the wisata from the data list
+                                          data.removeWhere((element) =>
+                                              element.id == document.id);
+                                        });
+                                      },
+                                      onError: (error) {
+                                        // Error callback: Handle error and show an error message
+                                        print(
+                                            "Error removing from favorites: $error");
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),
