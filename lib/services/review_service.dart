@@ -33,7 +33,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       await FirebaseFirestore.instance
           .collection('Destinations')
           .doc(widget.destinationId)
-          .collection('Reviews')
+          .collection('reviews')
           .add(review.toMap());
 
       Navigator.pop(context);
@@ -154,6 +154,69 @@ class DestinationScreen extends StatelessWidget {
         ],
       ),
       body: ReviewsList(destinationId: destinationId),
+    );
+  }
+}
+
+//add
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+Future<void> addReview(String reviewText, int rating) async {
+  CollectionReference reviews = FirebaseFirestore.instance.collection('reviews');
+
+  try {
+    await reviews.add({
+      'reviewText': reviewText,
+      'rating': rating,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    print("Review added");
+  } catch (e) {
+    print("Failed to add review: $e");
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _reviewController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Firebase Firestore Demo'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _reviewController,
+              decoration: InputDecoration(labelText: 'Review'),
+            ),
+            TextField(
+              controller: _ratingController,
+              decoration: InputDecoration(labelText: 'Rating'),
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                final reviewText = _reviewController.text;
+                final rating = int.parse(_ratingController.text);
+                addReview(reviewText, rating);
+              },
+              child: Text('Submit Review'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
