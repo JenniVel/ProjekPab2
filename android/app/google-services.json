@@ -1,40 +1,65 @@
 {
   "project_info": {
-    "project_number": "878350871001",
-    "project_id": "traveland-d50a9",
-    "storage_bucket": "traveland-d50a9.appspot.com"
+    "project_number": "3524906210",
+    "firebase_url": "https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "traveline-905a2",
+    "storage_bucket": "traveline-905a2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:878350871001:android:ef6a588568bec82a4bd1c8",
+        "mobilesdk_app_id": "1:3524906210:android:5ffe65dd06a758e43b62bb",
         "android_client_info": {
           "package_name": "com.example.projek"
         }
       },
       "oauth_client": [
         {
-          "client_id": "878350871001-7ahgfopqknrq0ipldkekm36p03vb6ff3.apps.googleusercontent.com",
+          "client_id": "3524906210-742qq9oilsq0i20s9sg5ie6q2ih2qten.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projek",
+            "certificate_hash": "58668a37be2894f0700d494ebeb6a96f79f41e7c"
+          }
+        },
+        {
+          "client_id": "3524906210-ffvd7qmmbgj3lmmqp831uohcbctcl3m3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projek",
+            "certificate_hash": "a0fba1460729e5dc2acf39d71ce6e357bbe2f109"
+          }
+        },
+        {
+          "client_id": "3524906210-ovp5eq2h3lulmlnrd78bdc1elbbitss2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projek",
+            "certificate_hash": "1e5618bfbe26f23174c6069a93d4519d86e468b2"
+          }
+        },
+        {
+          "client_id": "3524906210-947ijkbfjeqpt71oj8sg1vcu9hspkuk9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBkd4-7kPXz7VPqd7TI7lBdaNxdSl77ceA"
+          "current_key": "AIzaSyBqEls1UzwNREwSO3QYq1s1TuPxFKKG3_k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "878350871001-7ahgfopqknrq0ipldkekm36p03vb6ff3.apps.googleusercontent.com",
+              "client_id": "3524906210-947ijkbfjeqpt71oj8sg1vcu9hspkuk9.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "878350871001-1v8k7s56eu61e7iuboght34t9h8ag85l.apps.googleusercontent.com",
+              "client_id": "3524906210-du35d5edeisj53kcb1tsgdqblo0iod34.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.projek"
+                "bundle_id": "com.example.projek.RunnerTests"
               }
             }
           ]
