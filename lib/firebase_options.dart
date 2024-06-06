@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,46 +41,51 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBXOd-7ZdHk8MhU8af8yZaPJ8Zdih_fVwA',
-    appId: '1:3524906210:web:75946d904a065b633b62bb',
-    messagingSenderId: '3524906210',
-    projectId: 'traveline-905a2',
-    authDomain: 'traveline-905a2.firebaseapp.com',
-    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'traveline-905a2.appspot.com',
-    measurementId: 'G-Z1GDQXEXER',
+    apiKey: 'AIzaSyDxxn7LJmQwhGYqoewnlUw95dTUgR6z3T0',
+    appId: '1:878350871001:web:5e5e69491f5907d44bd1c8',
+    messagingSenderId: '878350871001',
+    projectId: 'traveland-d50a9',
+    authDomain: 'traveland-d50a9.firebaseapp.com',
+    storageBucket: 'traveland-d50a9.appspot.com',
+    measurementId: 'G-RC2FY63N5S',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBqEls1UzwNREwSO3QYq1s1TuPxFKKG3_k',
-    appId: '1:3524906210:android:5ffe65dd06a758e43b62bb',
-    messagingSenderId: '3524906210',
-    projectId: 'traveline-905a2',
-    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'traveline-905a2.appspot.com',
+    apiKey: 'AIzaSyBkd4-7kPXz7VPqd7TI7lBdaNxdSl77ceA',
+    appId: '1:878350871001:android:ef6a588568bec82a4bd1c8',
+    messagingSenderId: '878350871001',
+    projectId: 'traveland-d50a9',
+    storageBucket: 'traveland-d50a9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCqYN63phN1iLz3bTX0lwk9K5sBpglVDJs',
-    appId: '1:3524906210:ios:fbc7eca92fe14c133b62bb',
-    messagingSenderId: '3524906210',
-    projectId: 'traveline-905a2',
-    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'traveline-905a2.appspot.com',
-    androidClientId: '3524906210-ffvd7qmmbgj3lmmqp831uohcbctcl3m3.apps.googleusercontent.com',
-    iosClientId: '3524906210-hc9ruv4h4tg08mqrdkqcthu5281a1u39.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCIA8gyv1csOruVszF560x-snvrhlzF_tQ',
+    appId: '1:878350871001:ios:50fcdc5ed34ba9c74bd1c8',
+    messagingSenderId: '878350871001',
+    projectId: 'traveland-d50a9',
+    storageBucket: 'traveland-d50a9.appspot.com',
+    iosClientId: '878350871001-1v8k7s56eu61e7iuboght34t9h8ag85l.apps.googleusercontent.com',
     iosBundleId: 'com.example.projek',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCqYN63phN1iLz3bTX0lwk9K5sBpglVDJs',
-    appId: '1:3524906210:ios:386b8070c845124a3b62bb',
-    messagingSenderId: '3524906210',
-    projectId: 'traveline-905a2',
-    databaseURL: 'https://traveline-905a2-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'traveline-905a2.appspot.com',
-    androidClientId: '3524906210-ffvd7qmmbgj3lmmqp831uohcbctcl3m3.apps.googleusercontent.com',
-    iosClientId: '3524906210-du35d5edeisj53kcb1tsgdqblo0iod34.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projek.RunnerTests',
+    apiKey: 'AIzaSyCIA8gyv1csOruVszF560x-snvrhlzF_tQ',
+    appId: '1:878350871001:ios:50fcdc5ed34ba9c74bd1c8',
+    messagingSenderId: '878350871001',
+    projectId: 'traveland-d50a9',
+    storageBucket: 'traveland-d50a9.appspot.com',
+    iosClientId: '878350871001-1v8k7s56eu61e7iuboght34t9h8ag85l.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projek',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDxxn7LJmQwhGYqoewnlUw95dTUgR6z3T0',
+    appId: '1:878350871001:web:b0d322d0cc62a9c34bd1c8',
+    messagingSenderId: '878350871001',
+    projectId: 'traveland-d50a9',
+    authDomain: 'traveland-d50a9.firebaseapp.com',
+    storageBucket: 'traveland-d50a9.appspot.com',
+    measurementId: 'G-JYHM1N8VSN',
+  );
+
 }
